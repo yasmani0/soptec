@@ -1,0 +1,1 @@
+web: gunicorn soporte_pc.wsgi

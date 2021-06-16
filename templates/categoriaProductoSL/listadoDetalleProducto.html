@@ -1,0 +1,57 @@
+{% load staticfiles %}
+<!-- ======= Section Categoria Producto======= -->
+<section id="portfolio" class="portfolio">
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-lg-12 d-flex justify-content-center"
+        style="background-image: url({{c.imagen.url}}); background-repeat: no-repeat; background-size: contain;">
+        <ul id="portfolio-flters">
+          <li data-filter="*" class="filter-active">Todas</li>
+          {% for m in marca %}
+          {% if m.estado == '1'%}
+          <li data-filter=".filter-{{m.id}}">{{m.nombre}}</li>
+          {% else %}
+          {% endif %}
+          {% endfor %}
+
+        </ul>
+      </div>
+    </div>
+
+    <div class="row portfolio-container">
+
+      {% for p in producto %}
+
+      {% if p.estado == '1'%}
+
+      <div class="col-lg-3 col-md-6 portfolio-item filter-{{p.id_marca_id}}">
+        <div class="portfolio-wrap">
+          <img src="{{p.imagen.url}}" style="height: 200px; width: 100%;" class="img-fluid" alt="">
+          <div class="portfolio-info">
+            <h4 style="text-transform: capitalize;">{{p.nombre}}</h4>
+            <p>{{p.precio}}</p>
+            <div class="portfolio-links">
+              <a title="Agregar" class="btnInfo" data-swal-template="#my-template"><i class="bx bx-plus"></i></a>
+              <a title="Más detalle" data-toggle="modal" data-target="#ModalCard-{{p.id}}"><i
+                  class="bx bx-link"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include 'categoriaProductoSL/cardDetalle.html' %}
+
+
+      {% else %}
+      {% endif %}
+
+      {% endfor %}
+
+
+    </div>
+
+  </div>
+</section>
+<!-- End Section Categoria Producto-->

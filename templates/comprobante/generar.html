@@ -1,0 +1,122 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="{% static 'style_users/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+
+<style>
+    .img-invoice {
+        width: 150px;
+        position: relative;
+        /* text-align: center;
+        margin: 0 auto; */
+    }
+
+    .head {
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    #invoice thead tr th {
+        text-align: left;
+        border-bottom: 1px solid black;
+        border-top: 1px solid black;
+        padding-top: 4px;
+    }
+
+    #invoice thead tr {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    #invoice tbody tr {
+        padding: 0;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+<body>
+    <img src="{% static 'style_users/img/logo.jpeg' %}" class="img-invoice">
+    <p class="head" style="font-size: 20px;">
+        {{ comp.name|upper }}<br>
+        <span style="font-size: 8px;"> {{ comp.address|upper }}</span>
+    </p>
+    <p>
+        <b>FACTURA:</b> {{ sale.id }}
+        <br>
+        <b>FECHA DE VENTA:</b> {{ sale.fecha_pedido }}
+        <br>
+        {% for u in usuario %}
+        <b>CLIENTE:</b> <span style="text-transform: uppercase;">{{u.first_name|upper}} {{u.last_name|upper}}</span>
+        <br>
+        <b>TELEFONO:</b>{{u.telefono}}
+        {% endfor %}
+
+        <!-- <b>CLIENTE:</b> {{ sale.cli.names|upper }} -->
+        <!-- <b>DNI:</b> {{ sale.cli.dni }}<br> -->
+    </p>
+
+    <table id="invoice" style="margin-top: -20px;">
+        <thead>
+            <tr>
+                <th style="padding-left: 30px;"> # </th>
+                <th class="text-center">PRODUCTO</th>
+                <th class="text-center">P.UNITARIO</th>
+                <th class="text-center">CANTIDAD</th>
+                <th class="text-center">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in detalle %}
+            <tr {% if forloop.first %}style="padding-top: 3px;" {% endif %}>
+                <td style="padding-left: 30px;">{{forloop.counter}}</td>
+                <td>{{ p.nombre }}</td>
+                <td style="padding-left: 7px;">{{ p.precio}}</td>
+                <td style="padding-left: 10px;">{{p.cantidad}}</td>
+                <td>${{ p.subtotal }}</td>
+            </tr>
+            {% endfor %}
+            <br>
+            <tr style="border-top: 1px solid black; padding-top: 4px;">
+                <td colspan="4" style="margin-top: 15px;"><b>SUBTOTAL</b></td>
+                <td style="text-align: right; padding-right: 57px;">${{sale.totalPagar}}</td>
+            </tr>
+
+            {% for t in total %}
+
+            <tr style="padding-top: 0px;">
+                <td colspan="4"><b>IVA 12%</b></td>
+                <td style="text-align: right;padding-right: 57px;">{{t.iva}}</td>
+            </tr>
+
+            <tr style="padding-top: 0px;">
+                <td colspan="4"><b>TOTAL A PAGAR</b></td>
+                <td style="text-align: right;padding-right: 57px;">${{t.totaf}}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+
+
+
+
+
+    </table>
+
+    <p
+        style="margin-left: 260px; margin-right: 260px; margin-top: 100px; border-top: 1px solid black; text-align: center; padding: 7px; font-size: 14px;">
+        Firma
+    </p>
+    <table style="margin-top: 10px;">
+        <thead>
+            <tr>
+                <th style="font-size: 14px;">**** GRACIAS POR SU COMPRA ****</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+
+</html>

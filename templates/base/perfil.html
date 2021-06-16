@@ -1,0 +1,22 @@
+{% if user.is_authenticated %}
+<li class="active drop-down d-none d-md-block"><a href="#"><i class="icofont-user"></i></a>
+    <ul class="mr-2">
+        <div class="container"></div>
+        <li><a data-toggle="modal" data-target="#modalPerfilForm"> <i class="fas fa-user-alt"
+                    style="padding-right: 2px"></i><span style="padding-left:5px ;">Perfil</span></a></li>
+        <li><a href="{% url 'Mis_Pedidos' %}"><i class="fas fa-box"></i><span style="padding-left:5px ;">Mis
+                    pedidos</span></a>
+        </li>
+        <li><a href=" {% url 'usuario_salir' %}"><i class="fas fa-sign-out-alt"></i><span
+                    style="padding-left:5px ;">Cerrar sesión</span></a></li>
+        </div>
+    </ul>
+</li>
+{% else %}
+<li class=" drop-down d-none d-md-block"><a href="#"><i class="icofont-user"></i></a>
+    <ul>
+        <li><a data-toggle="modal" data-target="#modalLoginForm"">Iniciar sesión</a></li>   
+    </ul>
+</li>
+
+{% endif %}

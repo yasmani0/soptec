@@ -1,0 +1,52 @@
+{% load staticfiles %}
+<!-- ======= Section Categoria Producto======= -->
+<section id="portfolio" class="portfolio">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-lg-12 d-flex justify-content-center">
+        <ul id="portfolio-flters">
+          <li data-filter="*" class="filter-active">Todas</li>
+          {% for c in categoria %}
+          {% if c.estado == '1'%}
+          <li data-filter=".filter-{{c.id}}">{{c.nombre}}</li>
+          {% else %}
+          {% endif %}
+          {% endfor %}
+
+
+
+        </ul>
+      </div>
+    </div>
+
+    <div class="row portfolio-container">
+
+      {% for c in categoria %}
+
+      {% if c.estado == '1'%}
+
+      <div class="col-lg-4 col-md-6 portfolio-item filter-{{c.id}}">
+        <div class="portfolio-wrap">
+          <img src="{{c.imagen.url}}" style="height: 200px; width: 100%;" class="img-fluid" alt="">
+          <div class="portfolio-info">
+            <h4>{{c.nombre}}</h4>
+            <p>{{c.descripcion}}</p>
+            <div class="portfolio-links">
+              <a href="{% url 'producto_detalle' c.id %}" title="Más detalle"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% else %}
+      {% endif %}
+
+      {% endfor %}
+
+
+    </div>
+
+  </div>
+</section>
+<!-- End Section Categoria Producto-->

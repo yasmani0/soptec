@@ -1,0 +1,170 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+
+
+{% block aside %}
+<li><a href="{% url 'Inicio' %}">Inicio</a></li>
+<li class=""><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+<li><a href="{% url 'Contactanos' %}">Contactanos</a></li>
+<li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
+
+{% endblock %}
+
+{% block carrusel %}
+{% endblock %}
+
+{% block servicios %}
+{% endblock %}
+
+{% block contacto %}
+{% endblock %}
+
+{% block quienesSomos %}
+{% endblock %}
+
+<!-- ======= Breadcrumbs ======= -->
+
+
+{% block categoriaProducto %}
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+        <ol>
+            <li><a href="{% url 'Inicio' %}">Inicio</a></li>
+            <li><a href="{% url 'Comprobante' %}">Pedido</a></li>
+        </ol>
+        <h2>Mis Pedidos</h2>
+
+    </div>
+</section><!-- End Breadcrumbs -->
+
+<section id="portfolio" class="portfolio">
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="tablamispedidos">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;"> # </th>
+                                <th style="text-align: center;">Nombre</th>
+                                <th style="text-align: center;">Tipo Envio</th>
+                                <th style="text-align: center;">Total</th>
+                                <th style="text-align: center;">Estado</th>
+                                <th style="text-align: center;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if misPedios %}
+                            <!---->
+                            {% for p in misPedios %}
+                            <!---->
+                            <tr>
+                                <th scope="row" style="text-align: center;">{{forloop.counter}} </th>
+                                <td style="text-align: center;">
+                                    <b
+                                        style="color: rgb(43, 182, 50); text-transform: capitalize;">{{user.first_name}}</b>
+                                </td>
+                                {% if p.tipo_envio == '1' %}
+                                <td scope="row" style="text-align: center;">
+                                    <i class="fas fa-laptop-house fa-2x"></i>
+                                    <br>
+                                    <span>Recoger</span>
+                                </td>
+
+                                {% else %}
+                                {% if p.tipo_envio == '2' %}
+                                <td scope="row" style="text-align: center;">
+                                    <i class="fas fa-dolly fa-2x"></i>
+                                    <br>
+                                    <span>Recibir</span>
+                                </td>
+                                {% else %}
+                                {% endif %}
+                                {% endif %}
+
+                                <td style="text-align: center;">
+                                    {{p.totalPagar}}
+
+                                </td>
+                                <td style="text-align: center;">
+                                    {% if p.disponibilidad == '1' %}
+                                    <b style="color: rgb(43, 182, 50);">Aceptado</b>
+                                    {% else %}
+                                    {% if p.disponibilidad == '0' %}
+                                    <b style="color: rgb(236, 120, 43);">Pendiente</b>
+                                    {% else %}
+                                    <b style="color: rgb(236, 43, 43);">Cancelado</b>
+                                    {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: center;">
+                                    <a title="Más detalles" class="btn btn-dark"
+                                        onclick="abrir_modal_edicion('{% url 'Detalle_Pedidos' p.id  %}')">
+                                        <i class="fa fa-info-circle fa-2x"></i>
+                                    </a>
+
+                                    {% if p.disponibilidad == '1' %}
+
+                                    <a href="{% url 'Comprobante_generado' p.id %}" title="Comprobante"
+                                        class="btn btn-dark">
+
+                                        <i class="fa fa-file-invoice-dollar fa-2x">
+                                        </i>
+
+                                    </a>
+
+                                    {% endif %}
+
+
+
+                                </td>
+
+                                <!-- incluir -->
+
+
+                            </tr>
+                            {% endfor %}
+                            <!---->
+                            {% else %}
+                            <!---->
+                            <tr>
+                                <div class="alert alert-danger" role="alert">
+                                    No tiene ningun pedido realizado
+                                </div>
+                            </tr>
+
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="alertcategoria">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="edicion" role="dialog">
+
+
+    </div>
+
+
+</section>
+<script src="{% static 'style_admin/funcionalidades/categoria.js' %}"></script>
+{% endblock %}
+
+{% block addjs %}
+<script type="text/javascript">
+    function abrir_modal_edicion(url) {
+        $('#edicion').load(url, function () {
+            $(this).modal('show')
+        })
+    }
+</script>
+
+{% endblock %}

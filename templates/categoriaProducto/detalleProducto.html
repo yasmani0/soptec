@@ -1,0 +1,136 @@
+{% extends 'base/base.html' %}
+
+{% block aside %}
+<li><a href="{% url 'Inicio' %}">Inicio</a></li>
+<li class="active"><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+<li><a href="{% url 'Contactanos' %}">Contactanos</a></li>
+<li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
+
+{% endblock %}
+
+{% block carrusel %}
+{% endblock %}
+
+{% block servicios %}
+{% endblock %}
+
+{% block contacto %}
+{% endblock %}
+
+{% block quienesSomos %}
+{% endblock %}
+
+<!-- ======= Breadcrumbs ======= -->
+
+
+{% block categoriaProducto %}
+
+
+<section id="breadcrumbs" class="breadcrumbs" style="background-image: url();">
+    <div class="container">
+        {% include 'base/carrito.html' %}
+        <div class="row">
+            <div class="d-none d-lg-block">
+                <ol>
+                    <li><a href="{% url 'Inicio' %}">Inicio</a></li>
+                    <li><a href="{% url 'CategoriaProducto' %}">Categoria</a></li>
+                    <li>Productos</li>
+
+                </ol>
+
+
+                {% for c in categoria %}
+                {% if c.estado == '1'%}
+                <h2>{{c.nombre}}</h2>
+
+                {% else %}
+                {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div class="col-12 d-lg-none">
+                <ol>
+                    <li><a href="">Inicio</a></li>
+                    <li>Categoria</li>
+                    <li>Productos</li>
+
+                </ol>
+
+
+                {% for c in categoria %}
+                {% if c.estado == '1'%}
+                <h2>{{c.nombre}}</h2>
+
+                {% else %}
+                {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div class="d-none d-lg-block col-lg-9">
+                {% for c in categoria %}
+                {% if c.estado == '1'%}
+                <img src="{{c.imagen.url}}" alt="image" style="width: 150px; height: 90px;" />
+                {% else %}
+                {% endif %}
+                {% endfor %}
+
+            </div>
+            <div class="col-12 d-lg-none">
+                {% for c in categoria %}
+                {% if c.estado == '1'%}
+                <img src="{{c.imagen.url}}" alt="image" style="width: 150px; height: 90px;" />
+                {% else %}
+                {% endif %}
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+</section><!-- End Breadcrumbs -->
+
+{% include 'categoriaProducto/listadoDetalleProducto.html' %}
+
+
+
+{% endblock %}
+
+{% block addjs %}
+{% if messages %}
+{% for m in messages %}
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    if ('{{m}}' == 'No hay suficientes productos') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+    } else if ('{{m}}' == 'Solo puede realizar un pedido a la vez, confirme su pedido') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+    } else {
+        Toast.fire({
+            icon: 'success',
+            title: '{{m}}'
+        })
+    }
+
+</script>
+{% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,61 @@
+<div class="modal fade" id="ModalConfirmarID-{{p.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px 20px 0 0">
+            <div class="modal-header"
+                style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar Comprobante </h5>
+                <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'Pedido_Update' %}" enctype="multipart/form-data" method="POST" role="form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Nombre del cliente</label>
+                        <!---->
+                        <input class="form-control" type="text" name="nombre" value="{{p.cliente.id_cliente}}"
+                            maxlength="100" required disabled>
+                        <input class="form-control" type="hidden" name="idConf" value="{{p.id}}" maxlength="100"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Total a pagar</label>
+                        <!---->
+                        <input class="form-control" type="text" name="total" value="{{p.totalPagar}}" maxlength="100"
+                            required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado del Pedido</label>
+                        <!---->
+                        <select name="estadoPedido" class="form-control js-example-basic-single w-100"
+                            style="border: 1px solid rgb(0,0,0); width: 100%;">
+                            <!---->
+                            {% if p.disponibilidad == '1'%}
+                            <option value="1" selected>Aceptado</option>
+                            <option value="2">Cancelado</option>
+                            <option value="0">Pendiente</option>
+                            {% else %}
+                            {% if p.disponibilidad == '0'%}
+                            <option value="0" selected>Pendiente</option>
+                            <option value="1">Aceptado</option>
+                            <option value="2">Cancelado</option>
+                            {% else %}
+                            <option value="0">Pendiente</option>
+                            <option value="1">Aceptado</option>
+                            <option value="2" selected>Cancelado</option>
+                            {% endif %}
+                            {% endif %}
+                            <!---->
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

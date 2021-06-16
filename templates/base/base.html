@@ -1,0 +1,605 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title%} Soptec Pc {%endblock%}</title>
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'style_users/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'style_users/bootstrap/mdb.min.css' %}" rel="stylesheet">
+  <link href="{% static 'style_users/icofont/icofont.min.css' %}" rel="stylesheet">
+  <link href="{% static 'style_users/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <!-- iconos de nuestros servicios -->
+  <link href="{% static 'style_users/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'style_users/owl.carousel/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'style_users/venobox/venobox.css' %}" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+    integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'style_users/css/style.css' %}" rel="stylesheet">
+
+  {% block extracss %}
+  {% endblock %}
+
+</head>
+
+<body>
+
+  <!-- inicio -->
+
+  <!-- ======= Top Bar ======= -->
+  <!-- <section id="topbar" class="d-none d-lg-block text-center">
+        <div class="container d-flex" style="border-bottom: 1px solid rgba(0,0,0,.1)">
+    
+        <div class="logo mr-auto d-none d-md-block" style="text-align: center !important;">
+            <h1 class="text-light"><a href="index.html"><span style="text-align: center !important;">Tecnologica</span></a></h1>
+        </div>
+
+        </div>
+    </section> -->
+
+  <!-- ======= Header ======= -->
+  <header id="header" style="box-shadow: none; border-bottom: 1px solid rgba(0,0,0,.1)">
+
+    <div class="container d-flex">
+
+      <div class="logo mr-auto ">
+        <h1 class="text-light"><a href="{% url 'Inicio' %}"><span>Soptec PC</span></a></h1>
+      </div>
+
+      <nav class="nav-menu d-none d-lg-block">
+
+        <ul class="">
+          <li class="drop-down d-block d-md-none active" style="border-bottom: 1px solid rgba(0,0,0,.1)"><a href="#"><i
+                class="icofont-user"></i></a>
+            <ul>
+              {% if user.is_authenticated %}
+              <li><a data-toggle="modal" data-target="#modalPerfilForm"> <i class="fas fa-user-alt"
+                    style="padding-right: 2px"></i><span style="padding-left:5px ;">Perfil</span></a></li>
+              <li><a href="{% url 'Mis_Pedidos' %}"><i class="fas fa-box"></i><span style="padding-left:5px ;">Mis
+                    pedidos</span></a>
+              </li>
+              <li><a href=" {% url 'usuario_salir' %}"><i class="fas fa-sign-out-alt"></i><span
+                    style="padding-left:5px ;">Cerrar sesión</span></a></li>
+              {% else %}
+              <li class="d-lg-"><a data-toggle="modal" data-target="#modalLoginForm">Iniciar sesión</a></li>
+              {% endif %}
+            </ul>
+          </li>
+          {% block aside %}
+
+
+          <li class="active"><a href="{% url 'Inicio' %}">Inicio</a></li>
+          <li><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+          <li><a href="{% url 'Contactanos' %}">Contactanos</a></li>
+          <li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
+
+          {% endblock %}
+
+          {% if user.is_authenticated and user.is_superuser %}
+
+          <script>
+            window.location.href = "{% url 'Admin' %}"
+          </script>
+
+
+          {% else %}
+          {% include "base/perfil.html" %}
+
+          {% endif %}
+
+
+
+        </ul>
+
+      </nav><!-- .nav-menu -->
+
+      <!--  <nav class="nav-menu">
+
+      <ul>
+         <li class="drop-down"><a href="#"><i class="icofont-user"></i></a>
+            <ul>
+              <li><a href="about.html">Iniciar sesión</a></li>
+          
+            </ul>
+          </li>
+
+      </ul>
+      </nav> -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  {% block carrusel %}
+  {% include 'base/carrusel.html' %}
+  {% endblock %}
+
+
+
+  <main id="main">
+
+    {% block login %}
+    {% include 'base/login.html' %}
+    {% endblock %}
+
+
+
+
+    <!-- ======= Services Section ======= -->
+    {% block servicios %}
+    {% include 'base/servicios.html' %}
+    {% endblock %}
+
+
+
+    <!-- <section>
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Contactanos</h2>
+        </div>
+           
+                <div class="row">
+                    <div class="col-sm-4">
+                      <div class="card sin_sombra">
+                        <div class="card-body text-center">
+                          <h5 class="card-title"> <i class="fas fa-envelope text-center" style="width: 17px"></i></h5>
+                          <p class="card-text" style="font-size: 15px;">vecientrega.com</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="card sin_sombra">
+                        <div class="card-body text-center">
+                          <h5 class="card-title"><i class="fas fa-map-marker-alt " style="width: 17px"></i></h5>
+                          <p class="card-text" style="font-size: 15px;">Latacunga</p>
+                        
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="card sin_sombra">
+                        <div class="card-body text-center">
+                          <h5 class="card-title"><i class="fas fa-phone " style="width: 17px"></i></h5>
+                          <p class="card-text" style="font-size: 15px;">(+593) 985478569</p>
+          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card col-12 sin_sombra mt-2">
+                      <div class="row">
+                   
+                      <div class="col-12 mt-3">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="Nombre">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control"  placeholder="Asunto">
+                            </div>
+                            <div class="form-group">
+                                 <textarea class="form-control"  placeholder="Mensaje"></textarea>
+                            </div>
+                      </div>
+                      <div class="col-12 text-center">
+                        
+                        <button type="submit" class="btn btn-success  w-25">Enviar</button>
+                    </div>
+    
+                </form>
+
+               
+                    </div>
+
+                  </div>
+
+                  </div>
+
+        </section> -->
+
+
+    <!-- ======= Contact Section ======= -->
+    {% block contacto %}
+    {% include 'base/contacto.html' %}
+    {% endblock %}
+
+    <!-- End Contact Section -->
+
+    <!-- ======= Quienes Somos ======= -->
+    {% block quienesSomos %}
+    {% include 'base/quienesSomos.html' %}
+    {% endblock %}
+
+    <!-- End Quienes Somos -->
+
+    <!-- ======= Quienes Somos ======= -->
+    {% block categoriaProducto %}
+
+    {% endblock %}
+
+    <!-- End Quienes Somos -->
+
+
+
+
+    <!-- ======= Clients Section ======= -->
+    <!-- <section id="clients" class="clients">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Clientes</h2>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+        </div>
+
+        <div class="owl-carousel clients-carousel">
+          <img src="assets/img/clients/client-1.png" alt="">
+          <img src="assets/img/clients/client-2.png" alt="">
+          <img src="assets/img/clients/client-3.png" alt="">
+          <img src="assets/img/clients/client-4.png" alt="">
+          <img src="assets/img/clients/client-5.png" alt="">
+          <img src="assets/img/clients/client-6.png" alt="">
+          <img src="assets/img/clients/client-7.png" alt="">
+          <img src="assets/img/clients/client-8.png" alt="">
+        </div>
+
+      </div>
+    </section>End Clients Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Terminos y condiciones</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terminos de servicios</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Politica de privacidad</a></li>
+            </ul>
+          </div>
+          <!-- 
+          <div class="col-lg-6 col-md-6 footer-links">
+            <h4>Servicios</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Computadora</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Telefonos</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Accesorio</a></li>
+
+            </ul>
+          </div> -->
+
+          <!-- <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contactanos</h4>
+            <p>
+              A108 Adam Street <br>
+              New York, NY 535022<br>
+              United States <br><br>
+              <strong>Phone:</strong> +1 5589 55488 55<br>
+              <strong>Email:</strong> info@example.com<br>
+            </p>
+
+          </div> -->
+
+          <!-- <div class="col-lg-3 col-md-6 footer-info">
+            <h3>Acerca de Tecnologica</h3>
+            <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
+            <div class="social-links mt-3">
+              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Soptec PC</span></strong>. Todos los derechos reversados
+      </div>
+
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+
+  <!-- js -->
+
+  <!-- <script src="{% static 'style_users/jquery/jquery.js' %}"></script> -->
+  <script src="{% static 'style_users/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'style_users/bootstrap/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'style_users/bootstrap/bootstrap.mdb.min.js' %}"></script>
+  <script src="{% static 'style_users/jquery/jquery.easing.min.js' %}"></script>
+  <!-- <script src="{% static 'style_users/php-email-form/validate.js"></script> -->
+  <script src="{% static 'style_users/jquery/jquery.sticky.js' %}"></script>
+  <script src="{% static 'style_users/owl.carousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'style_users/waypoints/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'style_users/counterup/counterup.min.js' %}"></script>
+  <script src="{% static 'style_users/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'style_users/venobox/venobox.min.js' %}"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{% static 'style_users/validaciones/libreria_validacion.js' %}"></script>
+
+  <!-- Datatable -->
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'style_users/js/main.js' %}"></script>
+  <script src="{% static 'style_users/js/cart.js' %}"></script>
+
+  <!-- validacion jquery -->
+
+
+  {% if messages %}
+  {% for m in messages %}
+  <script>
+
+    if ('{{m}}' == 'Usuario o contraseña incorrecta') {
+      Swal.fire({
+        icon: 'error',
+        title: '{{m}}',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: "#282C34",
+      })
+    } else if ('{{m}}' == 'Nombre del usuario ya existe, ingrese otro usuario ...') {
+      Swal.fire({
+        icon: 'error',
+        title: '{{m}}',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: "#282C34",
+      })
+    } else if ('{{m}}' == 'Acceso denegado') {
+      Swal.fire({
+        icon: 'error',
+        title: '{{m}}',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: "#282C34",
+      })
+    } else {
+      Swal.fire({
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: "#282C34",
+        icon: 'success',
+        title: '{{m}}',
+      })
+    }
+
+  </script>
+  {% endfor %}
+  {% endif %}
+
+
+  <script>
+    // verificamos si el usuario esta autentificado
+    let user = '{{request.user}}'
+
+    // funcion para poder utilizar el token
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+  </script>
+
+  {% block addjs %}
+  {% endblock %}
+
+
+  {% block js %}
+  <script>
+    $(document).ready(function () {
+      //formulario de repartidores
+      $("#formContacto").validate({
+        rules: {
+
+          nombre_info: "required",
+          email_info: {
+            required: true,
+            email: true
+          },
+          asunto_info: "required",
+          message: "required",
+        },
+        messages: {
+
+          nombre_info: "Este campo es obligatorio",
+          email_info: {
+            required: "Este campo es obligatorio",
+            email: "Email incorrecto"
+          },
+          asunto_info: "Debe mencionar el asunto a tratar",
+          message: "Este campo es obligatorio",
+
+
+        }
+
+      })
+
+      $("#login_user").validate({
+        rules: {
+
+          users_login: "required",
+          pass_login: {
+            required: true,
+            rangelength: [8, 15],
+          },
+        },
+        messages: {
+
+          users_login: "Este campo es obligatorio",
+          pass_login: {
+            required: "Este campo es obligatorio",
+            rangelength: "Debe tener de 8 a 15 digitos"
+          },
+
+        }
+
+      })
+
+      // validacion registro
+      $("#login_register").validate({
+        rules: {
+
+          usuario_reg: "required",
+          nombre_reg: "required",
+          apellido_reg: "required",
+          email_reg: {
+            required: true,
+            email: true,
+          },
+          clave_reg: {
+            required: true,
+            rangelength: [8, 15],
+          },
+
+        },
+        messages: {
+
+          usuario_reg: "Este campo es obligatorio",
+          nombre_reg: "Este campo es obligatorio",
+          apellido_reg: "Este campo es obligatorio",
+          email_reg: {
+            required: "Este campo es obligatorio",
+            email: "Email incorrecto"
+          },
+          clave_reg: {
+            required: "Este campo es obligatorio",
+            rangelength: "Debe tener de 8 a 15 digitos",
+
+          }
+
+        }
+
+      })
+
+      // validacion perfil usuario
+      $("#perfil_usuario").validate({
+        rules: {
+
+          usuario_update: "required",
+          nombre_update: "required",
+          apellido_update: "required",
+          email_update: {
+            required: true,
+            email: true,
+          },
+        },
+        messages: {
+
+          usuario_update: "Este campo es obligatorio",
+          nombre_update: "Este campo es obligatorio",
+          apellido_update: "Este campo es obligatorio",
+          email_update: {
+            required: "Este campo es obligatorio",
+            email: "Email incorrecto"
+          },
+
+        }
+
+      })
+
+
+      $("#verificarCarrito").validate({
+        rules: {
+
+          cedula: "required",
+          telefono: "required",
+        },
+        messages: {
+
+          cedula: "Este campo es obligatorio",
+          telefono: "Este campo es obligatorio",
+
+        }
+
+      })
+
+
+
+
+    });
+  </script>
+  {% endblock %}
+
+
+
+  <script>
+    $(document).ready(function () {
+      $("#mostrar_modal_login").click(function () {
+        $("#modalLoginForm").modal('hide')
+        $("#modalLoginForm1").modal('show')
+      })
+      $("#mostrar_modal_registro").click(function () {
+        $("#modalLoginForm1").modal('hide')
+        $("#modalLoginForm").modal('show')
+      })
+      $("#cerrar_card").click(function () {
+        $(".cerrar_modals").modal('hide')
+      })
+      $("#tablamispedidos").DataTable({
+        "language": {
+          "lengthMenu": "Mostrar _MENU_ registros",
+          "search": "Buscar:",
+          "zeroRecords": '<i class="far fa-sad-tear"></i> Registro no encontrado <i class="far fa-sad-tear"></i>',
+          "info": "Mostrando _PAGE_ de _PAGES_",
+          "infoEmpty": "No records available",
+          "infoFiltered": "(filtered from _MAX_ total records)",
+          paginate: {
+            previous: "Anterior",
+            next: "Siguiente"
+          }
+        },
+        scrolly: 400,
+        lengthMenu: [
+          [10, 15, 20, -1],
+          [10, 15, 20, "All"]
+        ]
+      })
+    })
+  </script>
+
+
+
+
+</body>
+
+</html>

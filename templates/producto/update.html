@@ -1,0 +1,112 @@
+<div class="modal fade" id="ModalProducto-{{p.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px 20px 0 0">
+            <div class="modal-header"
+                style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Categoria </h5>
+                <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'producto_update' p.id %}" enctype="multipart/form-data" method="POST" role="form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        {{form.id_categoria.label}}
+                        <!---->
+                        <select name="id_categoria" class="form-control js-example-basic-single w-100"
+                            style="width: 100%;" required>
+                            <option value=""> ---------------- </option>
+                            {% for cat in categoria %}
+                            {% if cat.id == p.id_categoria_id %}
+                            <option value="{{cat.id}}" selected>{{cat.nombre}}</option>
+                            {% else %}
+                            <option value="{{cat.id}}">{{cat.nombre}} </option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        {{form.id_marca.label}}
+                        <!---->
+                        <select name="id_marca" class="form-control js-example-basic-single w-100" style="width: 100%;"
+                            required>
+                            <option value=""> ---------------- </option>
+                            {% for m in marca %}
+                            {% if m.id == p.id_marca_id %}
+                            <option value="{{m.id}}" selected>{{m.nombre}} - {{m.id_categoria}}</option>
+                            {% else %}
+                            <option value="{{m.id}}">{{m.nombre}} - {{m.id_categoria}} </option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        {{form.nombre.label}}
+                        <!---->
+                        <input class="form-control" type="text" name="nombre" value="{{p.nombre}}"
+                            placeholder="Ingresa el nombre ..." maxlength="100" required>
+                        <input class="form-control" type="hidden" name="id_pro" value="{{p.id}}" maxlength="100"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        {{form.precio.label}}
+                        <!---->
+                        <input class="form-control" type="text" name="precio" value="{{p.precio}}"
+                            placeholder="Ingresa el precio ..." maxlength="100" required>
+                    </div>
+                    <div class="form-group">
+                        {{form.cantidad.label}}
+                        <!---->
+                        <input class="form-control" type="number" name="cantidad" value="{{p.cantidad}}"
+                            placeholder="Ingresa la descripcion ..." maxlength="100" required>
+                    </div>
+                    <div class="form-group">
+
+                        <!---->
+
+                        <label for="descripcion">{{form.descripcion.label}}</label>
+                        <textarea class="form-control" id="descripcion" rows="3" name="descripcion"
+                            required>{{p.descripcion}}</textarea>
+
+
+
+                    </div>
+                    <div class="form-group">
+                        {{form.estado.label}}
+                        <!---->
+                        <select name="estado" class="form-control js-example-basic-single w-100"
+                            style="border: 1px solid rgb(0,0,0); width: 100%;">
+                            <!---->
+                            {% if p.estado == '1'%}
+                            <option value="1" selected>Activo</option>
+                            <option value="0">Inactivo</option>
+                            {% else %}
+                            <option value="0" selected>Inactivo</option>
+                            <option value="1">Activo</option>
+                            {% endif %}
+                            <!---->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        {{form.imagen.label}}
+                        <br>
+                        {% if p.imagen %}
+                        <img src="{{p.imagen.url}}" class="img-fluid" width="150px" height="100px" alt="">
+                        <!---->
+                        <input class="form-control" type="file" name="imagen" value=""
+                            placeholder="Selecciona una imagen ...">
+                        {% else %}
+                        {% endif %}
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,158 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+
+
+{% block aside %}
+<li><a href="{% url 'Inicio' %}">Inicio</a></li>
+<li class="d-md-none"><a href="{% url 'Inicio' %}">Inicio</a></li>
+<li class="active d-none d-md-block"><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+<li><a href="">Contactanos</a></li>
+<li><a href="">Quienes Somos</a></li>
+
+{% endblock %}
+
+{% block carrusel %}
+{% endblock %}
+
+{% block servicios %}
+{% endblock %}
+
+{% block contacto %}
+{% endblock %}
+
+{% block quienesSomos %}
+{% endblock %}
+
+<!-- ======= Breadcrumbs ======= -->
+
+
+{% block categoriaProducto %}
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+        {% include 'base/carrito.html' %}
+        <ol>
+            <li><a href="{% url 'Inicio' %}">Inicio</a></li>
+            <li><a href="{% url 'CategoriaProducto' %}">Categoria</a></li>
+            <li>Productos</li>
+
+        </ol>
+        <h2>Verificar carrito</h2>
+
+    </div>
+</section><!-- End Breadcrumbs -->
+<section id="portfolio" class="portfolio">
+    <div class="container">
+        {% if cartItems %}
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <a class="btn btn-dark" style="margin-top:-20px; margin-left:-2px; margin-bottom:15px"
+                    onClick="history.go(-1);">&#x2190;
+                    Continuar comprando</a>
+
+
+
+                {% comment %} listar productos al carrito {% endcomment %}
+
+                <div class=" card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="tablacategoria">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Imagen</th>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                        <th>Cantidad</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td><img src="{{item.producto.imagen.url}}" alt="image" class="img-thumbnail"
+                                                style="width: 90px; height: 75px;"></td>
+                                        <td>{{item.producto.nombre}}</td>
+                                        <td>{{item.producto.precio|floatformat:2}}</td>
+                                        <td style="padding-left: 25px;">
+                                            {{item.cantidad}}
+                                            <img data-product="{{item.producto.id}}" data-action="add"
+                                                class="chg-quantity update-cart"
+                                                src="{% static  'style_users/img/arrow-up.png' %}"
+                                                style="width:12px; position:absolute; margin-bottom: 15x;">
+
+                                            <img data-product="{{item.producto.id}}" data-action="remove"
+                                                class="chg-quantity update-cart"
+                                                src="{% static  'style_users/img/arrow-down.png' %}"
+                                                style="width:12px; padding-top: 10px;">
+                                        </td>
+                                        <td>{{item.get_total|floatformat:2}}</td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    <tr>
+                                        <td colspan="4">
+                                            <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5>
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>Total:</strong></h5>
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>${{pedido.get_cart_total|floatformat:2}}</strong></h5>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <td colspan="4">
+                                <a style="float:right; margin:5px;" class="btn btn-success btn-lg btn-block"
+                                    href="{% url 'Verificar_pago' %}">Verificar</a>
+                            </td>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            {% else %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-danger text-center" role="alert">
+                        No tienes ningun producto agregado al carrito?<a href="{% url 'CategoriaProducto' %}"
+                            class="alert-link"> Agregar</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+</section>
+{% endblock %}
+
+{% block addjs %}
+{% if messages %}
+{% for m in messages %}
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: 'success',
+        title: '{{m}}'
+    })
+</script>
+{% endfor %}
+{% endif %}
+{% endblock %}

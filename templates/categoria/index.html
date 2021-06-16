@@ -1,0 +1,228 @@
+{% extends 'base_admin/base.html' %}
+{% load staticfiles%}
+
+{% block titlead %}
+
+Administración de categorias
+
+{% endblock %}
+
+{% block slider %}
+<ul class="sidebar-menu">
+    <li class="header">Navegación</li>
+
+    <li class="treeview">
+        <a href="#">
+            <i class="fas fa-home"></i> <span>Acceso</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="{% url 'Admin' %}"><i class="fa fa-angle-right "></i> Inicio</a></li>
+            <li><a href="{% url 'Users' %}"><i class="fa fa-angle-right"></i> Usuarios</a></li>
+
+        </ul>
+    </li>
+
+    <li class="treeview active">
+        <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>Almacén</span>
+            <i class="fas fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li class="active"><a href="{% url 'Categoria' %}"><i class="fa fa-angle-right"></i>
+                    Categorias</a></li>
+            <li><a href="{% url 'Marca' %}"><i class="fa fa-angle-right"></i> Marca</a></li>
+            <li><a href="{% url 'Producto' %}"><i class="fa fa-angle-right"></i> Productos</a></li>
+        </ul>
+    </li>
+
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-truck"></i>
+            <span>Pedidos</span>
+            <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="{% url 'Pedidos' %}"><i class="fa fa-angle-right"></i> Pendientes</a>
+            </li>
+            <li><a href="{% url 'Pedido_Completado' %}"><i class="fa fa-angle-right"></i> Completados</a></li>
+            <li><a href="{% url 'Pedido_Cancelado' %}"><i class="fa fa-angle-right"></i> Cancelados</a></li>
+        </ul>
+    </li>
+    <!-- 
+
+    <li>
+      <a href="#">
+        <i class="fa fa-plus-square"></i> <span>Ayuda</span>
+        <small class="label pull-right bg-red">PDF</small>
+      </a>
+    </li> -->
+
+
+</ul>
+{% endblock %}
+
+{% block content %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px 20px 0 0">
+            <div class="modal-header"
+                style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Categoria</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" enctype="multipart/form-data" method="POST" role="form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        {{form.nombre.label}}
+                        <!---->
+                        {{form.nombre}}
+                    </div>
+                    <div class="form-group">
+                        {{form.descripcion.label}}
+                        <!---->
+                        {{form.descripcion}}
+                    </div>
+                    <div class="form-group">
+                        {{form.imagen.label}}
+                        <!---->
+                        {{form.imagen}}
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- listar -->
+<div class="col-lg-12 grid-margin stretch-card">
+    <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#exampleModal">
+        <b>+ Agregar</b>
+    </button>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="tablacategoria">
+                    <thead>
+                        <tr>
+                            <th> # </th>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if categoria %}
+                        <!---->
+                        {% for c in categoria %}
+                        <!---->
+                        <tr>
+                            <th scope="row">{{c.id}}</th>
+                            <td>
+                                <img src="{{c.imagen.url}}" alt="image" class="img-thumbnail"
+                                    style="width: 90px; height: 75px;" />
+                            </td>
+                            <td>{{c.nombre}}</td>
+                            <td>{{c.descripcion}}</td>
+                            <td>{% if c.estado == '1'%} <b style="color: rgb(43, 182, 50);">Activo</b> {% else %} <b
+                                    style="color: rgb(252,56,29);">Inactivo</b> {% endif %}</td>
+                            <!-- <td>
+                                <img src="{{a.imagen.url}}" alt="image" class="img-fluid" style="width: 90px !important; height: 70px !important;" />
+                            </td> -->
+                            <td>
+                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#ModalID-{{c.id}}"><i class="fa fa-edit"> Editar</i></button>
+                                <!--<button type="button" class="btn btn-danger btn-rounded btn-icon font-weight-bold" data-toggle="modal" data-target="#exampleModal-{{a.id}}"><i class="icon icon-trash"></i></button>-->
+                            </td>
+
+                            {% include "categoria/update.html" %}
+
+
+                        </tr>
+                        {% endfor %}
+                        <!---->
+                        {% else %}
+                        <!---->
+                        <tr>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-heart-broken"></i> Aún no tenemos categorias <i
+                                    class="fas fa-heart-broken"></i>
+                            </div>
+                        </tr>
+
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="alertcategoria">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin listar -->
+{% endblock %}
+
+
+{% block extrajs %}
+{% if messages %}
+{% for m in messages %}
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    if ('{{m}}' == 'El nombre de la categoria ya existe') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+
+    } else if ('{{m}}' == 'Cuenta o numero de ya existente, ingrese otra cuenta') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+
+    } else {
+        Toast.fire({
+            icon: 'success',
+            title: '{{m}}'
+        })
+
+    }
+
+</script>
+{% endfor %}
+{% endif %}
+
+
+<script src="{% static 'style_admin/funcionalidades/categoria.js' %}"></script>
+
+{% endblock %}

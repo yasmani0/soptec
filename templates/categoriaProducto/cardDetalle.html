@@ -1,0 +1,52 @@
+<div class="modal fade cerrar_modals" id="ModalCard-{{p.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="card card-cascade narrower">
+
+                <!-- Card image -->
+                <div class="view view-cascade overlay">
+
+                    <img class="card-img-top" src="{{p.imagen.url}}" alt="Card image cap"
+                        style="height: 300px; width: 400px; margin: 0 auto; padding-top: 55px;">
+                    <a>
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+
+                <!-- Card content -->
+                <div class="card-body card-body-cascade">
+
+                    <!-- Title -->
+                    <h4 class="card-title" style="font-weight: 500;">{{p.nombre}}</h4>
+                    <hr>
+                    <!-- Text -->
+                    <span style="font-size: 18px;">Caracteristicas</span>
+                    <p class="card-text">{{p.descripcion}}</p>
+                    <!-- Button -->
+                    <div>
+                        <div style="font-size: 25px; padding-top: 15px; float: left; position: absolute; left: 18px; bottom: 38px;"
+                            class="text-success">
+                            ${{p.precio}}
+                        </div>
+
+                        <a title="Agregar" data-swal-template="#my-template"
+                            style="float: right; font-size: 50px; padding-right: 5px;"
+                            class="update-cart add-btn text-dark" data-product="{{p.id}}" data-action="add">
+                            <i class="icofont-plus-circle"></i>
+                        </a>
+
+                        <a data-dismiss="modal" style="font-size: 25px; position: absolute; right: 20px; top: 10px;"><i
+                                class="icofont-ui-close"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

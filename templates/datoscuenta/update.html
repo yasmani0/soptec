@@ -1,0 +1,51 @@
+<div class="modal fade" id="ModalCuentaID-{{dc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px 20px 0 0">
+      <div class="modal-header" style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Cuenta Bancaria </h5>
+        <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'Cuenta_update' %}" enctype="multipart/form-data" method="POST" role="form">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="form-group">
+            {{form_cuenta.nombre_banco.label}}
+            <!---->
+            <input class="form-control" type="text" name="nombre_banco" value="{{dc.nombre_banco}}"
+              placeholder="Ingresa el nombre del banco..." maxlength="100" required>
+            <input class="form-control" type="hidden" name="id_cuenta" value="{{dc.id}}" maxlength="100" required>
+          </div>
+          <div class="form-group">
+            {{form_cuenta.numero_cuenta.label}}
+            <!---->
+            <input class="form-control" type="text" name="numero_cuenta" value="{{dc.numero_cuenta}}"
+              placeholder="Ingresa el numero de cuenta ..." maxlength="100" required>
+          </div>
+          <div class="form-group">
+            {{form_cuenta.estado.label}}
+            <!---->
+            <select name="estado" class="form-control js-example-basic-single w-100"
+              style="border: 1px solid rgb(0,0,0); width: 100%;">
+              <!---->
+              {% if dc.estado == '1'%}
+              <option value="1" selected>Activo</option>
+              <option value="0">Inactivo</option>
+              {% else %}
+              <option value="0" selected>Inactivo</option>
+              <option value="1">Activo</option>
+              {% endif %}
+              <!---->
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

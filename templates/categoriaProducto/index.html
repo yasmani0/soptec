@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+
+
+{% block aside %}
+<li><a href="{% url 'Inicio' %}">Inicio</a></li>
+<li class="active"><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+<li><a href="{% url 'Contactanos' %}">Contactanos</a></li>
+<li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
+
+{% endblock %}
+
+{% block carrusel %}
+{% endblock %}
+
+{% block servicios %}
+{% endblock %}
+
+{% block contacto %}
+{% endblock %}
+
+{% block quienesSomos %}
+{% endblock %}
+
+<!-- ======= Breadcrumbs ======= -->
+
+
+{% block categoriaProducto %}
+<section id="breadcrumbs" class="breadcrumbs">
+  <div class="container">
+    {% include 'base/carrito.html' %}
+    <ol>
+      <li><a href="{% url 'Inicio' %}">Inicio</a></li>
+      <li>Categoria</li>
+    </ol>
+    <h2>Productos</h2>
+
+  </div>
+</section><!-- End Breadcrumbs -->
+{% include 'base/categoriaProducto.html' %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base/base.html' %}
+
+
+{% block aside %}
+<li><a href="{% url 'Inicio' %}">Inicio</a></li>
+<li><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+<li class="active "><a href="{% url 'Contactanos' %}">Contactanos</a></li>
+<li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
+
+{% endblock %}
+
+{% block carrusel %}
+{% endblock %}
+
+{% block servicios %}
+{% endblock %}
+
+{% block contacto %}
+{% endblock %}
+
+
+{% block quienesSomos %}
+{% endblock %}
+
+<!-- ======= Breadcrumbs ======= -->
+
+
+
+
+{% block categoriaProducto %}
+<section id="portfolio" class="portfolio">
+    <div class="container pt-5">
+        {% include 'base/contacto.html' %}
+
+    </div>
+</section>
+{% endblock %}

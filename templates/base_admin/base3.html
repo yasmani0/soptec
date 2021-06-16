@@ -1,0 +1,319 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Soptec PC | Admin Inicio</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="{% static 'style_admin/bower_components/bootstrap/bootstrap.min.css' %}">
+
+    <!-- <link href="{% static 'style_users/bootstrap/bootstrap.min.css' %}" rel="stylesheet"> -->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'style_admin/bower_components/font-awesome/css/font-awesome.min.css' %}">
+    <!-- Ionicons -->
+    <!-- <link rel="stylesheet" href="../../bower_components/Ionicons/css/ionicons.min.css"> -->
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'style_admin/dist/css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'style_admin/dist/css/_all-skins.min.css' %}">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+        integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+
+    <!-- Google Font -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="{% url 'Admin' %}" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>S</b>PC</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>Soptec </b>PC</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning">10</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="header">You have 10 notifications</li>
+                                <li>
+                                    <!-- inner menu: contains the actual data -->
+                                    <ul class="menu">
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="footer"><a href="#">View all</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="{%static 'style_admin/img/muser2-160x160.jpg' %}" class="user-image"
+                                    alt="User Image">
+                                <span class="hidden-xs">{{user.first_name}}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="{%static 'style_admin/img/muser2-160x160.jpg' %}" class="img-circle"
+                                        alt="User Image">
+
+                                    <p>
+                                        {{user.first_name}} - Administrador
+                                    </p>
+                                </li>
+
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat" data-toggle="modal"
+                                            data-target="#ModalPerfil">Perfil</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="{% url 'usuario_salir' %}" class="btn btn-default btn-flat">Salir</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        <!--  <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          </li> -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- =============================================== -->
+
+        <!-- Left side column. contains the sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="{%static 'style_admin/img/muser2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p>Administrador</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>
+
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="header">OPCIONES DE NAVEGACIÓN</li>
+                    <li class="treeview active">
+                        <a href="#">
+                            <i class="fas fa-home"></i> <span>Acceso</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="active"><a href="{% url 'Admin' %}"><i class="fa fa-angle-right "></i> Inicio</a>
+                            </li>
+                            <li><a href="{% url 'Users' %}"><i class="fa fa-angle-right"></i> Usuarios</a></li>
+
+                        </ul>
+                    </li>
+
+
+                    <li class="treeview  ">
+                        <a href="#">
+                            <i class="fa fa-laptop"></i>
+                            <span>Almacén</span>
+                            <i class="fas fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu activate">
+                            <li><a href="{% url 'Categoria' %}"><i class="fa fa-angle-right"></i>
+                                    Categorias</a></li>
+                            <li><a href="{% url 'Marca' %}"><i class="fa fa-angle-right"></i> Marca</a>
+                            </li>
+                            <li><a href="{% url 'Producto' %}"><i class="fa fa-angle-right"></i> Productos</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-truck"></i>
+                            <span>Pedidos</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="{% url 'Pedidos' %}"><i class="fa fa-angle-right"></i> Pendientes</a>
+                            </li>
+                            <li><a href="{% url 'Pedido_Completado' %}"><i class="fa fa-angle-right"></i>
+                                    Completados</a></li>
+                            <li><a href="{% url 'Pedido_Cancelado' %}"><i class="fa fa-angle-right"></i> Cancelados</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- =============================================== -->
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <!--    <section class="content-header">
+      <h1>
+        Blank page
+        <small>it all starts here</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="#">Examples</a></li>
+        <li class="active">Blank page</li>
+      </ol>
+    </section> -->
+
+            <!-- Main content -->
+            <section class="content">
+
+                <!-- Default box -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{% block titlead %}Resumen general {% endblock %}</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                                title="Collapse">
+                                <i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                                title="Remove">
+                                <i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <!--Contenido-->
+                        {% block content %}
+                        <h3> </h3>
+                        {% endblock %}
+                        <!--Fin Contenido-->
+                    </div>
+                    <!-- /.box-body -->
+                    <!--  <div class="box-footer">
+          Footer
+        </div> -->
+                    <!-- /.box-footer-->
+                </div>
+                <!-- /.box -->
+
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+
+        {% include 'base_admin/cuenta.html' %}
+        {% include 'datoscuenta/index.html' %}
+
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2021-2022 <a href="#">Soptec PC</a>.</strong> Todos los derechos reservados.
+        </footer>
+
+
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery 3 -->
+    <script src="{% static 'style_admin/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="{% static 'style_admin/bower_components/bootstrap/bootstrap.min.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'style_admin/jquery/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'style_admin/fastclick/fastclick.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'style_admin/dist/js/adminlte.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'style_admin/dist/js/demo.js' %}"></script>
+
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.sidebar-menu').tree()
+        })
+    </script>
+
+    <!-- funcionalidades -->
+    <script>
+        $(document).ready(function () {
+            $("#btnMostrarModalCuenta").click(function () {
+                $("#ModalPerfil").modal('hide')
+                $("#ModalCuenta").modal('show')
+            })
+            $("#btnMostrarAgregarCuenta").click(function () {
+                $("#ModalCuenta").modal('hide')
+                $("#ModalCuentaCreate").modal('show')
+            })
+            $("#btnMostrarDNCuenta").click(function () {
+                $("#ModalCuentaCreate").modal('hide')
+                $("#ModalCuenta").modal('show')
+            })
+            // $("#cerrarUpdateC").click(function () {
+            //   $("#ModalCuentaID").modal('hide')
+            // })
+        })
+    </script>
+
+
+    {% block extrajs %}
+    {% if messages %}
+    {% for m in messages %}
+    <script>
+        Swal.fire({
+            title: 'Felicitaciones',
+            text: '{{m}}',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        })
+
+    </script>
+    {% endfor %}
+    {% endif %}
+
+    {% endblock %}
+
+</body>
+
+</html>

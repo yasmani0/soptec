@@ -1,0 +1,299 @@
+{% extends 'base/base.html' %}
+
+
+{% block aside %}
+<li><a href="{% url 'Inicio' %}">Inicio</a></li>
+<li class="d-md-none"><a href="{% url 'Inicio' %}">Inicio</a></li>
+<li class="d-none d-md-block"><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+<li class="d-none d-md-block"><a href="{% url 'Contactanos' %}">Contactanos</a></li>
+<li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
+
+{% endblock %}
+
+{% block carrusel %}
+{% endblock %}
+
+{% block servicios %}
+{% endblock %}
+
+{% block contacto %}
+{% endblock %}
+
+
+{% block quienesSomos %}
+{% endblock %}
+
+<!-- ======= Breadcrumbs ======= -->
+
+
+
+
+{% block categoriaProducto %}
+<section id="portfolio" class="portfolio">
+    <div class="container pt-4">
+        <div class="box-element hidden" id="payment-info">
+
+
+
+            {% if filtroPedidoRetiro == 0 and filtroPedidoEnvio == 0%}
+            <div class="row">
+
+                <div class="col-12 mt-5 mb-5 pt-5 pb-5">
+                    <div class="alert alert-danger text-center" role="alert">
+                        No tienes ningun pedido realizado? <a href="{% url 'CategoriaProducto' %}"
+                            class="alert-link">Realizar pedido</a>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+
+            <div class="row">
+
+
+                <!--  -->
+                {% if filtroPedidoRetiro == 1 and filtroPedidoEnvio == 0 %}
+
+
+                <div class="col-12">
+                    <p style="font-weight: 605; text-transform: uppercase;" id="originalME">Retire su pedido</p>
+                    <hr>
+                </div>
+                <div class="col-6 col-lg-6">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.752127029916!2d-78.45284978572951!3d-0.330041635422386!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d5bd1fdbf97f9d%3A0x6eebf7349aa7e1fd!2sSana%20Sana%20Parque%20Turismo!5e0!3m2!1ses!2sec!4v1623077661753!5m2!1ses!2sec"
+                        height="460" style="border:0; width: 100%" allowfullscreen="" loading="lazy"></iframe>
+
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <p style="font-weight: 605; text-transform: uppercase;" id="originalME">Detalle de su compra</p>
+                    <hr>
+                    <div class="table-responsive" style="margin-top: -20px;">
+                        <table class="table table-striped" id="tablacategoria">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th><strong>#</strong></th>
+                                    <th><strong>Nombre</strong></th>
+                                    <th><strong>Total a pagar</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if pedidoRetiro %}
+                                {% for p in pedidoRetiro %}
+                                <tr style="text-align: center;">
+                                    <th scope="row">{{forloop.counter}} </th>
+                                    <td style="text-transform: uppercase;"> {{user.last_name}} {{user.first_name}}</td>
+                                    <td> {{p.totalPagar}} </td>
+                                </tr>
+
+                                <div class="form-group">
+                                    <input type="hidden" id="nombre" class="form-control"
+                                        placeholder="Ingrese su apellido ..." name="id_cliente"
+                                        value="{{user.cliente.id_cliente_id}}">
+
+                                    <input type="hidden" id="nombre" class="form-control" name="id_pedido"
+                                        value="{{p.id}}">
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
+                    <p style="font-weight: 605; text-transform: uppercase;" id="originalME">Dirección de retiro</p>
+                    <span>ARTEFACTA </span><br>
+                    <span>Sangolqui , Pichincha, Ecuador </span><br>
+                    <span>AV.GENERAL ENRIQUES 30-39 Y COLOMBIA</span>
+                    <hr>
+                    <p>Para más detalle de su compra valla a sus <a href="{% url 'Mis_Pedidos' %}"
+                            style=" font-weight: 600;">pedidos</a>
+                    </p>
+                    <hr>
+                    <div class="div" style="text-align: center;font-weight: 600;">
+                        {% if pedidoRetiro %}
+                        {% for p in pedidoRetiro %}
+                        <a href="#" id="cancelar" style="text-align: center;" onclick="pedidoCanceladoEnvio({{p.id}})">¿
+                            Desea
+                            cancelar su pedido ?
+                        </a>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            {% endif %}
+
+            {% if filtroPedidoRetiro == 0 and filtroPedidoEnvio == 1 %}
+
+            <div class="col-12">
+
+                <form id="formComp" action="{% url 'Comprobante' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+
+                        <p style="font-weight: 605; text-transform: uppercase;" id="originalME">Suba su comprobante</p>
+
+                        <hr>
+                        <div class="form-group">
+
+                            <button type="button" class="btn btn-block"
+                                style="background-color: rgb(60, 141, 188); box-shadow: none; border: 1px solid rgb(126, 125, 125); color: white;"
+                                data-toggle="modal" data-target="#ModalComprobante">Mirar los datos de envio</button>
+                        </div>
+
+                        <div class="table-responsive" style="margin-top: -20px;">
+                            <table class="table table-striped" id="tablacategoria">
+                                <thead>
+                                    <tr style="text-align: center;">
+                                        <th><strong>#</strong></th>
+                                        <th><strong>Nombre</strong></th>
+                                        <th><strong>Total a pagar</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if pedidoEnvio %}
+                                    {% for p in pedidoEnvio %}
+                                    <tr style="text-align: center;">
+                                        <th scope="row"> </th>
+                                        <td style="text-transform: uppercase;"> {{user.last_name}} {{user.first_name}}
+                                        </td>
+                                        <td> {{p.totalPagar}} </td>
+                                    </tr>
+
+                                    <div class="form-group">
+                                        <input type="hidden" id="nombre" class="form-control"
+                                            placeholder="Ingrese su apellido ..." name="id_cliente"
+                                            value="{{user.cliente.id_cliente_id}}">
+
+                                        <input type="hidden" id="nombre" class="form-control" name="id_pedido"
+                                            value="{{p.id}}">
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <input type="file" class="form-control" name="imagenComprobante" id="imagen" required>
+
+                    </div>
+
+                    <input class="btn btn-success btn-block" type="submit" value="Enviar comprobante">
+
+            </div>
+            </form>
+            <div class="col-12 pt-3" style="text-align: center; font-weight: 600;">
+                {% if pedidoEnvio %}
+                {% for p in pedidoEnvio %}
+                <a href="#" id="cancelar" style="text-align: center;" onclick="pedidoCancelado({{p.id}})">¿ Desea
+                    cancelar su pedido ?
+                </a>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+
+
+
+
+        {% endif %}
+
+        {% endif %}
+
+
+    </div>
+
+    </div>
+
+
+</section>
+<div class="modal fade" id="ModalComprobante" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px 20px 0 0">
+            <div class="modal-header"
+                style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+                <h5 class="modal-title" id="exampleModalLabel">Datos de envio </h5>
+                <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% if datos_cuenta %}
+                <p style="font-weight: 500;">Envie su pago a una de las siguientes cuentas disponibles:
+                </p>
+                {% for dato in datos_cuenta %}
+
+                <hr>
+                <strong>Banco</strong>
+                <p style="text-transform: uppercase;">{{dato.nombre_banco}}</p>
+                <strong>Número de cuenta</strong>
+                <p>{{dato.numero_cuenta}}</p>
+
+                <hr>
+                {% endfor %}
+
+                {% else %}
+                adios
+                {% endif %}
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal"
+                    style="border-radius: 5%;">Confirmar</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function pedidoCancelado(id) {
+        Swal.fire({
+            "title": "¿Estas seguro?",
+            "text": "Esta acción no se puede deshacer",
+            "icon": "error",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3645"
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/cancelado/" + id + "/"
+                }
+            })
+
+    }
+    function pedidoCanceladoEnvio(id) {
+        Swal.fire({
+            "title": "¿Estas seguro?",
+            "text": "Esta acción no se puede deshacer",
+            "icon": "error",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3645"
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/cancelado/" + id + "/"
+                }
+            })
+
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+<div class="modal fade" id="ModalID-{{c.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 20px 20px 0 0">
+        <div class="modal-header" style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+          <h5 class="modal-title" id="exampleModalLabel">Editar Categoria </h5>
+          <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="{% url 'Categoria_update' c.id %}" enctype="multipart/form-data" method="POST" role="form">
+        {% csrf_token %}
+        <div class="modal-body">
+            <div class="form-group">
+                {{form.nombre.label}}
+                <!---->
+                <input class="form-control" type="text" name="nombre" value="{{c.nombre}}" placeholder="Ingresa el nombre ..." maxlength="100" required>
+            </div>
+            <div class="form-group">
+                {{form.descripcion.label}}
+                <!---->
+                <input class="form-control" type="text" name="descripcion" value="{{c.descripcion}}" placeholder="Ingresa la descripcion ..." maxlength="100" required>
+            </div>
+            <div class="form-group">
+                {{form.estado.label}}
+                <!---->
+                <select name="estado" class="form-control js-example-basic-single w-100" style="border: 1px solid rgb(0,0,0); width: 100%;">
+                    <!---->
+                    {% if  c.estado == '1'%}
+                        <option value="1" selected>Activo</option>
+                        <option value="0">Inactivo</option>
+                    {% else %}
+                        <option value="0" selected>Inactivo</option>
+                        <option value="1">Activo</option>
+                    {% endif %}
+                    <!---->
+                </select>
+            </div>
+            <div class="form-group">
+                {{form.imagen.label}}
+                <br>
+                <img src="{{c.imagen.url}}" class="img-fluid" width="150px" height="100px" alt="">
+                <!---->
+                <input class="form-control" type="file" name="imagen" value="{{c.imagen}}" placeholder="Selecciona una imagen ...">
+            </div>
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Confirmar</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>

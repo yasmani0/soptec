@@ -1,0 +1,171 @@
+{% load staticfiles %}
+<div class="modal fade" id="modalLoginForm" style="overflow-y: auto;z-index: 10000;" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="border-radius: 20px 20px 0 0">
+      <div class="modal-header text-center"
+        style="background-color: rgb(60, 141, 188);color: white; border: none !important;">
+        <h4 class="modal-title w-100 font-weight-bold"> <b>Iniciar Sesión</b>
+        </h4>
+        <button type="button" style="color: white;" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+
+        <form action="{% url 'usuario_login' %}" method="POST" id="login_user">
+          {% csrf_token %}
+
+
+          <div class="md-form mb-1">
+            <input type="text" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="Ingrese su usuario"
+              name="users_login" autocomplete="off">
+          </div>
+
+          <div class="md-form">
+            <input type="password" id="defaultLoginFormPassword" class="form-control mb-3" placeholder="Password"
+              name="pass_login">
+
+          </div>
+
+          <div class="md-form  justify-content-center">
+
+            <p style="text-align:center"><a href="{% url 'password_reset' %}"><b>Olvido su contraseña?</b></a> </p>
+            <button class="btn btn-success btn-block" type="submit"><b>Iniciar Sesión</b></button>
+            <p style="text-align:center; color: black; font-size: 16px;">No tienes una cuenta ?
+              <a id="mostrar_modal_login" style="color: red;"><b>Registrate</b></a>
+            </p>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Default form login -->
+
+<!-- modal registro -->
+
+<div class="modal fade" id="modalLoginForm1" style="overflow-y: auto;z-index: 10000;" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="border-radius: 20px 20px 0 0">
+      <div class="modal-header text-center"
+        style="background-color: rgb(60, 141, 188);color: white; border: none !important;">
+        <h4 class="modal-title w-100 font-weight-bold">
+          <b>Registrarse</b>
+        </h4>
+        <button type="button" style="color: white;" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'usuario_register' %}" method="POST" id="login_register">
+        {% csrf_token %}
+        <div class="modal-body mx-3">
+          <div class="md-form mb-1">
+            <input type="text" id="" class="form-control mb-4" placeholder="Usuario" name="usuario_reg"
+              autocomplete="off">
+          </div>
+          <div class="md-form mb-1">
+            <input type="text" id="" class="form-control mb-4" placeholder="Nombre" name="nombre_reg"
+              autocomplete="off">
+          </div>
+          <div class="md-form mb-1">
+            <input type="text" id="" class="form-control mb-4" placeholder="Apellido" name="apellido_reg"
+              autocomplete="off">
+          </div>
+          <div class="md-form mb-1">
+            <input type="email" id="" class="form-control mb-4" placeholder="E-mail" name="email_reg"
+              autocomplete="off">
+          </div>
+          <div class="md-form mb-1">
+            <input type="password" id="defaultLoginFormPassword" class="form-control mb-3" placeholder="Contraseña"
+              name="clave_reg">
+          </div>
+
+          <div class="md-form  justify-content-center">
+
+
+            <button class="btn btn-success btn-block" type="submit"><b>Registrarse</b></button>
+            <p style="text-align:center; color: black; font-size: 16px;">Ya tienes una cuenta?
+              <a id="mostrar_modal_registro" style="color: red;"><b>Inicia Sesión</b></a>
+            </p>
+            <p style="text-align:center; color: black; font-size: 16px;">Al registrarte aceptas nuestro <a href=""
+                style="color: green;"><b>Terminos y
+                  condiciones</b></a> </p>
+          </div>
+
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- fin modal registro -->
+
+<!-- Modal -->
+<div class="modal fade" id="modalPerfilForm" style="overflow-y: auto; z-index: 10000;" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px 20px 0 0">
+      <div class="modal-header" style="background-color: rgb(60, 141, 188);color: white; border: none !important;">
+        {% if user.is_authenticated %}
+        <h5 class="modal-title" id="exampleModalLabel"><strong>Mi Perfil</strong> - <span
+            style="text-transform: capitalize;"><b>{{user.first_name}}</b></span>
+        </h5>
+        <button type="button" style="color: white;" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'usuario_perfil' %}" method="POST" role="form" id="perfil_usuario">
+        {% csrf_token %}
+        <div class="modal-body">
+
+          <input type="text" id="" style="display: none;" placeholder="Usuario" name="id_user" value="{{user.id}}">
+
+          <div class="form-group">
+            <label> <strong>Usuario:</strong> </label>
+            <input type="text" id="" class="form-control mb-4" placeholder="Usuario" name="usuario_update"
+              value="{{user.username}}">
+
+          </div>
+          <div class="form-group">
+            <label> <strong>Nombre:</strong> </label>
+            <input type="text" id="" class="form-control mb-4" placeholder="Nombre" name="nombre_update"
+              value="{{user.first_name}}">
+
+          </div>
+          <div class="form-group">
+            <label> <strong>Apellido:</strong> </label>
+            <input type="text" id="" class="form-control mb-4" placeholder="Apellido" name="apellido_update"
+              value="{{user.last_name}}">
+          </div>
+
+          <div class="form-group">
+            <label> <strong>E-mail:</strong> </label>
+            <input type="email" id="" class="form-control mb-4" placeholder="E-mail" name="email_update"
+              value="{{user.email}}">
+          </div>
+
+          <!-- <div class="form-group">
+            <label> <strong>Contraseña:</strong> </label>
+            <input type="password" id="" class="form-control mb-4" placeholder="Contraseña" name="clave_nueva" value="">
+
+            <input type="password" style="display: none;" id="" class="form-control mb-4" placeholder="Contraseña"
+              name="clave_pasada" value="{{user.password}}">
+          </div> -->
+          {% endif %}
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-dismiss="modal"><b>Cancelar</b></button>
+          <button type="submit" class="btn btn-success"><b>Actualizar</b></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
