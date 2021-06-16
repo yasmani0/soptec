@@ -89,13 +89,27 @@ WSGI_APPLICATION = 'soporte_pc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# Local
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'soportepc_bd',
+#         'USER': 'postgres',
+#         'PASSWORD': 'yaz',
+#         'HOST': 'localhost',
+#         'PORT': 5432,
+#     }
+# }
+
+# Produccion
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'soportepc_bd',
-        'USER': 'postgres',
-        'PASSWORD': 'yaz',
-        'HOST': 'localhost',
+        'NAME': 'd8usqbjfu2e03u',
+        'USER': 'rnbooqeskgvgzt',
+        'PASSWORD': 'f6072b199672c87415fe742b20d37288d19f551b57cd6cb9537d830ac041c53a',
+        'HOST': 'ec2-34-233-114-40.compute-1.amazonaws.com',
         'PORT': 5432,
     }
 }
