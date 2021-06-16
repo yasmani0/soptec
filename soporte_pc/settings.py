@@ -26,7 +26,8 @@ SECRET_KEY = 's-vem((20&$14$^0bc6kt+w_@q38$6*7a=x5__hx$u-)&dw^kk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['soptecpc.herokuapp.com']
 
 # Para mensajes alertas
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
