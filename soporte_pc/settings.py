@@ -107,7 +107,7 @@ WSGI_APPLICATION = 'soporte_pc.wsgi.application'
 #     }
 # }
 
-//Produccion
+# Produccion
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
