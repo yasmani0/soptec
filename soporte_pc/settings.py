@@ -107,7 +107,7 @@ WSGI_APPLICATION = 'soporte_pc.wsgi.application'
 #     }
 # }
 
-Produccion
+//Produccion
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -176,8 +176,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 LOGIN_URL = "Inicio"
 
-cloudinary.config( 
-  cloud_name = "dndunnh1v", 
-  api_key = "668282533837722", 
-  api_secret = "2LY2dd9FanConC9_k2jbvMwQTmI"
+cloudinary.config(
+    cloud_name="dndunnh1v",
+    api_key="668282533837722",
+    api_secret="2LY2dd9FanConC9_k2jbvMwQTmI"
 )
