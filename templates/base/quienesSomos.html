@@ -3,29 +3,40 @@
     <div class="container">
 
        <div class="section-title" data-aos="fade-up">
-        <h2>Quienes Somos</h2>
+        <h2 class="d-none d-lg-block">Quienes Somos</h2>
+        <h2 class="d-lg-none" style="font-size: 20px !important;">Quienes Somos</h2>
       </div>
 
       <div class="row">
         <div class="col-lg-4">
           <div class="icon-box">
-            <i class="icofont-computer"></i>
-            <h3><a href="">Compromiso</a></h3>
-            <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
+            <i class="icofont-touch" style="text-align: center;"></i>
+            <h3 style="text-align: center;"><a href="{% url 'QuienesSomos' %}">Conocenos</a></h3>
+            <p>SOPTEC PC empresa dedicada a la venta de productos y servicios informáticos con los más altos estándares de calidad a precios cómodos nuestra empresa inicia en el año 2013 nos ha dado hasta ahora más ...</p>
+            <a href="{% url 'QuienesSomos' %}" class="d-flex flex-row-reverse p-2" style="text-align: center;">
+              <h5 style="font-size: 14px; color: black; font-weight: 500; border-bottom: 1px solid black; ">Leer más</h5>
+            </a>
           </div>
         </div>
         <div class="col-lg-4 mt-4 mt-lg-0">
           <div class="icon-box">
-            <i class="icofont-image"></i>
-            <h3><a href="">Confiable</a></h3>
-            <p>Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+            <!-- <i class="icofont-bulb-alt"></i> -->
+            <i class="icofont-crown" style="text-align: center;"></i>
+            <h3 style="text-align: center;"><a href="{% url 'QuienesSomos' %}">Misión</a></h3>
+            <p>Proporcionar el mejor servicio en productos tecnológicos de calidad y venta online en la ciudad de Cayambe y el país satisfaciendo las necesidades de la población con el objetivo de incrementar nuestra competitividad ... </p>
+            <a href="{% url 'QuienesSomos' %}" class="d-flex flex-row-reverse p-2" style="text-align: center;">
+              <h5 style="font-size: 14px; color: black; font-weight: 500; border-bottom: 1px solid black; ">Leer más</h5>
+            </a>
           </div>
         </div>
         <div class="col-lg-4 mt-4 mt-lg-0">
           <div class="icon-box">
-            <i class="icofont-tasks-alt"></i>
-            <h3><a href="">Seguro</a></h3>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
+            <i class="icofont-badge" style="text-align: center;"></i>
+            <h3 style="text-align: center;"><a href="{% url 'QuienesSomos' %}">Visión</a></h3>
+            <p>Ser una empresa líder del país, comprometidos en la venta de productos tecnológicos online y llegar hacer la preferida por los clientes gracias a la transparencia y eficacia en el servicio y venta con el ...</p>
+            <a href="{% url 'QuienesSomos' %}" class="d-flex flex-row-reverse p-2" style="text-align: center;">
+              <h5 style="font-size: 14px; color: black; font-weight: 500; border-bottom: 1px solid black; ">Leer más</h5>
+            </a>
           </div>
         </div>
       </div>

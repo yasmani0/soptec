@@ -99,17 +99,18 @@
                                 </td>
                                 <td style="text-align: center;">
                                     <a title="Más detalles" class="btn btn-dark"
-                                        onclick="abrir_modal_edicion('{% url 'Detalle_Pedidos' p.id  %}')">
-                                        <i class="fa fa-info-circle fa-2x"></i>
+                                        onclick="abrir_modal_edicion('{% url 'Detalle_Pedidos' p.id  %}')" style="margin: 2px;">
+                                        <i class="fa fa-info-circle fa-2x d-none d-md-block"></i>
+                                        <i class="fa fa-info-circle d-block d-md-none"></i>
                                     </a>
 
                                     {% if p.disponibilidad == '1' %}
 
                                     <a href="{% url 'Comprobante_generado' p.id %}" title="Comprobante"
-                                        class="btn btn-dark">
+                                        class="btn btn-dark" style="margin: 2px;">
 
-                                        <i class="fa fa-file-invoice-dollar fa-2x">
-                                        </i>
+                                        <i class="fa fa-file-invoice-dollar fa-2x d-none d-md-block"> </i>
+                                        <i class="fa fa-file-invoice-dollar d-block d-md-none"></i>
 
                                     </a>
 

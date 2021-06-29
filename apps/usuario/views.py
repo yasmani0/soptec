@@ -43,7 +43,7 @@ def usuario_login(request):
                     if user is not None:
                         login(request, user)
                         messages.success(
-                            request, "Inicio de sessión correctamente")
+                            request, "Inicio de sesión correctamente")
                         return render(request, 'base/base.html')
                     else:
                         messages.error(

@@ -4,10 +4,9 @@
 
 {% block aside %}
 <li><a href="{% url 'Inicio' %}">Inicio</a></li>
-<li class="d-md-none"><a href="{% url 'Inicio' %}">Inicio</a></li>
-<li class="active d-none d-md-block"><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
-<li><a href="">Contactanos</a></li>
-<li><a href="">Quienes Somos</a></li>
+<li><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+<li><a href="{% url 'Contactanos' %}">Contactanos</a></li>
+<li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
 
 {% endblock %}
 
@@ -48,8 +47,8 @@
 
             <div class="col-12">
 
-                <a class="btn btn-dark" style="margin-top:-20px; margin-left:-2px; margin-bottom:15px"
-                    onClick="history.go(-1);">&#x2190;
+                <a href="{% url 'CategoriaProducto' %}" class="btn btn-dark" style="margin-top:-20px; margin-left:-2px; margin-bottom:15px"
+                   >&#x2190;
                     Continuar comprando</a>
 
 

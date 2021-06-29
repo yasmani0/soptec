@@ -4,10 +4,9 @@
 
 {% block aside %}
 <li><a href="{% url 'Inicio' %}">Inicio</a></li>
-<li class="d-md-none"><a href="{% url 'Inicio' %}">Inicio</a></li>
-<li class="active d-none d-md-block"><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
-<li><a href="">Contactanos</a></li>
-<li><a href="">Quienes Somos</a></li>
+<li><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
+<li><a href="{% url 'Contactanos' %}">Contactanos</a></li>
+<li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
 
 {% endblock %}
 

@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 from decouple import config
 import os
 
+# archivos estaticos
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,8 +31,8 @@ SECRET_KEY = 's-vem((20&$14$^0bc6kt+w_@q38$6*7a=x5__hx$u-)&dw^kk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['soptecpc.herokuapp.com']
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['soptecpc.herokuapp.com']
 
 # Para mensajes alertas
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
@@ -91,28 +96,28 @@ WSGI_APPLICATION = 'soporte_pc.wsgi.application'
 
 # Local
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'soportepc_bd',
-#         'USER': 'postgres',
-#         'PASSWORD': 'yaz',
-#         'HOST': 'localhost',
-#         'PORT': 5432,
-#     }
-# }
-
-# Produccion
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd8usqbjfu2e03u',
-        'USER': 'rnbooqeskgvgzt',
-        'PASSWORD': 'f6072b199672c87415fe742b20d37288d19f551b57cd6cb9537d830ac041c53a',
-        'HOST': 'ec2-34-233-114-40.compute-1.amazonaws.com',
+        'NAME': 'soportepc_bd',
+        'USER': 'postgres',
+        'PASSWORD': 'yaz',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }
+
+# Produccion
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'd8usqbjfu2e03u',
+#         'USER': 'rnbooqeskgvgzt',
+#         'PASSWORD': 'f6072b199672c87415fe742b20d37288d19f551b57cd6cb9537d830ac041c53a',
+#         'HOST': 'ec2-34-233-114-40.compute-1.amazonaws.com',
+#         'PORT': 5432,
+#     }
+# }
 
 
 # Password validation
@@ -170,3 +175,9 @@ EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 LOGIN_URL = "Inicio"
+
+cloudinary.config( 
+  cloud_name = "dndunnh1v", 
+  api_key = "668282533837722", 
+  api_secret = "2LY2dd9FanConC9_k2jbvMwQTmI"
+)

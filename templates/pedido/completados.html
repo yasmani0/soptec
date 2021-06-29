@@ -129,27 +129,27 @@ Administración de Pedidos / Completados
                             </td>
                             <td style="text-align: center;">
                                 <a title="Confirmar" class="btn btn-dark" data-toggle="modal"
-                                    data-target="#ModalConfirmarID-{{p.id}}"><i class="fa fa-check fa-2x"></i>
+                                    data-target="#ModalConfirmarID-{{p.id}}" style="margin: 2px;"><i class="fa fa-check"></i>
                                 </a>
 
                                 <a title="Más detalles" class="btn btn-dark"
-                                    onclick="abrir_modal_edicion('{% url 'Detalle_Pedidos' p.id  %}')">
-                                    <i class="fa fa-info-circle fa-2x"></i>
+                                    onclick="abrir_modal_edicion('{% url 'Detalle_Pedidos' p.id  %}')" style="margin: 2px;">
+                                    <i class="fa fa-info-circle"></i>
                                 </a>
 
                                 {% if p.tipo_envio == '2' %}
                                 <a title="Confirmar" class="btn btn-dark"
-                                    onclick="abrir_modal_comprobante('{% url 'Detalle_Comprobante' p.id  %}')"><i
-                                        class="fa fa-eye fa-2x"></i>
+                                    onclick="abrir_modal_comprobante('{% url 'Detalle_Comprobante' p.id  %}')" style="margin: 2px;"><i
+                                        class="fa fa-eye"></i>
                                 </a>
 
                                 {% endif %}
 
                                 {% if p.disponibilidad == '1' %}
                                 <a href="{% url 'Comprobante_generado' p.id %}" title="Comprobante"
-                                    class="btn btn-dark">
+                                    class="btn btn-dark" style="margin: 2px;">
 
-                                    <i class="fa fa-file-invoice-dollar fa-2x">
+                                    <i class="fa fa-file-invoice-dollar">
                                     </i>
 
                                 </a>
