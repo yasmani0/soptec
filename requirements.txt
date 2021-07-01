@@ -12,6 +12,7 @@ html5lib==1.1
 idna==2.10
 Pillow==8.2.0
 psycopg2==2.8.6
+psycopg2-binary==2.9.1
 PyPDF2==1.26.0
 python-bidi==0.4.2
 python-dateutil==1.5
