@@ -31,7 +31,7 @@ SECRET_KEY = 's-vem((20&$14$^0bc6kt+w_@q38$6*7a=x5__hx$u-)&dw^kk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['147.182.172.74']
+ALLOWED_HOSTS = ['147.182.165.39']
 # ALLOWED_HOSTS = ['soptecpc.herokuapp.com',
 #                  'soptecpc.herokuapp.com/categoria/views/', '*']
 
