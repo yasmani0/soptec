@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 's-vem((20&$14$^0bc6kt+w_@q38$6*7a=x5__hx$u-)&dw^kk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['147.182.172.74']
 # ALLOWED_HOSTS = ['soptecpc.herokuapp.com',
@@ -97,28 +97,28 @@ WSGI_APPLICATION = 'soporte_pc.wsgi.application'
 
 # Local
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'soportepc_bd',
-#         'USER': 'postgres',
-#         'PASSWORD': 'yaz',
-#         'HOST': 'localhost',
-#         'PORT': 5432,
-#     }
-# }
-
-# Produccion
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd8usqbjfu2e03u',
-        'USER': 'rnbooqeskgvgzt',
-        'PASSWORD': 'f6072b199672c87415fe742b20d37288d19f551b57cd6cb9537d830ac041c53a',
-        'HOST': 'ec2-34-233-114-40.compute-1.amazonaws.com',
-        'PORT': 5432,
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'soportepc_bd',
+            'USER': 'postgres',
+            'PASSWORD': 'yaz',
+            'HOST': 'localhost',
+            'PORT': 5432,
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'myproject',
+            'USER': 'soptec_admin',
+            'PASSWORD': 'alexander19970',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 
 # Password validation
