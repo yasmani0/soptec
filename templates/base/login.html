@@ -71,11 +71,11 @@
           </div>
           <div class="md-form mb-1">
             <input type="text" id="" class="form-control mb-4" placeholder="Nombre" name="nombre_reg"
-              autocomplete="off">
+              autocomplete="off" onkeypress="return sololetras(event)" onpaste="return false">
           </div>
           <div class="md-form mb-1">
             <input type="text" id="" class="form-control mb-4" placeholder="Apellido" name="apellido_reg"
-              autocomplete="off">
+              autocomplete="off" onkeypress="return sololetras(event)" onpaste="return false">
           </div>
           <div class="md-form mb-1">
             <input type="email" id="" class="form-control mb-4" placeholder="E-mail" name="email_reg"
@@ -136,13 +136,13 @@
           <div class="form-group">
             <label> <strong>Nombre:</strong> </label>
             <input type="text" id="" class="form-control mb-4" placeholder="Nombre" name="nombre_update"
-              value="{{user.first_name}}">
+              value="{{user.first_name}}" onkeypress="return sololetras(event)" onpaste="return false">
 
           </div>
           <div class="form-group">
             <label> <strong>Apellido:</strong> </label>
             <input type="text" id="" class="form-control mb-4" placeholder="Apellido" name="apellido_update"
-              value="{{user.last_name}}">
+              value="{{user.last_name}}" onkeypress="return sololetras(event)" onpaste="return false">
           </div>
 
           <div class="form-group">

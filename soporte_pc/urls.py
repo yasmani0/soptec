@@ -29,6 +29,7 @@ urlpatterns = [
     path('usuario/', include('apps.usuario.urls'), name='Usuario'),
     path('producto/', include('apps.producto.urls'), name='Producto'),
     path('marca/', include('apps.marca.urls'), name='Marca'),
+    path('servicios/', include('apps.servicios.urls'), name='Servicios'),
     path('contactanos/', include('apps.contactanos.urls'), name='Contactanos'),
     path('quienesSomos/', include('apps.quienessomos.urls'), name='QuienesSomos'),
     path('pedidos/', include('apps.pedido.urls'), name='Pedidos'),

@@ -21,13 +21,13 @@
             Nombre
             <!---->
             <input class="form-control" type="text" name="nombre_upd_adm" value="{{u.first_name}}"
-              placeholder="Ingresa el nombre ..." maxlength="100" required>
+              placeholder="Ingresa el nombre ..." maxlength="100" required required onkeypress="return sololetras(event)" onpaste="return false">
           </div>
           <div class="form-group">
             Apellido
             <!---->
             <input class="form-control" type="text" name="apellido_upd_adm" value="{{u.last_name}}"
-              placeholder="Ingresa el apellido ..." maxlength="100" required>
+              placeholder="Ingresa el apellido ..." maxlength="100" required required onkeypress="return sololetras(event)" onpaste="return false">
           </div>
           <div class="form-group">
             E-mail

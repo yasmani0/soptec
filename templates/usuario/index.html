@@ -87,19 +87,19 @@ Administración de usuarios
                     <div class="form-group">
                         Usuario
                         <input type="text" id="usuario" class="form-control" placeholder="Ingrese se usuario ..."
-                            name="usuario_reg_adm" required>
+                            name="usuario_reg_adm" required autocomplete="off">
                     </div>
 
                     <div class="form-group">
                         Nombre
                         <input type="text" id="nombre" class="form-control" placeholder="Ingrese su nombre ..."
-                            name="nombre_reg_adm" required>
+                            name="nombre_reg_adm" required required onkeypress="return sololetras(event)" onpaste="return false" autocomplete="off">
                     </div>
 
                     <div class="form-group">
                         Apellido
                         <input type="text" id="nombre" class="form-control" placeholder="Ingrese su apellido ..."
-                            name="apellido_reg_adm" required>
+                            name="apellido_reg_adm" required required onkeypress="return sololetras(event)" onpaste="return false" autocomplete="off">
                     </div>
 
                     <div class="form-group">

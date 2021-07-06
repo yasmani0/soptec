@@ -16,7 +16,7 @@
                         <label for="nombre">Nombre</label>
                         <!---->
                         <input class="form-control" type="text" id="nombre" name="nombre" value="{{user.first_name}}"
-                            placeholder="Ingresa el nombre ..." maxlength="100" required>
+                            placeholder="Ingresa el nombre ..." maxlength="100" required onkeypress="return sololetras(event)" onpaste="return false">
                         <input class="form-control" type="hidden" id="id_adm" name="id_adm" value="{{user.id}}"
                             maxlength="100" required>
                     </div>
@@ -24,7 +24,7 @@
                         <label for="apellido">Apellido</label>
                         <!---->
                         <input class="form-control" type="text" id="apellido" name="apellido" value="{{user.last_name}}"
-                            placeholder="Ingresa el apellido ..." maxlength="100" required>
+                            placeholder="Ingresa el apellido ..." maxlength="100" required onkeypress="return sololetras(event)" onpaste="return false">
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
