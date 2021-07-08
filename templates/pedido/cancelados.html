@@ -77,6 +77,7 @@ Administración de Pedidos / Cancelados
                     <thead>
                         <tr>
                             <th style="text-align: center;"> # </th>
+                            <th style="text-align: center;">Fecha</th>
                             <th style="text-align: center;">Cliente</th>
                             <th style="text-align: center;">Tipo Envio</th>
                             <th style="text-align: center;">Total</th>
@@ -91,6 +92,9 @@ Administración de Pedidos / Cancelados
                         <!---->
                         <tr>
                             <th scope="row" style="text-align: center;">{{forloop.counter}}</th>
+                            <td style="text-align: center;">
+                                {{p.fecha_pedido}}
+                            </td>
                             <td style="text-align: center;">
                                 <b
                                     style="color: rgb(43, 182, 50); text-transform: capitalize;">{{p.cliente.id_cliente}}</b>
@@ -114,7 +118,7 @@ Administración de Pedidos / Cancelados
                             {% endif %}
 
                             <td style="text-align: center;">
-                                {{p.totalPagar}}
+                                ${{p.totalf|floatformat:2}}
 
                             </td>
                             <td style="text-align: center;">

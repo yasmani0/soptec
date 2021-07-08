@@ -7,7 +7,6 @@
 <li class="active"><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
 <li><a href="{% url 'Contactanos' %}">Contactanos</a></li>
 <li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
-
 {% endblock %}
 
 {% block carrusel %}
@@ -27,8 +26,8 @@
 
 {% block categoriaProducto %}
 <section id="breadcrumbs" class="breadcrumbs">
+  <div>{% include 'base/carrito.html' %}</div>
   <div class="container">
-    {% include 'base/carrito.html' %}
     <ol>
       <li><a href="{% url 'Inicio' %}">Inicio</a></li>
       <li>Categoria</li>

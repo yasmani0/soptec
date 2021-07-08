@@ -25,14 +25,27 @@ def index(request):
 
     if request.user.is_authenticated:
         datos_cuenta = DatosCuenta.objects.all()
+        tipo = 1
 
-        pedidoRetiro = Pedido.objects.filter(
-            estado=True, cliente=request.user.cliente.id, tipo_envio=1, estadoc=0)
+        # pedidoRetiro = Pedido.objects.filter(
+        #     estado=True, cliente=request.user.cliente.id, tipo_envio=1, estadoc=0)
+
+        pedidoRetiro = Pedido.objects.raw(
+            'SELECT p.id, p."totalPagar", p.fecha_pedido, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND tipo_envio=1::text AND estadoc=0::text AND cliente_id='+str(
+                request.user.cliente.id)
+        )
+
         filtroPedidoRetiro = Pedido.objects.filter(
             estado=True, cliente=request.user.cliente.id, tipo_envio=1, estadoc=0).count()
 
-        pedidoEnvio = Pedido.objects.filter(
-            estado=True, cliente=request.user.cliente.id, tipo_envio=2, estadoc=0)
+        # pedidoEnvio = Pedido.objects.filter(
+        #     estado=True, cliente=request.user.cliente.id, tipo_envio=2, estadoc=0)
+
+        pedidoEnvio = Pedido.objects.raw(
+            'SELECT p.id, p."totalPagar", p.fecha_pedido, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND tipo_envio=2::text AND estadoc=0::text AND cliente_id='+str(
+                request.user.cliente.id)
+        )
+
         filtroPedidoEnvio = Pedido.objects.filter(
             estado=True, cliente=request.user.cliente.id, tipo_envio=2, estadoc=0).count()
         cliente = request.user.cliente
@@ -115,12 +128,15 @@ class generarComprobante(View):
             productos = PedidoEspecifico.objects.raw(
                 'select proe.id, proe.cantidad, proe.pedido_id, proe.producto_id, pro.nombre, pro.precio, pro.imagen, proe.cantidad * pro.precio as subtotal from pedido_pedidoespecifico as proe inner join producto_producto as pro on proe.producto_id=pro.id where proe.pedido_id='+str(idDetalle))
 
+            numeroComp = Pedido.objects.filter(disponibilidad=1).count()
+
             context = {
                 'sale': Pedido.objects.get(pk=self.kwargs['pk']),
-                'comp': {'name': 'Soptec PC', 'address': 'Ecuador - Sangolqui'},
+                'comp': {'name': 'Soptec PC', 'address': 'Cayambe , Pichincha, Ecuador'},
                 'detalle': productos,
                 'total': totales,
                 'usuario': cliente,
+                'numeroCom': numeroComp,
                 'icon': '{}{}'.format(settings.MEDIA_URL, 'logo.jpeg'),
             }
 

@@ -1,7 +1,7 @@
 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content" style="border-radius: 20px 20px 0 0">
         <div class="modal-header" style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
-            <h3 class="modal-title">Detalle pedido</h3>
+            <h3 class="modal-title">Detalle del pedido</h3>
             <button style="color: white;" class="close" type="button" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -16,7 +16,7 @@
                             <th>Producto</th>
                             <th>Precio</th>
                             <th>Cantidad</th>
-                            <th>Total</th>
+                            <th>Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,22 +33,46 @@
                             <td style="padding-left: 35px;">
                                 {{p.cantidad}}
                             </td>
-                            <td>{{p.subtotal}}</td>
+                            <td>${{p.subtotal|floatformat:2}}</td>
                         </tr>
                         {% endfor %}
                         {% else %}
                         {% endif %}
-                        <!-- <tr>
-                            <td colspan="4">
-                                <h5>Productos: <strong>{{p.get_cart_items}}</strong></h5>
+                        {% for t in totales %}
+                        <tr>
+                            <td colspan="3">
+                               
                             </td>
                             <td colspan="1">
-                                <h5><strong>Total:</strong></h5>
+                                <h5 style="text-align: center; font-size: 16px;"><strong>Subtotal</strong></h5>
                             </td>
                             <td colspan="1">
-                                <h5><strong class="total">${{totalFinal}}</strong></h5>
+                                <h5 style="font-size: 16px;"><strong class="total">${{t.totalPagar|floatformat:2}}</strong></h5>
                             </td>
-                        </tr> -->
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                               
+                            </td>
+                            <td colspan="1">
+                                <h5 style="text-align: center; font-size: 16px;"><strong>Iva(12%):</strong></h5>
+                            </td>
+                            <td colspan="1">
+                                <h5 style="font-size: 16px;"><strong class="total">${{t.iva|floatformat:2}}</strong></h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                               
+                            </td>
+                            <td colspan="1">
+                                <h5 style="text-align: center; font-size: 16px; font-weight: 600;"><strong>Total:</strong></h5>
+                            </td>
+                            <td colspan="1">
+                                <h5 style="font-size: 16px; font-weight: 600; "><strong class="total">${{t.totalf|floatformat:2}}</strong></h5>
+                            </td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
 
                 </table>

@@ -17,6 +17,7 @@ body {
 /* body::-webkit-scrollbar {
   width: 8px;
   background: #ffffff;
+  
 }
 
 body::-webkit-scrollbar-thumb {
@@ -24,9 +25,17 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
 } */
 
+/* #login_user label .error {
+  color: rgba(255, 0, 0, 0.781);
+  position: absolute !important;
+  font-size: 1px !important;
+} */
+
 /* .modal-dialog{
   overflow-x: hidden;
 }
+
+
 
 .modal::-webkit-scrollbar {
   width: 8px;
@@ -37,6 +46,39 @@ body::-webkit-scrollbar-thumb {
   background: rgba(233, 107, 86,1);
   border-radius: 10px;
 } */
+
+#formContacto label.error {
+  color: rgba(255, 0, 0, 0.781);
+  position: relative;
+  font-size: 14px;
+  padding-top: 22px;
+}
+
+#login_user, #login_register, .md-form label.error {
+  color: rgba(255, 0, 0, 0.781);
+  position: relative;
+  font-size: 14px;
+  top:-25px;
+  padding-bottom: 1px;
+  margin: 0;
+}
+
+#perfil_usuario, label.error {
+  color: rgba(255, 0, 0, 0.781);
+  position: relative;
+  font-size: 14px;
+  top:-25px;
+
+}
+
+#perfil_usuario{
+  color: black;
+  padding-top: 25px;
+}
+
+
+
+
 
 a {
   color: #e96b56;
@@ -162,7 +204,7 @@ h1, h2, h3, h4, h5, h6 {
 #header .logo img {
   padding: 0;
   margin: 0;
-  max-height: 40px;
+  /* max-height: 40px; */
 }
 
 /*--------------------------------------------------------------

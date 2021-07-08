@@ -17,6 +17,10 @@ from apps.cliente.models import Cliente
 from apps.datoscuenta.models import DatosCuenta
 from apps.datoscuenta.forms import DatosCuentaForm
 
+from django.conf import settings
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
+
 import datetime
 import json
 
@@ -31,7 +35,6 @@ def index(request):
         marca = Marca.objects.all().order_by('nombre')
         datos_cuenta = DatosCuenta.objects.all()
         form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
-        
 
         if request.method == 'POST':
             # id = request.POST.get('id_cat')
@@ -47,11 +50,11 @@ def index(request):
         else:
             form = ProductoForm()
             contexto = {'producto': producto, 'form': form,
-                        'categoria': categoria, 'marca': marca,'datos_cuenta':datos_cuenta,'form_cuenta':form_cuenta}
+                        'categoria': categoria, 'marca': marca, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
         return render(request, 'producto/index.html', contexto)
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')
 
 # def update(request, id):
 #     producto = Producto.objects.get(id=id)
@@ -88,7 +91,6 @@ def update(request, id):
             return render(request, 'producto/update.html', {'producto': producto, 'form': form})
         else:
             return HttpResponse("Acceso Denegado Admin")
-    
 
 
 class update1(UpdateView):
@@ -116,7 +118,7 @@ def update2(request, id):
         return render(request, 'producto/update.html', {'form': form})
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')
 
 
 def update3(request):
@@ -219,8 +221,25 @@ def updatePedidoEspecifico(request):
                 pedido=pedido, producto=producto)
 
             if action == 'add':
+
                 if producto.cantidad == 0:
                     messages.error(request, "No hay suficientes productos")
+                    # mensajes
+                    context = {'mail': 'zeroyaz0@gmail.com', 'nombre': '! Admin !',
+                               'asunto': '!IMPORTANTE!', 'mensaje': 'No hay suficientes productos de '+str(producto.nombre)}
+                    template = get_template('contactanos/email.html')
+                    content = template.render(context)
+
+                    email = EmailMultiAlternatives(
+                        'Soptec PC - Sin Productos',
+                        'Mensaje enviando ',
+                        settings.EMAIL_HOST_USER,
+                        ['zeroyaz0@gmail.com']
+                    )
+
+                    email.attach_alternative(content, 'text/html')
+                    email.send()
+
                 else:
                     pedidoespecifico.cantidad = (pedidoespecifico.cantidad + 1)
                     producto.cantidad = (producto.cantidad - 1)
@@ -287,6 +306,21 @@ def pedidoProcesados(request):
                     direccion="Local",
                 )
 
+                context = {'mail': 'zeroyaz0@gmail.com', 'nombre': '! Admin !',
+                           'asunto': '!IMPORTANTE!', 'mensaje': 'Nuevo pedido de '+str(request.user.first_name)}
+                template = get_template('contactanos/email.html')
+                content = template.render(context)
+
+                email = EmailMultiAlternatives(
+                    'Soptec PC - Nuevo Pedido',
+                    'Mensaje enviando ',
+                    settings.EMAIL_HOST_USER,
+                    ['zeroyaz0@gmail.com']
+                )
+
+                email.attach_alternative(content, 'text/html')
+                email.send()
+
                 messages.success(
                     request, "Pedido relizado correctamente retie su pedido en la siguiente dirreción ...")
 
@@ -305,6 +339,21 @@ def pedidoProcesados(request):
                 cursor = connection.cursor()
                 cursor.execute("Update cliente_cliente set cedula='"+str(cedula) +
                                "', telefono='"+str(telefono)+"' where id_cliente_id="+str(idA))
+
+                context = {'mail': 'zeroyaz0@gmail.com', 'nombre': '! Admin !',
+                           'asunto': '!IMPORTANTE!', 'mensaje': 'Nuevo pedido de '+str(request.user.first_name)}
+                template = get_template('contactanos/email.html')
+                content = template.render(context)
+
+                email = EmailMultiAlternatives(
+                    'Soptec PC - Nuevo Pedido',
+                    'Mensaje enviando ',
+                    settings.EMAIL_HOST_USER,
+                    ['zeroyaz0@gmail.com']
+                )
+
+                email.attach_alternative(content, 'text/html')
+                email.send()
                 messages.success(
                     request, "Pedido relizado correctamente por favor suba su comprobante con el deposito realizado...")
 

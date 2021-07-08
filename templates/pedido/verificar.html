@@ -189,14 +189,38 @@
                                     {% endfor %}
                                     <tr>
                                         <td colspan="4">
+                                            <!-- <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5> -->
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>Subtotal:</strong></h5>
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>${{pedido.get_cart_total|floatformat:2}}</strong></h5>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>Iva (12%):</strong></h5>
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>${{pedido.get_cart_total_iva|floatformat:2}}</strong></h5>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
                                             <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5>
                                         </td>
                                         <td colspan="1">
                                             <h5><strong>Total:</strong></h5>
                                         </td>
                                         <td colspan="1">
-                                            <h5><strong>${{pedido.get_cart_total|floatformat:2}}</strong></h5>
+                                            <h5><strong>${{pedido.get_cart_total_final|floatformat:2}}</strong></h5>
                                         </td>
+
                                     </tr>
                                 </tbody>
 
@@ -316,6 +340,34 @@
 
                     let url = '/producto/pedido_procesado/'
 
+                    let timerInterval
+                    Swal.fire({
+                    title: 'Cargando ...',
+                    html: '',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading()
+                        timerInterval = setInterval(() => {
+                        const content = Swal.getHtmlContainer()
+                        if (content) {
+                            const b = content.querySelector('b')
+                            if (b) {
+                            b.textContent = Swal.getTimerLeft()
+                            }
+                        }
+                        }, 100)
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval)
+                    }
+                    }).then((result) => {
+                    /* Read more about handling dismissals below */
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('Pedido completado')
+                    }
+                    })
+
                     fetch(url, {
                         method: 'POST',
                         headers: {
@@ -330,7 +382,7 @@
                         })
                         .then((data) => {
                             console.log('Success:', data);
-                            alert("Pedido completado")
+                            // alert("Pedido completado")
                             window.location.href = "{% url 'Comprobante' %}"
                         })
 
@@ -397,9 +449,38 @@
                             envioInfo.city = form.city.value
                             envioInfo.address = form.address.value
                             envioInfo.seleccion = form.seleccion.value
-                            // envioInfo.imagenComprobante = form.imagenComprobante.value.replace(/.*(\/|\\)/, '');j
+                           
 
                             let url = '/producto/pedido_procesado/'
+
+                              
+                            let timerInterval
+                                    Swal.fire({
+                                    title: 'Cargando ...',
+                                    html: '',
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    didOpen: () => {
+                                        Swal.showLoading()
+                                        timerInterval = setInterval(() => {
+                                        const content = Swal.getHtmlContainer()
+                                        if (content) {
+                                            const b = content.querySelector('b')
+                                            if (b) {
+                                            b.textContent = Swal.getTimerLeft()
+                                            }
+                                        }
+                                        }, 100)
+                                    },
+                                    willClose: () => {
+                                        clearInterval(timerInterval)
+                                    }
+                                    }).then((result) => {
+                                    /* Read more about handling dismissals below */
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        console.log('Pedido completado')
+                                    }
+                                    })
 
                             fetch(url, {
                                 method: 'POST',
@@ -415,7 +496,35 @@
                                 })
                                 .then((data) => {
                                     console.log('Success:', data);
-                                    alert("Pedido completado")
+
+                                    // let timerInterval
+                                    // Swal.fire({
+                                    // title: 'Cargando ...',
+                                    // html: '',
+                                    // timer: 2000,
+                                    // timerProgressBar: true,
+                                    // didOpen: () => {
+                                    //     Swal.showLoading()
+                                    //     timerInterval = setInterval(() => {
+                                    //     const content = Swal.getHtmlContainer()
+                                    //     if (content) {
+                                    //         const b = content.querySelector('b')
+                                    //         if (b) {
+                                    //         b.textContent = Swal.getTimerLeft()
+                                    //         }
+                                    //     }
+                                    //     }, 100)
+                                    // },
+                                    // willClose: () => {
+                                    //     clearInterval(timerInterval)
+                                    // }
+                                    // }).then((result) => {
+                                    // /* Read more about handling dismissals below */
+                                    // if (result.dismiss === Swal.DismissReason.timer) {
+                                    //     console.log('Pedido completado')
+                                    // }
+                                    // })
+
                                     window.location.href = "{% url 'Comprobante' %}"
                                 })
                         }
@@ -525,6 +634,17 @@
             return false
         }
 
+    }
+
+
+    function mostraralert() {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Your work has been saved',
+            showConfirmButton: false,
+            timer: 1500
+         })
     }
 
 

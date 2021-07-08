@@ -24,6 +24,11 @@
                     <!-- Text -->
                     <span style="font-size: 18px;">Caracteristicas</span>
                     <p class="card-text">{{p.descripcion}}</p>
+                    {% if p.cantidad == 0 %}
+                    <span style="font-size: 18px;">Stock: <span class="text-danger">{{p.cantidad}}</span></span>
+                    {% else %}
+                    <span style="font-size: 18px;">Stock: <span class="text-success">{{p.cantidad}}</span></span>
+                    {% endif %}
                     <!-- Button -->
                     <div>
                         <div style="font-size: 25px; padding-top: 15px; float: left; position: absolute; left: 18px; bottom: 38px;"

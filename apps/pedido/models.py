@@ -32,6 +32,20 @@ class Pedido(models.Model):
         return total
 
     @property
+    def get_cart_total_iva(self):
+        orderitems = self.pedidoespecifico_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total*0.12
+
+    @property
+    def get_cart_total_final(self):
+        orderitems = self.pedidoespecifico_set.all()
+        subtotal = sum([item.get_total for item in orderitems])
+        iva = subtotal*0.12
+        total = subtotal+iva
+        return total
+
+    @property
     def get_cart_items(self):
         orderitems = self.pedidoespecifico_set.all()
         total = sum([item.cantidad for item in orderitems])

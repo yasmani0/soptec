@@ -12,19 +12,20 @@ import json
 def index(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
     if is_admin:
-        pedido = Pedido.objects.filter(estado=True, disponibilidad=0)
+        pedido = Pedido.objects.raw(
+            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text'
+        )
+        # pedido = Pedido.objects.filter(estado=True, disponibilidad=0)
         pedidoEspecifico = PedidoEspecifico.objects.all()
         metodoEnvio = MetodoEnvio.objects.all()
         datos_cuenta = DatosCuenta.objects.all()
         form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
         context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
-                'metodoEnvio': metodoEnvio, 'datos_cuenta':datos_cuenta,'form_cuenta':form_cuenta}
+                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
         return render(request, 'pedido/index.html', context)
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
-    
-
+        return render(request, 'base/base.html')
 
 
 def update(request):
@@ -38,8 +39,8 @@ def update(request):
                 if id_pedido:
                     cursor = connection.cursor()
                     cursor.execute("Update pedido_pedido set disponibilidad='" +
-                                str(estado)+"', estadoc='" +
-                                str(estadoc)+"' where id="+str(id_pedido))
+                                   str(estado)+"', estadoc='" +
+                                   str(estadoc)+"' where id="+str(id_pedido))
                     messages.success(request, "Estado del pedido actualizado")
                     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             except:
@@ -48,36 +49,42 @@ def update(request):
             return HttpResponse(json.dumps(""), content_type="application/json")
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')
 
 
 def completados(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
     if is_admin:
-        pedido = Pedido.objects.filter(estado=True, disponibilidad=1)
+        pedido = Pedido.objects.raw(
+            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text'
+        )
+        # pedido = Pedido.objects.filter(estado=True, disponibilidad=1)
         pedidoEspecifico = PedidoEspecifico.objects.all()
         metodoEnvio = MetodoEnvio.objects.all()
         datos_cuenta = DatosCuenta.objects.all()
         form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
         context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
-                'metodoEnvio': metodoEnvio, 'datos_cuenta':datos_cuenta,'form_cuenta':form_cuenta}
+                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
         return render(request, 'pedido/completados.html', context)
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')
 
 
 def cancelados(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
     if is_admin:
-        pedido = Pedido.objects.filter(estado=True, disponibilidad=2)
+        pedido = Pedido.objects.raw(
+            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text'
+        )
+        # pedido = Pedido.objects.filter(estado=True, disponibilidad=2)
         pedidoEspecifico = PedidoEspecifico.objects.all()
         metodoEnvio = MetodoEnvio.objects.all()
         datos_cuenta = DatosCuenta.objects.all()
         form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
         context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
-                'metodoEnvio': metodoEnvio, 'datos_cuenta':datos_cuenta,'form_cuenta':form_cuenta}
+                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
         return render(request, 'pedido/cancelados.html', context)
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')

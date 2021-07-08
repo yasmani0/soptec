@@ -42,9 +42,11 @@ def pedido_cancelado_envio(request, id):
 
 
 def mis_pedidos(request):
-    misPedidos = Pedido.objects.filter(
-        estado=True, cliente=request.user.cliente.id)
-    context = {'misPedios': misPedidos}
+    misPedidos = Pedido.objects.raw(
+        'SELECT p.id, p."totalPagar", p.fecha_pedido, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND cliente_id='+str(
+            request.user.cliente.id)
+    )
+    context = {'misPedidos': misPedidos}
     return render(request, 'pedido/mispedidos.html', context)
 
 
@@ -54,7 +56,10 @@ def detalle_pedidos(request, id):
         productos = PedidoEspecifico.objects.raw(
             'select proe.id, proe.cantidad, proe.pedido_id, proe.producto_id, pro.nombre, pro.precio, pro.imagen, proe.cantidad * pro.precio as subtotal from pedido_pedidoespecifico as proe inner join producto_producto as pro on proe.producto_id=pro.id where proe.pedido_id='+str(id))
 
-    context = {'productos': productos}
+        totales = Pedido.objects.raw(
+            'SELECT p.id, p."totalPagar", p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND id='+str(id))
+
+    context = {'productos': productos, 'totales': totales}
     return render(request, 'pedido/detallepedidos.html', context)
 
 

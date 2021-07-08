@@ -159,7 +159,7 @@ Administración de Productos
                         {% for p in producto %}
                         <!---->
                         <tr>
-                            <th scope="row">{{p.id}}</th>
+                            <th scope="row">{{forloop.counter}}</th>
                             <td>
                                 {% if p.imagen %}
                                 <img src="{{p.imagen.url}}" alt="image" class="img-thumbnail"

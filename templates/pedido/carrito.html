@@ -83,17 +83,40 @@
                                             <img data-product="{{item.producto.id}}" data-action="add"
                                                 class="chg-quantity update-cart"
                                                 src="{% static  'style_users/img/arrow-up.png' %}"
-                                                style="width:12px; position:absolute; margin-bottom: 15x;">
+                                                style="width:12px; position:relative; margin-top: -15px;">
 
                                             <img data-product="{{item.producto.id}}" data-action="remove"
                                                 class="chg-quantity update-cart"
                                                 src="{% static  'style_users/img/arrow-down.png' %}"
-                                                style="width:12px; padding-top: 10px;">
+                                                style="width:12px; padding-top: 10px; margin-left: -16px;">
                                         </td>
                                         <td>{{item.get_total|floatformat:2}}</td>
                                     </tr>
                                     {% endfor %}
 
+                                    <tr>
+                                        <td colspan="4">
+                                            <!-- <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5> -->
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>Subtotal:</strong></h5>
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>${{pedido.get_cart_total|floatformat:2}}</strong></h5>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>Iva (12%):</strong></h5>
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>${{pedido.get_cart_total_iva|floatformat:2}}</strong></h5>
+                                        </td>
+
+                                    </tr>
                                     <tr>
                                         <td colspan="4">
                                             <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5>
@@ -102,8 +125,9 @@
                                             <h5><strong>Total:</strong></h5>
                                         </td>
                                         <td colspan="1">
-                                            <h5><strong>${{pedido.get_cart_total|floatformat:2}}</strong></h5>
+                                            <h5><strong>${{pedido.get_cart_total_final|floatformat:2}}</strong></h5>
                                         </td>
+
                                     </tr>
                                 </tbody>
 
@@ -148,10 +172,25 @@
         }
     })
 
-    Toast.fire({
-        icon: 'success',
-        title: '{{m}}'
-    })
+    
+    if ('{{m}}' == 'No hay suficientes productos') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+    } else if ('{{m}}' == 'Solo puede realizar un pedido a la vez, confirme su pedido') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+    } else {
+        Toast.fire({
+            icon: 'success',
+            title: '{{m}}'
+        })
+    }
+
+
 </script>
 {% endfor %}
 {% endif %}

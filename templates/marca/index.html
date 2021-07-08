@@ -126,7 +126,7 @@ Administración de marcas
                         {% for m in marca %}
                         <!---->
                         <tr>
-                            <th scope="row">{{m.id}}</th>
+                            <th scope="row">{{forloop.counter}}</th>
                             <td>{{m.id_categoria}}</td>
                             <td>{{m.nombre}}</td>
                             <td>{% if m.estado == '1'%} <b style="color: rgb(43, 182, 50);">Activo</b> {% else %} <b

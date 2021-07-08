@@ -6,15 +6,16 @@
 
 <style>
     .img-invoice {
-        width: 150px;
+        width: 300px;
         position: relative;
-        /* text-align: center;
-        margin: 0 auto; */
+        text-align: center;
+        margin: 0 auto;
     }
 
     .head {
         text-align: center;
         text-transform: uppercase;
+        margin-top: -500px;
     }
 
     #invoice thead tr th {
@@ -39,13 +40,14 @@
 </style>
 
 <body>
-    <img src="{% static 'style_users/img/logo.jpeg' %}" class="img-invoice">
-    <p class="head" style="font-size: 20px;">
+    <img src="{% static 'style_users/img/logospt.png' %}" class="img-invoice">
+    <!-- <p class="head" style="font-size: 20px;">
         {{ comp.name|upper }}<br>
         <span style="font-size: 8px;"> {{ comp.address|upper }}</span>
-    </p>
+    </p> -->
+    <p style="font-size: 10px;text-align: right; width: 200px; height: 200px;"> {{ comp.address|upper }}</p>
     <p>
-        <b>FACTURA:</b> {{ sale.id }}
+        <b>FACTURA:</b> {{ numeroCom }}  
         <br>
         <b>FECHA DE VENTA:</b> {{ sale.fecha_pedido }}
         <br>

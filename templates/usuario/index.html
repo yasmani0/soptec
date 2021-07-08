@@ -151,7 +151,7 @@ Administración de usuarios
                         {% for u in usuarios %}
                         <!---->
                         <tr>
-                            <th scope="row">{{u.id}}</th>
+                            <th scope="row">{{forloop.counter}}</th>
                             <td>{{u.username}}</td>
                             <td>{{u.first_name}}</td>
                             <td>{{u.last_name}}</td>

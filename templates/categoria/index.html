@@ -131,7 +131,7 @@ Administración de categorias
                         {% for c in categoria %}
                         <!---->
                         <tr>
-                            <th scope="row">{{c.id}}</th>
+                            <th scope="row">{{forloop.counter}}</th>
                             <td>
                                 <img src="{{c.imagen.url}}" alt="image" class="img-thumbnail"
                                     style="width: 90px; height: 75px;" />
