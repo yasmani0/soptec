@@ -7,4 +7,5 @@ urlpatterns = [
     path('', login_required(index), name="Comprobante"),
     path('generar/<pk>', login_required(generarComprobante.as_view()),
          name="Comprobante_generado"),
+
 ]

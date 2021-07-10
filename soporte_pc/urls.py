@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.inicio.urls'), name='Inicio'),
     path('SPCAdmin/', include('apps.admin.urls'), name='Admin'),
+    path('SoptecLocaldmin/', include('apps.local.urls'), name='LocalAdmin'),
     path('categoria/', include('apps.categoria.urls'), name='Categoria'),
     path('usuario/', include('apps.usuario.urls'), name='Usuario'),
     path('producto/', include('apps.producto.urls'), name='Producto'),

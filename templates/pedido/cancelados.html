@@ -7,6 +7,9 @@ Administración de Pedidos / Cancelados
 
 {% endblock %}
 
+{% block contenidograficas %}
+{% endblock %}
+
 {% block slider %}
 <ul class="sidebar-menu">
     <li class="header">Navegación</li>
@@ -151,6 +154,10 @@ Administración de Pedidos / Cancelados
                                 </a>
                                 {% endif %}
 
+                                <a title="Eliminar" class="btn btn-danger" style="margin: 2px" onclick="pedidoCancelado({{p.id}})">
+                                    <i class="fa fa-remove"></i>
+                                </a>
+
 
 
 
@@ -239,6 +246,28 @@ Administración de Pedidos / Cancelados
             $(this).modal('show')
         })
     }
+</script>
+
+<script>
+    function pedidoCancelado(id) {
+        Swal.fire({
+            "title": "¿Eliminar pedido, Estas seguro?",
+            "text": "Esta acción no se puede deshacer",
+            "icon": "error",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Si, Eliminar",
+            "reverseButtons": true,
+            "confirmButtonColor": "#dc3645"
+        })
+            .then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/admin_pedido_canceladof/" + id + "/"
+                }
+            })
+
+    }
+ 
 </script>
 
 

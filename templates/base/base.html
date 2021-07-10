@@ -98,10 +98,17 @@
           <script>
             window.location.href = "{% url 'Admin' %}"
           </script>
-
-
           {% else %}
           {% include "base/perfil.html" %}
+
+          {% endif %}
+
+          {% if user.is_authenticated and user.username == 'alexander' %}
+
+          <script>
+            window.location.href = "{% url 'LocalAdmin' %}"
+          </script>
+      
 
           {% endif %}
 

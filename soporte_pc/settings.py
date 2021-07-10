@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'apps.contactanos',
     'apps.quienessomos',
     'apps.comprobante',
+    'apps.local',
 
 ]
 

@@ -154,3 +154,4 @@ class generarComprobante(View):
         except:
             pass
         return HttpResponseRedirect(reverse_lazy('Mis_Pedidos'))
+

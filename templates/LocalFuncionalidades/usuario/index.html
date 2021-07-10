@@ -1,0 +1,223 @@
+{% extends 'base_local/base.html' %}
+{% load staticfiles%}
+
+{% block titlepage %}
+
+<h3 class="pt-4 pl-3"> Administración de usuarios</h3>
+
+{% endblock %}
+
+{% block slider %}
+<li class="mt sub-menu">
+  <a  class="active" href="javascript:;">
+      <i class="fas fa-tachometer-alt"></i>
+    <span>Acceso</span>
+    </a>
+  <ul class="sub">
+    <li><a href="{% url 'LocalAdmin' %}">Inicio</a></li>
+    <li class="active" ><a href="{% url 'LocalUsers' %}">Usuarios</a></li>
+  </ul>
+</li>
+<li class="sub-menu">
+  <a href="javascript:;">
+    <i class="fa fa-desktop"></i>
+    <span>Almacén</span>
+    </a>
+  <ul class="sub">
+    <li><a href="{% url 'Local_Categoria' %}">Categorias</a></li>
+    <li><a href="{% url 'Local_Marca' %}">Marcas</a></li>
+    <li><a href="{% url 'Local_Producto' %}">Productos</a></li>
+  </ul>
+</li>
+<li class="sub-menu">
+  <a href="javascript:;">
+    <i class="fa fa-shopping-cart"></i>
+    <span>Pedidos</span>
+    </a>
+  <ul class="sub">
+    <li><a href="{% url 'Local_Pedido_Completado' %}">Completados</a></li>
+    <li><a href="{% url 'Local_Pedidos' %}">Pendientes</a></li>
+    <li><a href="{% url 'Local_Pedido_Cancelado' %}">Cancelados</a></li>
+  </ul>
+</li>
+{%endblock%}
+
+{% block contenido %}
+<!-- Modal -->
+<div class="modal fade" id="ModalAgregarUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px 20px 0 0">
+            <div class="modal-header"
+                style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Usuario</h5>
+                <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'LocalUserRegisterAdm'  %}" enctype="multipart/form-data" method="POST" role="form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+
+                    </div>
+                    <div class="form-group">
+                        Usuario
+                        <input type="text" id="usuario" class="form-control" placeholder="Ingrese se usuario ..."
+                            name="usuario_reg_adm" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        Nombre
+                        <input type="text" id="nombre" class="form-control" placeholder="Ingrese su nombre ..."
+                            name="nombre_reg_adm" required required onkeypress="return sololetras(event)" onpaste="return false" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        Apellido
+                        <input type="text" id="nombre" class="form-control" placeholder="Ingrese su apellido ..."
+                            name="apellido_reg_adm" required required onkeypress="return sololetras(event)" onpaste="return false" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        Email
+                        <input type="email" id="nombre" class="form-control" placeholder="Ingrese su Email ..."
+                            name="email_reg_adm" required>
+                    </div>
+
+                    <div class="form-group">
+                        Contraseña
+                        <input type="password" id="nombre" class="form-control" placeholder="Ingrese su contraseña ...."
+                            name="clave_reg_adm" pattern="[A-Za-z][A-Za-z0-9]*[0-9][A-Za-z0-9]*"
+                            title="La contraseña debe tener una letra mayúscula o minúscula, o un dígito. además debe empezar con una letra y contener al menor un dígito"
+                            required minlength="8">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- listar -->
+<div class="col-lg-12 grid-margin stretch-card">
+    <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#ModalAgregarUsuario">
+        <b>+ Agregar</b>
+    </button>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="tablausuario">
+                    <thead>
+                        <tr>
+                            <th> # </th>
+                            <th>Usuario</th>
+                            <th>Nombre </th>
+                            <th>Apellido</th>
+                            <th>Email</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if usuarios %}
+                        <!---->
+                        {% for u in usuarios %}
+                        <!---->
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{u.username}}</td>
+                            <td>{{u.first_name}}</td>
+                            <td>{{u.last_name}}</td>
+                            <td>{{u.email}}</td>
+
+                            <td>{% if u.is_active %} <b style="color: rgb(43, 182, 50);">Activo</b> {% else %} <b
+                                    style="color: rgb(252,56,29);">Inactivo</b> {% endif %}</td>
+
+                            <td>
+
+                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#ModalUsuID-{{u.id}}"><i class="fa fa-edit"></i></button>
+
+                            </td>
+
+                            {% include "LocalFuncionalidades/usuario/update.html" %}
+
+
+                        </tr>
+                        {% endfor %}
+                        <!---->
+                        {% else %}
+                        <!---->
+                        <tr>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-heart-broken"></i> Aún no tenemos usuarios <i
+                                    class="fas fa-heart-broken"></i>
+                            </div>
+                        </tr>
+
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="alertcategoria">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin listar -->
+{% endblock %}
+
+
+{% block addjs %}
+{% if messages %}
+{% for m in messages %}
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    if ('{{m}}' == 'Usuario ya registrado, ingrese otro usuario') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+
+
+    } else if ('{{m}}' == 'Cuenta o numero de ya existente, ingrese otra cuenta') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+
+    } else {
+        Toast.fire({
+            icon: 'success',
+            title: '{{m}}'
+        })
+
+    }
+
+
+</script>
+{% endfor %}
+{% endif %}
+
+<script src="{% static 'style_admin/funcionalidades/usuarios.js' %}"></script>
+
+{% endblock %}

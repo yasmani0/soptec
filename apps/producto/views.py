@@ -56,19 +56,6 @@ def index(request):
         messages.error(request, "Acceso denegado")
         return render(request, 'base/base.html')
 
-# def update(request, id):
-#     producto = Producto.objects.get(id=id)
-#     if request.method == 'POST':
-#         forms = ProductoForm(request.POST, instance=producto, files=request.FILES)
-#         if forms.is_valid():
-#             forms.save()
-#             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-#         else:
-#             return HttpResponse(json.dumps("El producto ya existe"), content_type="application/json")
-#     else:
-#         forms = ProductoForm(instance=producto)
-#         return render(request, 'producto/update.html', {'producto': producto, 'forms': forms})
-
 
 def update(request, id):
     if request.user.is_authenticated:
@@ -116,6 +103,61 @@ def update2(request, id):
         else:
             form = ProductoForm(instance=producto)
         return render(request, 'producto/update.html', {'form': form})
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+# Admin Local
+
+
+def local_index(request):
+    is_admin_local = User.objects.filter(
+        id=request.user.id).filter(username='alexander')
+    if is_admin_local:
+        producto = Producto.objects.all()
+        categoria = Categoria.objects.all()
+        marca = Marca.objects.all().order_by('nombre')
+        datos_cuenta = DatosCuenta.objects.all()
+        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
+
+        if request.method == 'POST':
+            # id = request.POST.get('id_cat')
+            form = ProductoForm(request.POST, files=request.FILES)
+            if form.is_valid():
+                # form.instance.id_categoria = id
+                form.id_marca = request.POST.get('id_marca')
+                form.save()
+                messages.success(request, "Producto agregado correctamente")
+            else:
+                messages.error(request, "El nombre del producto ya existe")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            form = ProductoForm()
+            contexto = {'producto': producto, 'form': form,
+                        'categoria': categoria, 'marca': marca, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
+        return render(request, 'LocalFuncionalidades/producto/index.html', contexto)
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+
+def localupdate(request, id):
+    is_admin_local = User.objects.filter(
+        id=request.user.id).filter(username='alexander')
+    if is_admin_local:
+        producto = Producto.objects.get(id=id)
+        if request.method == "POST":
+            form = ProductoForm(request.POST, instance=producto,
+                                files=request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Producto actualizado correctamente")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            else:
+                return HttpResponse(json.dumps("El servicio ya existe"), content_type="application/json")
+        else:
+            form = ProductoForm(instance=producto)
+        return render(request, 'LocalFuncionalidades/producto/update.html', {'form': form})
     else:
         messages.error(request, "Acceso denegado")
         return render(request, 'base/base.html')

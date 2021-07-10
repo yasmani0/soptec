@@ -268,6 +268,8 @@
                       </div>
                       <!-- ./col -->
                     </div>
+
+                  
                     {% endblock %}
                     <!--Fin Contenido-->
                   </div>
@@ -275,14 +277,214 @@
 
               </div>
             </div><!-- /.row -->
-          </div><!-- /.box-body -->
+            <!-- aqui va -->
+          <!-- inicio -->
+          {% block contenidograficas %}
+          <!-- operaciones recientes -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Operaciones recientes</h3>
+    
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="table-responsive">
+                        <table class="table table-striped" id="tablaoperacion">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;"> # </th>
+                                    <th style="text-align: center;">Fecha</th>
+                                    <th style="text-align: center;">Cliente</th>
+                                    <th style="text-align: center;">Tipo Envio</th>
+                                    <th style="text-align: center;">Total</th>
+                                    <th style="text-align: center;">Estado</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if operacionesRec %}
+                                <!---->
+                                {% for p in operacionesRec %}
+                                <!---->
+                                <tr>
+                                    <th scope="row" style="text-align: center;">{{forloop.counter}}</th>
+                                    <td style="text-align: center;">
+                                        {{p.fecha_pedido}}
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <b
+                                            style="color: rgb(43, 182, 50); text-transform: capitalize;">{{p.cliente.id_cliente}}</b>
+                                    </td>
+                                    {% if p.tipo_envio == '1' %}
+                                    <td scope="row" style="text-align: center;">
+                                        <i class="fas fa-laptop-house fa-2x"></i>
+                                        <br>
+                                        <span>Recibir</span>
+                                    </td>
+        
+                                    {% else %}
+                                    {% if p.tipo_envio == '2' %}
+                                    <td scope="row" style="text-align: center;">
+                                        <i class="fas fa-dolly fa-2x"></i>
+                                        <br>
+                                        <span>Entregar</span>
+                                    </td>
+                                    {% else %}
+                                    {% endif %}
+                                    {% endif %}
+        
+                                    <td style="text-align: center;">
+                                        ${{p.totalf|floatformat:2}}
+        
+                                    </td>
+                                    <td style="text-align: center;">
+                                        {% if p.disponibilidad == '1' %}
+                                        <b style="color: rgb(43, 182, 50);">Aceptado</b>
+                                        {% else %}
+                                        {% if p.disponibilidad == '0' %}
+                                        <b style="color: rgb(236, 120, 43);">Pendiente</b>
+                                        {% else %}
+                                        <b style="color: rgb(236, 43, 43);">Cancelado</b>
+                                        {% endif %}
+                                        {% endif %}
+                                    </td>
+        
+        
+                                </tr>
+                                {% endfor %}
+                                <!---->
+                                {% else %}
+                                <!---->
+                                <tr>
+                                    <div class="alert alert-success" role="alert">
+                                        Aún no tiene ninguna oparación reciente
+                                    </div>
+                                </tr>
+        
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                  
+                      
+                  </div>
+                  
+                </div>
+               </div>
+               
+                <!-- /.box-footer -->
+              </div>
+              <!-- /.box -->
+            </div>
+           
+          </div>
+
+          <!-- graficar -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Pedidos</h3>
+    
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    <div class="col-12">
+                      <!-- <div class="card"> -->
+                        <div class="form-group">
+                            <br class="d-block d-md-none">
+                            <br class="d-block d-md-none">
+                            <br class="d-block d-md-none">
+                            <h5 class="pt-2" id="textopedido" style="font-size: 16px;">Pedidos completados</h5>
+              
+                            <select class="form-control filtros" id="selecciongrafica" name="selecciongrafica" style="width: 210px; position: absolute; top: 5px; right: 18px;">
+                                <option value="1">Pedidos completados </option>
+                                <option value="2">Pedidos pendientes</option>
+                                <option value="3">Pedidos cancelados</option>
+                            </select>
+                        </div>
+                          <!-- <div class="card-body"> -->
+                              <div class="row">
+                                  <!-- pedidos completados -->
+                                  <div class="col-12 my-3 text-center" id="grafica_completados">
+                                    <div class="alert alert-secondary" role="alert" id="mensajecompletano" style="display: none;">
+                                      No tiene ningun pedido completado!
+                                    </div>
+                                      <p id="textomensajecompletado" style="display: none;"">Pedidos por mes</p>
+                                      <canvas id="myChart" ></canvas>
+                                  </div>
+                                  <!-- pedidos pendiente -->
+                                  <div class="col-12 my-3 text-center" id="grafica_pendientes" style="display: none;">
+                                    <div class="alert alert-secondary" role="alert" id="mensajependiente" style="display: none;">
+                                      No tiene ningun pedido pendiente!
+                                    </div>
+                                      <p id="textomensajependiente" style="display: none;">Pedidos por mes</p>
+                                      <canvas id="myChart1" ></canvas>
+                                  </div>
+                                  <!-- pedidos cancelados -->
+                                  <div class="col-12 my-3 text-center" id="grafica_cancelados" style="display: none;">
+                                    <div class="alert alert-secondary" role="alert" id="mensajecancelado" style="display: none;">
+                                      No tiene ningun pedido cancelado!
+                                    </div>
+                                      <p id="textomensajecancelado" style="display: none;">Pedidos por mes</p>
+                                      <canvas id="myChart2" ></canvas>
+                                  </div>
+              
+                              </div>
+                          <!-- </div> -->
+                      <!-- </div> -->
+                      
+                        
+                    </div>
+                  
+                      
+                  </div>
+                  
+                </div>
+               </div>
+               
+                <!-- /.box-footer -->
+              </div>
+              <!-- /.box -->
+            </div>
+           
+          </div>
+          <!-- fingraficar -->
+
+          {%endblock%}
+          <!-- fin -->
         </div><!-- /.box -->
     </div><!-- /.col -->
   </div><!-- /.row -->
 
+  
+
   </section><!-- /.content -->
   </div><!-- /.content-wrapper -->
   <!--Fin-Contenido-->
+
+  <!-- inicio -->
+  
+<!-- fin -->
+  
 
   {% include 'base_admin/cuenta.html' %}
   {% include 'datoscuenta/index.html' %}
@@ -386,6 +588,239 @@
 
   {% block scriptadd %}
   {% endblock %}
+
+  {% block adicionaljs %}
+  <script src="{% static 'style_admin/funcionalidades/operaciones.js' %}"></script>
+    <script src="{% static 'graficas/chartjs/charts.js' %}"></script>
+  
+    <script>
+    const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    const pedidosMes = [50,60,50,65,75,100,25,36,35,78,15,36];
+    let textomensajecompletado = document.getElementById('textomensajecompletado')
+    let textomensajepediente = document.getElementById('textomensajepediente')
+    let textomensajecancelado = document.getElementById('textomensajecancelado')
+
+    let mensajecompletado = document.getElementById('mensajecompletado')
+    let mensajepediente = document.getElementById('mensajepediente')
+    let mensajecancelado = document.getElementById('mensajecancelado')
+
+    arrayhaypedidos= [0,0,0,0,0,0,0,0,0,0,0,0]
+
+    
+
+    
+    
+    // grafica pedidos completados
+    // if(JSON.stringify({{pedido_completado_grafica_data|safe}}) == JSON.stringify(arrayhaypedidos)){
+    //     textomensajecompletado.style.display='none';
+    //     mensajecompletado.style.display='block';
+    // }else{
+    //     textomensajecompletado.style.display='block';
+    //     mensajecompletado.style.display='none';
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: meses,
+            datasets: [{
+                label: ' Número de pedidos por meses',
+                data: {{pedido_completado_grafica_data|safe}},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    // }
+
+    // grafica pedidos pendientes
+    // if(JSON.stringify({{pedido_pendiente_grafica_data|safe}}) == JSON.stringify(arrayhaypedidos)){
+    //     textomensajepediente.style.display='none';
+    //     mensajepediente.style.display='block';
+    // }else{
+    //     textomensajepediente.style.display='block';
+    //     mensajepediente.style.display='none';
+    var ctx1 = document.getElementById('myChart1').getContext('2d');
+    var myChart1 = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: meses,
+            datasets: [{
+                label: ' Número de pedidos por meses',
+                data: {{pedido_pendiente_grafica_data|safe}},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    // }
+    
+   
+    // if(JSON.stringify({{pedido_cancelado_grafica_data|safe}}) == JSON.stringify(arrayhaypedidos)){
+    //     textomensajecancelado.style.display='none';
+    //     mensajecancelado.style.display='block';
+    // }else{
+    // grafica pedidos cancelados
+      textomensajecancelado.style.display='block';
+      mensajecancelado.style.display='none';
+      var ctx2 = document.getElementById('myChart2').getContext('2d');
+      var myChart2 = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+              labels: meses,
+              datasets: [{
+                  label: ' Número de pedidos por meses',
+                  data: {{pedido_cancelado_grafica_data|safe}},
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)',
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)',
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero: true
+                          }
+                      }]
+                  }
+              }
+          });
+    // }
+
+    </script>
+
+    <script>
+
+      let seleccion = document.getElementById('selecciongrafica')
+      let completados = document.getElementById('grafica_completados')
+      let pendientes = document.getElementById('grafica_pendientes')
+      let cancelados = document.getElementById('grafica_cancelados')
+      let texto = document.getElementById('textopedido')
+
+      seleccion.addEventListener('change', (event) => {
+        if (event.target.value == 1) {
+          completados.style.display = 'block';
+          pendientes.style.display = 'none';
+          cancelados.style.display = 'none';
+          texto.textContent='Pedidos completados';
+
+        }else  if (event.target.value == 2) {
+
+          completados.style.display = 'none';
+          pendientes.style.display = 'block';
+          cancelados.style.display = 'none';
+          texto.textContent='Pedidos pendientes';
+
+        }else if (event.target.value == 3) {
+
+          completados.style.display = 'none';
+          pendientes.style.display = 'none';
+          cancelados.style.display = 'block';
+          texto.textContent='Pedidos cancelados';
+
+        }
+      })
+
+    </script>
+  {%endblock%}
 
 </body>
 

@@ -30,11 +30,12 @@ def index(request):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             form = CategoriaForm()
-            contexto = {'categoria': categoria, 'form': form,'datos_cuenta': datos_cuenta,'form_cuenta': form_cuenta}
+            contexto = {'categoria': categoria, 'form': form,
+                        'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
         return render(request, 'categoria/index.html', contexto)
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')
 
 
 def update(request, id):
@@ -46,7 +47,8 @@ def update(request, id):
                 request.POST, instance=categoria, files=request.FILES)
             if forms.is_valid():
                 forms.save()
-                messages.success(request, "Categoria actualizada correctamente")
+                messages.success(
+                    request, "Categoria actualizada correctamente")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             else:
                 return HttpResponse(json.dumps("El servicio ya existe"), content_type="application/json")
@@ -55,14 +57,68 @@ def update(request, id):
             return render(request, 'categoria/update.html', {'categoria': categoria, 'forms': forms})
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')
+
+# admin local
+
+
+def indexlocal(request):
+    is_admin_local = User.objects.filter(
+        id=request.user.id).filter(username='alexander')
+    if is_admin_local:
+        categoria = Categoria.objects.all()
+        datos_cuenta = DatosCuenta.objects.all()
+        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
+
+        if request.method == 'POST':
+            form = CategoriaForm(request.POST, files=request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Categoria agregada correctamente")
+            else:
+                messages.error(request, "El nombre de la categoria ya existe")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            form = CategoriaForm()
+            contexto = {'categoria': categoria, 'form': form,
+                        'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
+        return render(request, 'LocalFuncionalidades/categoria/index.html', contexto)
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+
+def updatelocal(request, id):
+    is_admin_local = User.objects.filter(
+        id=request.user.id).filter(username='alexander')
+    if is_admin_local:
+        categoria = Categoria.objects.get(id=id)
+        if request.method == 'POST':
+            forms = CategoriaForm(
+                request.POST, instance=categoria, files=request.FILES)
+            if forms.is_valid():
+                forms.save()
+                messages.success(
+                    request, "Categoria actualizada correctamente")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            else:
+                return HttpResponse(json.dumps("El servicio ya existe"), content_type="application/json")
+        else:
+            forms = CategoriaForm(instance=categoria)
+            return render(request, 'LocalFuncionalidades/categoria/update.html', {'categoria': categoria, 'forms': forms})
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+# listar cliente
 
 
 def categoria_listar(request):
     categoria = Categoria.objects.all().order_by('id')
     if request.user.is_authenticated:
         cliente = request.user.cliente
-        pedido, created = Pedido.objects.get_or_create(cliente=cliente, estado=False)
+        pedido, created = Pedido.objects.get_or_create(
+            cliente=cliente, estado=False)
         items = pedido.pedidoespecifico_set.all()
         cartItems = pedido.get_cart_items
     else:

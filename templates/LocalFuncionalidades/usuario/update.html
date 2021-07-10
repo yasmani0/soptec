@@ -1,0 +1,73 @@
+<div class="modal fade" id="ModalUsuID-{{u.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 20px 20px 0 0">
+      <div class="modal-header" style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Usuario </h5>
+        <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'LocalUserUpdateAdm'  %}" enctype="multipart/form-data" method="POST" role="form">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="form-group">
+            Usuario
+            <input class="form-control" type="hidden" name="id_upd_adm" value="{{u.id}}" ..." maxlength="100" required>
+            <!---->
+            <input class="form-control" type="text" name="usuario_upd_adm" value="{{u.username}}"
+              placeholder="Ingresa el usuario ..." maxlength="100" required>
+          </div>
+          <div class="form-group">
+            Nombre
+            <!---->
+            <input class="form-control" type="text" name="nombre_upd_adm" value="{{u.first_name}}"
+              placeholder="Ingresa el nombre ..." maxlength="100" required required onkeypress="return sololetras(event)" onpaste="return false">
+          </div>
+          <div class="form-group">
+            Apellido
+            <!---->
+            <input class="form-control" type="text" name="apellido_upd_adm" value="{{u.last_name}}"
+              placeholder="Ingresa el apellido ..." maxlength="100" required required onkeypress="return sololetras(event)" onpaste="return false">
+          </div>
+          <div class="form-group">
+            E-mail
+            <!---->
+            <input class="form-control" type="email" name="email_upd_adm" value="{{u.email}}"
+              placeholder="Ingresa el email ..." maxlength="100" required>
+          </div>
+          <div class="form-group">
+            <!-- Contraseña -->
+            <!---->
+            <input class="form-control" type="password" name="clave_nueva_upd_adm" value=""
+              placeholder="Ingresa la contraseña ..." maxlength="100" style="display: none;">
+
+            <input class="form-control" type="hidden" name="clave_pasada_upd_adm" value="{{u.password}}"
+              placeholder="Ingresa la contraseña ..." maxlength="100" required>
+          </div>
+          <div class="form-group">
+            Estado
+            <!---->
+            <select name="estado_upd_adm" class="form-control js-example-basic-single w-100"
+              style="border: 1px solid rgb(0,0,0); width: 100%;">
+              <!---->
+              {% if u.is_active == True %}
+              <option value="1" selected>Activo</option>
+              <option value="0">Inactivo</option>
+              {% else %}
+              <option value="0" selected>Inactivo</option>
+              <option value="1">Activo</option>
+              {% endif %}
+              <!---->
+            </select>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

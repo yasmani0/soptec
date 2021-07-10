@@ -73,7 +73,7 @@
                                 <tbody>
                                     {% for item in items %}
                                     <tr>
-                                        <th scope="row">1</th>
+                                        <th scope="row">{{forloop.counter}}</th>
                                         <td><img src="{{item.producto.imagen.url}}" alt="image" class="img-thumbnail"
                                                 style="width: 90px; height: 75px;"></td>
                                         <td>{{item.producto.nombre}}</td>

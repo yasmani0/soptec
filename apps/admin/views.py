@@ -8,6 +8,7 @@ from apps.datoscuenta.forms import DatosCuentaForm
 from apps.cliente.models import Cliente
 from apps.pedido.models import Pedido
 from django.contrib import messages
+from datetime import datetime
 import json
 
 
@@ -17,8 +18,44 @@ def index(request):
         datos_cuenta = DatosCuenta.objects.all()
         pedidoP = Pedido.objects.filter(estado=True, disponibilidad=0).count()
         pedidoC = Pedido.objects.filter(estado=True, disponibilidad=1).count()
-        pedidoCan = Pedido.objects.filter(estado=True, disponibilidad=2).count()
-        usuariosReg = User.objects.filter(is_active=True, is_superuser=False).count()
+        pedidoCan = Pedido.objects.filter(
+            estado=True, disponibilidad=2).count()
+
+        operacionesRec = Pedido.objects.raw(
+            'SELECT id, "totalPagar", fecha_pedido, disponibilidad, "totalPagar" * 0.12 as iva, "totalPagar" + ("totalPagar" * 0.12) as totalf FROM public.pedido_pedido where estado=true AND NOT disponibilidad>2::text ORDER BY id DESC LIMIT 10'
+        )
+
+        usuariosReg = User.objects.filter(
+            is_active=True, is_superuser=False).count()
+
+        # grafica
+        try:
+            pedido_completado_grafica_data = []
+            pedido_pendiente_grafica_data = []
+            pedido_cancelado_grafica_data = []
+            year = datetime.now().year
+            # obteniendo pedidos completados
+            for m in range(1, 13):
+                datosgrafica = Pedido.objects.filter(
+                    fecha_pedido__year=year, fecha_pedido__month=m, disponibilidad=1, estado=True).count()
+                pedido_completado_grafica_data.append(int(datosgrafica))
+
+            # obteniendo pedidos pendientes
+            for m in range(1, 13):
+                datosgraficapp = Pedido.objects.filter(
+                    fecha_pedido__year=year, fecha_pedido__month=m, disponibilidad=0, estado=True).count()
+                pedido_pendiente_grafica_data .append(
+                    int(datosgraficapp))
+
+            # obteniendo pedidos cancelados
+            for m in range(1, 13):
+                datosgraficapc = Pedido.objects.filter(
+                    fecha_pedido__year=year, fecha_pedido__month=m, disponibilidad=2, estado=True).count()
+                pedido_cancelado_grafica_data .append(
+                    int(datosgraficapc))
+        except:
+            pass
+
         if request.method == 'POST':
             form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
             nombre = request.POST.get('nombre_banco')
@@ -32,16 +69,17 @@ def index(request):
                 messages.success(request, "Cuenta agregada correctamente")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             except:
-                messages.error(request, "Cuenta o numero de ya existente, ingrese otra cuenta")
+                messages.error(
+                    request, "Cuenta o numero de ya existente, ingrese otra cuenta")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             form_cuenta = DatosCuentaForm()
-            contexto = {'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta, 'pedidoP':pedidoP, 'pedidoC':pedidoC,'pedidoCan':pedidoCan, 'usuariosReg':usuariosReg}
+            contexto = {'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta, 'pedidoP': pedidoP,
+                        'pedidoC': pedidoC, 'pedidoCan': pedidoCan, 'usuariosReg': usuariosReg, 'operacionesRec': operacionesRec, 'pedido_completado_grafica_data': pedido_completado_grafica_data, 'pedido_pendiente_grafica_data': pedido_pendiente_grafica_data, 'pedido_cancelado_grafica_data': pedido_cancelado_grafica_data}
         return render(request, 'base_admin/base.html', contexto)
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
-
+        return render(request, 'base/base.html')
 
 
 def update(request):
@@ -53,13 +91,14 @@ def update(request):
             numero = request.POST.get('numero_cuenta')
             estado = request.POST.get('estado')
             print("id: ", id_cuenta, "nombre: ", nombre,
-                "numero: ", numero, "estado: ", estado)
+                  "numero: ", numero, "estado: ", estado)
             try:
                 if id_cuenta:
                     cursor = connection.cursor()
                     cursor.execute("Update datoscuenta_datoscuenta set nombre_banco='"+str(nombre)+"', numero_cuenta='"+str(
                         numero)+"', estado='"+str(estado)+"' where id="+str(id_cuenta))
-                    messages.success(request, "Cuenta actualizada correctamente")
+                    messages.success(
+                        request, "Cuenta actualizada correctamente")
                     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             except:
                 return HttpResponse(json.dumps("Error  1"), content_type="application/json")
@@ -67,7 +106,7 @@ def update(request):
             return HttpResponse(json.dumps(""), content_type="application/json")
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')
 
 
 def admuser(request):
@@ -80,12 +119,13 @@ def admuser(request):
             cursor = connection.cursor()
             usuarios = User.objects.raw(
                 "select id, username, first_name, last_name, email, is_active from auth_user where is_superuser='0' ORDER BY id asc")
-            user = {'usuarios': usuarios, 'datos_cuenta':datos_cuenta,'form_cuenta':form_cuenta}
+            user = {'usuarios': usuarios, 'datos_cuenta': datos_cuenta,
+                    'form_cuenta': form_cuenta}
 
             return render(request, 'usuario/index.html', user)
         else:
             messages.error(request, "Acceso denegado")
-            return render(request, 'base/base.html' )
+            return render(request, 'base/base.html')
 
 
 def usuario_register_adm(request):
@@ -113,12 +153,12 @@ def usuario_register_adm(request):
 
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             except:
-                messages.error(request, "Usuario ya registrado, ingrese otro usuario")
+                messages.error(
+                    request, "Usuario ya registrado, ingrese otro usuario")
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
-  
+        return render(request, 'base/base.html')
 
 
 # función para actualizar el perfil
@@ -159,19 +199,22 @@ def usuario_actualizar_adm(request):
                             request, "Usuario actualizado correctamente")
                         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                 except:
-                    messages.error(request, "Usuario ya registrado, ingrese otro usuario")
+                    messages.error(
+                        request, "Usuario ya registrado, ingrese otro usuario")
                     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
         return HttpResponse(json.dumps(""), content_type="application/json")
     else:
         messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        return render(request, 'base/base.html')
 
-# función para actualizar el perfil
+# función para actualizar el perfil del admin y local
 
 
 def perfil_actualizar_adm(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
+    is_admin_local = User.objects.filter(
+        id=request.user.id).filter(username='alexander')
     if is_admin:
         if request.method == 'POST':
             id_adm = request.POST.get('id_adm')
@@ -190,7 +233,8 @@ def perfil_actualizar_adm(request):
                     cursor.execute("Update cliente_cliente set cedula='"+str(cedula)+"', telefono='"+str(
                         telefono)+"' where id_cliente_id="+str(id_adm))
 
-                    messages.success(request, "Perfil actualizado correctamente")
+                    messages.success(
+                        request, "Perfil actualizado correctamente")
 
                     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             except:
@@ -198,6 +242,34 @@ def perfil_actualizar_adm(request):
 
             return HttpResponse(json.dumps(""), content_type="application/json")
     else:
-        messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html' )
+        if is_admin_local:
+            if request.method == 'POST':
+                id_adm = request.POST.get('id_adm')
+                nombre = request.POST.get('nombre')
+                apellido = request.POST.get('apellido')
+                email = request.POST.get('email')
+                cedula = request.POST.get('cedula')
+                telefono = request.POST.get('telefono')
 
+                try:
+                    if id_adm:
+                        cursor = connection.cursor()
+                        cursor.execute("Update auth_user set first_name='"+str(nombre)+"', last_name='"+str(
+                            apellido)+"', email='"+str(email)+"' where id="+str(id_adm))
+
+                        cursor.execute("Update cliente_cliente set cedula='"+str(cedula)+"', telefono='"+str(
+                            telefono)+"' where id_cliente_id="+str(id_adm))
+
+                        messages.success(
+                            request, "Perfil actualizado correctamente")
+
+                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                except:
+                    messages.error(
+                        request, "Cedula ya registrada, ingrese otra cedula")
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+                return HttpResponse(json.dumps(""), content_type="application/json")
+        else:
+            messages.error(request, "Acceso denegado")
+            return render(request, 'base/base.html')
