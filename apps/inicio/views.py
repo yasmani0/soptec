@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from apps.pedido.models import Pedido, PedidoEspecifico, MetodoEnvio
 from django.contrib.auth.models import User
 from apps.comprobante.models import Comprobante
+from django.views.generic import TemplateView
 from apps.producto.models import Producto
 from apps.inicio.serializers import *
 from django.contrib import messages
@@ -12,6 +13,10 @@ import json
 
 def index(request):
     return render(request, 'base/base.html')
+
+
+class Error404View(TemplateView):
+    template_name = 'errores/404/index.html'
 
 
 def pedido_cancelado(request, id):
@@ -44,7 +49,7 @@ def pedido_cancelado_envio(request, id):
 
 def mis_pedidos(request):
     misPedidos = Pedido.objects.raw(
-        'SELECT p.id, p."totalPagar", p.fecha_pedido, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND cliente_id='+str(
+        'SELECT p.id, p."totalPagar", p.fecha_pedido, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + 5 as totalf FROM public.pedido_pedido as p where estado=true AND cliente_id='+str(
             request.user.cliente.id)+'ORDER BY p.id DESC'
     )
     context = {'misPedidos': misPedidos}
@@ -58,7 +63,7 @@ def detalle_pedidos(request, id):
             'select proe.id, proe.cantidad, proe.pedido_id, proe.producto_id, pro.nombre, pro.precio, pro.imagen, proe.cantidad * pro.precio as subtotal from pedido_pedidoespecifico as proe inner join producto_producto as pro on proe.producto_id=pro.id where proe.pedido_id='+str(id))
 
         totales = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND id='+str(id))
+            'SELECT p.id, p.tipo_envio, p."totalPagar", (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + 5 as totalf FROM public.pedido_pedido as p where estado=true AND id='+str(id))
 
     context = {'productos': productos, 'totales': totales}
     return render(request, 'pedido/detallepedidos.html', context)
@@ -100,7 +105,7 @@ def local_detalle_pedidos(request, id):
             'select proe.id, proe.cantidad, proe.pedido_id, proe.producto_id, pro.nombre, pro.precio, pro.imagen, proe.cantidad * pro.precio as subtotal from pedido_pedidoespecifico as proe inner join producto_producto as pro on proe.producto_id=pro.id where proe.pedido_id='+str(id))
 
         totales = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND id='+str(id))
+            'SELECT p.id, p.tipo_envio , p."totalPagar", (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND id='+str(id))
 
     context = {'productos': productos, 'totales': totales}
     return render(request, 'LocalFuncionalidades/pedido/detallepedidos.html', context)

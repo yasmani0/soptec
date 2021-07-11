@@ -88,10 +88,21 @@
                                 {% endif %}
                                 {% endif %}
 
+                                {% if p.tipo_envio == '1' %}
+                                <td style="text-align: center;">
+                                    {{p.totalPagar}}
+                                </td>
+                                {% else %}
+                                {% if p.tipo_envio == '2' %}
                                 <td style="text-align: center;">
                                     {{p.totalf}}
-
                                 </td>
+                                {% else %}
+                                {% endif %}
+                                {% endif %}
+
+                                
+
                                 <td style="text-align: center;">
                                     {% if p.disponibilidad == '1' %}
                                     <b style="color: rgb(43, 182, 50);">Aceptado</b>

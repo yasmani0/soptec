@@ -20,6 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import PasswordResetView,  PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
+from django.conf.urls import handler404
+from apps.inicio.views import Error404View
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,6 +50,8 @@ urlpatterns = [
         template_name='restablecer/password_reset_complete.html'), name='password_reset_complete')
 
 ]
+
+handler404 = Error404View.as_view()
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

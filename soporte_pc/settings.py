@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 's-vem((20&$14$^0bc6kt+w_@q38$6*7a=x5__hx$u-)&dw^kk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['localhost', '198.211.96.163',
                  'www.soptecpc.com', 'soptecpc.com']
 # ALLOWED_HOSTS = []

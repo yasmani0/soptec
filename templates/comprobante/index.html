@@ -75,8 +75,6 @@
                                 <tr style="text-align: center;">
                                     <th><strong>#</strong></th>
                                     <th><strong>Nombre</strong></th>
-                                    <th><strong>Subtotal</strong></th>
-                                    <th><strong>Iva(12%)</strong></th>
                                     <th><strong>Total</strong></th>
                                 </tr>
                             </thead>
@@ -87,8 +85,7 @@
                                     <th scope="row">{{forloop.counter}} </th>
                                     <td style="text-transform: uppercase;"> {{user.last_name}} {{user.first_name}}</td>
                                     <td> ${{p.totalPagar|floatformat:2}} </td>
-                                    <td> ${{p.iva|floatformat:2}} </td>
-                                    <td style="font-weight: 600;"> ${{p.totalf|floatformat:2}} </td>
+                                   
                                 </tr>
 
                                 <div class="form-group">
@@ -158,7 +155,7 @@
                                         <th><strong>#</strong></th>
                                         <th><strong>Nombre</strong></th>
                                         <th><strong>Subtotal</strong></th>
-                                        <th><strong>Iva(12%)</strong></th>
+                                        <th><strong>Costo envio</strong></th>
                                         <th><strong>Total</strong></th>
                                     </tr>
                                 </thead>

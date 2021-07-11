@@ -213,7 +213,7 @@ def cart(request):
         cliente = request.user.cliente
         pedido, created = Pedido.objects.get_or_create(
             cliente=cliente, estado=False)
-        items = pedido.pedidoespecifico_set.all()
+        items = pedido.pedidoespecifico_set.all().order_by('id')
         cartItems = pedido.get_cart_items
     else:
         items = []
@@ -231,7 +231,7 @@ def checkout(request):
         pedidoComprobante = Pedido.objects.all()
         pedido, created = Pedido.objects.get_or_create(
             cliente=cliente, estado=False)
-        items = pedido.pedidoespecifico_set.all()
+        items = pedido.pedidoespecifico_set.all().order_by('id')
         cartItems = pedido.get_cart_items
     else:
         items = []

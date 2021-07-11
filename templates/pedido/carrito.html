@@ -67,7 +67,7 @@
                                         <th>Producto</th>
                                         <th>Precio</th>
                                         <th>Cantidad</th>
-                                        <th>Total</th>
+                                        <th>Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -99,13 +99,13 @@
                                             <!-- <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5> -->
                                         </td>
                                         <td colspan="1">
-                                            <h5><strong>Subtotal:</strong></h5>
+                                            <h5><strong>Total:</strong></h5>
                                         </td>
                                         <td colspan="1">
                                             <h5><strong>${{pedido.get_cart_total|floatformat:2}}</strong></h5>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td colspan="4">
                                             
                                         </td>
@@ -128,7 +128,7 @@
                                             <h5><strong>${{pedido.get_cart_total_final|floatformat:2}}</strong></h5>
                                         </td>
 
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
 
                             </table>

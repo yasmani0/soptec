@@ -13,7 +13,7 @@ def index(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
     if is_admin:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=0)
         pedidoEspecifico = PedidoEspecifico.objects.all()
@@ -56,7 +56,7 @@ def completados(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
     if is_admin:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=1)
         pedidoEspecifico = PedidoEspecifico.objects.all()
@@ -75,7 +75,7 @@ def cancelados(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
     if is_admin:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=2)
         pedidoEspecifico = PedidoEspecifico.objects.all()
@@ -97,7 +97,7 @@ def local_pedidos_pendientes(request):
         id=request.user.id).filter(username='alexander')
     if is_admin_local:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + 5 as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=0)
         pedidoEspecifico = PedidoEspecifico.objects.all()
@@ -117,7 +117,7 @@ def local_pedidos_completados(request):
         id=request.user.id).filter(username='alexander')
     if is_admin_local:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=1)
         pedidoEspecifico = PedidoEspecifico.objects.all()
@@ -137,7 +137,7 @@ def local_pedidos_cancelados(request):
         id=request.user.id).filter(username='alexander')
     if is_admin_local:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p.fecha_pedido, p.disponibilidad, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=2)
         pedidoEspecifico = PedidoEspecifico.objects.all()

@@ -159,7 +159,7 @@
                     <h3 style="font-weight: 500;">Resumen del pedido</h3>
                     <hr>
                     <div class="cart-row">
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="tablasinenvio">
                             <table class="table table-striped" id="tablacategoria">
                                 <thead>
                                     <tr>
@@ -168,7 +168,51 @@
                                         <th>Producto</th>
                                         <th>Precio</th>
                                         <th>Cantidad</th>
-                                        <th>Total</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>
+                                            <img src="{{item.producto.imagen.url}}" alt="image" class="img-thumbnail"
+                                                style="width: 90px; height: 75px;">
+                                        </td>
+                                        <td>{{item.producto.nombre}}</td>
+                                        <td>{{item.producto.precio|floatformat:2}}</td>
+                                        <td style="padding-left: 35px;">
+                                            {{item.cantidad}}
+                                        </td>
+                                        <td>{{item.get_total|floatformat:2}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td colspan="4">
+                                            <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5>
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong class="subtotaler">Total:</strong></h5>
+                                        </td>
+                                        <td colspan="1">
+                                            <h5><strong>${{pedido.get_cart_total|floatformat:2}}</strong></h5>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <!-- tabla mas envio -->
+                        <div class="table-responsive" id="tablamasenvio" style="display: none;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Imagen</th>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                        <th>Cantidad</th>
+                                        <th>Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -192,7 +236,7 @@
                                             <!-- <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5> -->
                                         </td>
                                         <td colspan="1">
-                                            <h5><strong>Subtotal:</strong></h5>
+                                            <h5><strong class="subtotaler">Subtotal:</strong></h5>
                                         </td>
                                         <td colspan="1">
                                             <h5><strong>${{pedido.get_cart_total|floatformat:2}}</strong></h5>
@@ -200,32 +244,29 @@
                                     </tr>
                                     <tr>
                                         <td colspan="4">
-                                            
+                                            <!-- <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5> -->
                                         </td>
                                         <td colspan="1">
-                                            <h5><strong>Iva (12%):</strong></h5>
+                                            <h5><strong class="subtotaler">Envio:</strong></h5>
                                         </td>
                                         <td colspan="1">
-                                            <h5><strong>${{pedido.get_cart_total_iva|floatformat:2}}</strong></h5>
+                                            <h5><strong>${{pedido.get_precio_envio|floatformat:2}}</strong></h5>
                                         </td>
-
                                     </tr>
                                     <tr>
                                         <td colspan="4">
                                             <h5>Productos: <strong>{{pedido.get_cart_items}}</strong></h5>
                                         </td>
                                         <td colspan="1">
-                                            <h5><strong>Total:</strong></h5>
+                                            <h5><strong class="subtotaler">Total:</strong></h5>
                                         </td>
                                         <td colspan="1">
                                             <h5><strong>${{pedido.get_cart_total_final|floatformat:2}}</strong></h5>
                                         </td>
-
                                     </tr>
                                 </tbody>
 
                             </table>
-
                         </div>
                     </div>
 
@@ -255,6 +296,13 @@
     const mcedula = document.getElementById('cedula')
     const mciudad = document.getElementById('ciudad')
     const mdireccion = document.getElementById('direccion')
+
+    // 
+
+    
+    let tablasinenvio = document.getElementById('tablasinenvio')
+    let tablamasenvio = document.getElementById('tablamasenvio')
+    
 
     mcedula.addEventListener('focus', () => {
         mostrarMensaje.style.display = 'none'
@@ -307,6 +355,10 @@
             metodoRetiro.style.display = 'block';
             metodoEnvio.style.display = 'none';
             enviar.style.display = 'block';
+
+            tablasinenvio.style.display = 'block'
+            tablamasenvio.style.display = 'none'
+            
 
             form.addEventListener('submit', function (e) {
                 const cedula = document.getElementById('cedula').value
@@ -401,6 +453,9 @@
             enviar.style.display = 'block';
             metodoRetiro.style.display = 'none';
             metodoEnvio.style.display = 'block';
+
+            tablasinenvio.style.display = 'none'
+            tablamasenvio.style.display = 'block'
 
             form.addEventListener('submit', function (e) {
                 const cedula = document.getElementById('cedula').value
@@ -546,6 +601,9 @@
             enviar.style.display = 'none';
             metodoRetiro.style.display = 'none';
             metodoEnvio.style.display = 'none';
+            
+            tablasinenvio.style.display = 'block'
+            tablamasenvio.style.display = 'none'
         }
 
     })

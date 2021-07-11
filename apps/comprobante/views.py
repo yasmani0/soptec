@@ -42,7 +42,7 @@ def index(request):
         #     estado=True, cliente=request.user.cliente.id, tipo_envio=2, estadoc=0)
 
         pedidoEnvio = Pedido.objects.raw(
-            'SELECT p.id, p."totalPagar", p.fecha_pedido, p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totalf FROM public.pedido_pedido as p where estado=true AND tipo_envio=2::text AND estadoc=0::text AND cliente_id='+str(
+            'SELECT p.id, p."totalPagar", p.fecha_pedido, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + 5 as totalf FROM public.pedido_pedido as p where estado=true AND tipo_envio=2::text AND estadoc=0::text AND cliente_id='+str(
                 request.user.cliente.id)
         )
 
@@ -123,7 +123,7 @@ class generarComprobante(View):
                 'select u.id, u.first_name  , u.last_name , cl.telefono, cl.cedula, pe.estado from auth_user as u inner join cliente_cliente as cl on cl.id_cliente_id = u.id inner join pedido_pedido as pe on pe.cliente_id=cl.id where pe.id='+str(idDetalle))
 
             totales = Pedido.objects.raw(
-                'SELECT p.id, p."totalPagar", p."totalPagar" * 0.12 as iva, p."totalPagar" + (p."totalPagar" * 0.12) as totaf FROM public.pedido_pedido as p where id='+str(idDetalle))
+                'SELECT p.id, p.tipo_envio, p."totalPagar", (p."totalPagar" * 0) +5   as iva, p."totalPagar" + (5) as totaf FROM public.pedido_pedido as p where id='+str(idDetalle))
 
             productos = PedidoEspecifico.objects.raw(
                 'select proe.id, proe.cantidad, proe.pedido_id, proe.producto_id, pro.nombre, pro.precio, pro.imagen, proe.cantidad * pro.precio as subtotal from pedido_pedidoespecifico as proe inner join producto_producto as pro on proe.producto_id=pro.id where proe.pedido_id='+str(idDetalle))
@@ -154,4 +154,3 @@ class generarComprobante(View):
         except:
             pass
         return HttpResponseRedirect(reverse_lazy('Mis_Pedidos'))
-

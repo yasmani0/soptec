@@ -83,21 +83,42 @@
             {% endfor %}
             <br>
             <tr style="border-top: 1px solid black; padding-top: 4px;">
-                <td colspan="4" style="margin-top: 15px;"><b>SUBTOTAL</b></td>
-                <td style="text-align: right; padding-right: 57px;">${{sale.totalPagar}}</td>
+                {% for t in total %}
+
+                {% if t.tipo_envio == '1' %}
+                <td colspan="2"></td>
+                <td colspan="2" style="margin-top: 15px; text-align: center;"><b>TOTAL A PAGAR</b></td>
+                <td colspan="1" style="text-align: right; padding-right: 57px;">${{sale.totalPagar|floatformat:2}}</td>
+                {% else %}
+                {% if t.tipo_envio == '2' %}
+                <td colspan="2"></td>
+                <td colspan="2" style="margin-top: 15px; text-align: center;"><b>SUBTOTAL</b></td>
+                <td style="text-align: right; padding-right: 57px;">${{sale.totalPagar|floatformat:2}}</td>
+                {% endif %}
+                {% endif %}
+    
+                {% endfor %}
             </tr>
 
             {% for t in total %}
 
+            {% if t.tipo_envio == '1' %}
+            {% else %}
+            {% if t.tipo_envio == '2' %}
             <tr style="padding-top: 0px;">
-                <td colspan="4"><b>IVA 12%</b></td>
-                <td style="text-align: right;padding-right: 57px;">{{t.iva}}</td>
+                <td colspan="2"></td>
+                <td colspan="2" style="text-align: center;"><b>ENVIO</b></td>
+                <td style="text-align: right;padding-right: 57px;">${{t.iva|floatformat:2}}</td>
             </tr>
 
             <tr style="padding-top: 0px;">
-                <td colspan="4"><b>TOTAL A PAGAR</b></td>
-                <td style="text-align: right;padding-right: 57px;">${{t.totaf}}</td>
+                <td colspan="2"></td>
+                <td colspan="2" style="text-align: center;"><b>TOTAL A PAGAR</b></td>
+                <td style="text-align: right;padding-right: 57px;">${{t.totaf|floatformat:2}}</td>
             </tr>
+            {% endif %}
+            {% endif %}
+
             {% endfor %}
 
         </tbody>

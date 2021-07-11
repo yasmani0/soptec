@@ -39,12 +39,27 @@
                         {% else %}
                         {% endif %}
                         {% for t in totales %}
+
+                        {% if t.tipo_envio == '1' %}
                         <tr>
                             <td colspan="3">
                                
                             </td>
                             <td colspan="1">
-                                <h5 style="text-align: center; font-size: 16px;"><strong>Subtotal</strong></h5>
+                                <h5 style="text-align: center; font-size: 16px; font-weight: 600;"><strong>Total:</strong></h5>
+                            </td>
+                            <td colspan="1">
+                                <h5 style="font-size: 16px; font-weight: 600; "><strong class="total">${{t.totalPagar|floatformat:2}}</strong></h5>
+                            </td>
+                        </tr>
+                        {% else %}
+                        {% if t.tipo_envio == '2' %}
+                        <tr>
+                            <td colspan="3">
+                               
+                            </td>
+                            <td colspan="1">
+                                <h5 style="text-align: center; font-size: 16px;"><strong>Subtotal:</strong></h5>
                             </td>
                             <td colspan="1">
                                 <h5 style="font-size: 16px;"><strong class="total">${{t.totalPagar|floatformat:2}}</strong></h5>
@@ -55,7 +70,7 @@
                                
                             </td>
                             <td colspan="1">
-                                <h5 style="text-align: center; font-size: 16px;"><strong>Iva(12%):</strong></h5>
+                                <h5 style="text-align: center; font-size: 16px;"><strong>Costo envio:</strong></h5>
                             </td>
                             <td colspan="1">
                                 <h5 style="font-size: 16px;"><strong class="total">${{t.iva|floatformat:2}}</strong></h5>
@@ -72,6 +87,8 @@
                                 <h5 style="font-size: 16px; font-weight: 600; "><strong class="total">${{t.totalf|floatformat:2}}</strong></h5>
                             </td>
                         </tr>
+                        {% endif %}
+                        {% endif %}
                         {% endfor %}
                     </tbody>
 
