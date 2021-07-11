@@ -19,6 +19,20 @@ class Error404View(TemplateView):
     template_name = 'errores/404/index.html'
 
 
+class Error500View(TemplateView):
+    template_name = 'errores/500/index.html'
+
+    @classmethod
+    def as_error_view(cls):
+        v = cls.as_view()
+
+        def view(request):
+            r = v(request)
+            r.render()
+            return r
+        return view
+
+
 def pedido_cancelado(request, id):
     estado = 2
     try:
