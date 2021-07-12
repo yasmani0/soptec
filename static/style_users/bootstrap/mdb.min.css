@@ -6376,6 +6376,10 @@ body.scrollable {
       width: 400px;
       margin: 0; } }
 
+.carousel{
+  height: 80%;
+}
+
 .carousel .carousel-control-prev-icon,
 .carousel .carousel-control-next-icon {
   width: 20px;

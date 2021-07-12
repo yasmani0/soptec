@@ -50,13 +50,21 @@ def usuario_login(request):
                             request, "Usuario o contraseña incorrecta")
                         return render(request, 'base/base.html')
                 else:
-                    return HttpResponse(json.dumps("CUENTA DESHABILITADA"), content_type="application/json")
+                    messages.error(
+                        request, "Lo sentimos tu cuenta ha sido deshabilitada")
+                    return render(request, 'base/base.html')
             else:
-                return HttpResponse(json.dumps("NO EXISTE"), content_type="application/json")
+                messages.error(
+                    request, "No exite esta cuenta, por favor registrese")
+                return render(request, 'base/base.html')
         else:
-            return HttpResponse(json.dumps("NO EXISTE"), content_type="application/json")
+            messages.error(
+                request, "No exite esta cuenta, por favor registrese")
+            return render(request, 'base/base.html')
 
-        return HttpResponse("ESTE USUARIO NO EXISTE EN LA BDD")
+        messages.error(
+            request, "No exite esta cuenta, por favor registrese")
+        return render(request, 'base/base.html')
 
 
 def salir(request):
@@ -66,7 +74,7 @@ def salir(request):
 
 def usuario_register(request):
     if request.method == 'POST':
-        username = request.POST.get('usuario_reg')
+        username = request.POST.get('usuario_reg').lower()
         nombre = request.POST.get('nombre_reg')
         apellido = request.POST.get('apellido_reg')
         email = request.POST.get('email_reg')
@@ -105,7 +113,7 @@ def usuario_register(request):
 def usuario_perfil(request):
     if request.method == 'POST':
         id_user = request.POST.get('id_user')
-        username = request.POST.get('usuario_update')
+        username = request.POST.get('usuario_update').lower()
         nombre = request.POST.get('nombre_update')
         apellido = request.POST.get('apellido_update')
         email = request.POST.get('email_update')

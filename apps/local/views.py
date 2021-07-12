@@ -138,7 +138,7 @@ def local_usuario_register_adm(request):
         id=request.user.id).filter(username='alexander')
     if is_admin_local:
         if request.method == 'POST':
-            username = request.POST.get('usuario_reg_adm')
+            username = request.POST.get('usuario_reg_adm').lower()
             nombre = request.POST.get('nombre_reg_adm')
             apellido = request.POST.get('apellido_reg_adm')
             email = request.POST.get('email_reg_adm')
@@ -176,7 +176,7 @@ def local_usuario_actualizar_adm(request):
     if is_admin_local:
         if request.method == 'POST':
             id_user = request.POST.get('id_upd_adm')
-            username = request.POST.get('usuario_upd_adm')
+            username = request.POST.get('usuario_upd_adm').lower()
             nombre = request.POST.get('nombre_upd_adm')
             apellido = request.POST.get('apellido_upd_adm')
             email = request.POST.get('email_upd_adm')
