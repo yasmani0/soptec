@@ -25,7 +25,7 @@ def index(request):
         # operacionesRec = Pedido.objects.filter(
         #     estado=True).exclude(disponibilidad__gt=2)
         operacionesRec = Pedido.objects.raw(
-            'SELECT id, "totalPagar", fecha_pedido, disponibilidad, "totalPagar" * 0.12 as iva, "totalPagar" + ("totalPagar" * 0.12) as totalf FROM public.pedido_pedido where estado=true AND NOT disponibilidad>2::text ORDER BY id DESC LIMIT 10'
+            'SELECT id, tipo_envio, "totalPagar", fecha_pedido, disponibilidad, ("totalPagar" * 0) + 5 as iva, "totalPagar" + (5) as totalf FROM public.pedido_pedido where estado=true AND NOT disponibilidad>2::text ORDER BY id DESC LIMIT 10'
         )
         usuariosReg = User.objects.filter(
             is_active=True, is_superuser=False).exclude(username='alexander').count()
@@ -77,7 +77,7 @@ def index(request):
         else:
             form_cuenta = DatosCuentaForm()
             contexto = {'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta, 'pedidoP': pedidoP,
-                        'pedidoC': pedidoC, 'pedidoCan': pedidoCan, 'usuariosReg': usuariosReg, 'operacionesRec': operacionesRec, 'pedido_completado_grafica_data': pedido_completado_grafica_data,'pedido_pendiente_grafica_data':pedido_pendiente_grafica_data, 'pedido_cancelado_grafica_data':pedido_cancelado_grafica_data}
+                        'pedidoC': pedidoC, 'pedidoCan': pedidoCan, 'usuariosReg': usuariosReg, 'operacionesRec': operacionesRec, 'pedido_completado_grafica_data': pedido_completado_grafica_data, 'pedido_pendiente_grafica_data': pedido_pendiente_grafica_data, 'pedido_cancelado_grafica_data': pedido_cancelado_grafica_data}
         return render(request, 'base_local/base.html', contexto)
     else:
         messages.error(request, "Acceso denegado")

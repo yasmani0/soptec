@@ -14,16 +14,16 @@ body {
   overflow-x: hidden;
 }
 
-/* body::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 8px;
   background: #ffffff;
   
 }
 
-body::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: rgba(233, 107, 86,1);
   border-radius: 10px;
-} */
+}
 
 /* #login_user label .error {
   color: rgba(255, 0, 0, 0.781);
@@ -238,10 +238,11 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
+/* ul de inicio sesion */
 .nav-menu .drop-down ul {
   display: block;
   position: absolute;
-  left: 20px;
+  left: -120px;
   top: calc(100% + 30px);
   z-index: 99;
   opacity: 0;

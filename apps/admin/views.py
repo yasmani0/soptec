@@ -22,7 +22,7 @@ def index(request):
             estado=True, disponibilidad=2).count()
 
         operacionesRec = Pedido.objects.raw(
-            'SELECT id, "totalPagar", fecha_pedido, disponibilidad, "totalPagar" * 0.12 as iva, "totalPagar" + ("totalPagar" * 0.12) as totalf FROM public.pedido_pedido where estado=true AND NOT disponibilidad>2::text ORDER BY id DESC LIMIT 10'
+            'SELECT id, tipo_envio ,"totalPagar", fecha_pedido, disponibilidad, ("totalPagar" * 0) + 5 as iva, "totalPagar" + (5) as totalf FROM public.pedido_pedido where estado=true AND NOT disponibilidad>2::text ORDER BY id DESC LIMIT 10'
         )
 
         usuariosReg = User.objects.filter(

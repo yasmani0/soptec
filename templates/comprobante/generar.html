@@ -49,7 +49,7 @@
     <p>
         <b>FACTURA:</b> {{ numeroCom }}  
         <br>
-        <b>FECHA DE VENTA:</b> {{ sale.fecha_pedido }}
+        <b>FECHA DE VENTA:</b> {{ sale.fecha_pedido|date:"Y-m-d" }}
         <br>
         {% for u in usuario %}
         <b>CLIENTE:</b> <span style="text-transform: uppercase;">{{u.first_name|upper}} {{u.last_name|upper}}</span>

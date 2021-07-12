@@ -13,7 +13,7 @@ def index(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
     if is_admin:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text ORDER BY p.id DESC'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=0)
         pedidoEspecifico = PedidoEspecifico.objects.all()
@@ -23,6 +23,44 @@ def index(request):
         context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
                    'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
         return render(request, 'pedido/index.html', context)
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+
+def completados(request):
+    is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
+    if is_admin:
+        pedido = Pedido.objects.raw(
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text ORDER BY p.id DESC'
+        )
+        # pedido = Pedido.objects.filter(estado=True, disponibilidad=1)
+        pedidoEspecifico = PedidoEspecifico.objects.all()
+        metodoEnvio = MetodoEnvio.objects.all()
+        datos_cuenta = DatosCuenta.objects.all()
+        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
+        context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
+                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
+        return render(request, 'pedido/completados.html', context)
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+
+def cancelados(request):
+    is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
+    if is_admin:
+        pedido = Pedido.objects.raw(
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text ORDER BY p.id DESC'
+        )
+        # pedido = Pedido.objects.filter(estado=True, disponibilidad=2)
+        pedidoEspecifico = PedidoEspecifico.objects.all()
+        metodoEnvio = MetodoEnvio.objects.all()
+        datos_cuenta = DatosCuenta.objects.all()
+        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
+        context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
+                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
+        return render(request, 'pedido/cancelados.html', context)
     else:
         messages.error(request, "Acceso denegado")
         return render(request, 'base/base.html')
@@ -51,44 +89,6 @@ def update(request):
         messages.error(request, "Acceso denegado")
         return render(request, 'base/base.html')
 
-
-def completados(request):
-    is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
-    if is_admin:
-        pedido = Pedido.objects.raw(
-            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text'
-        )
-        # pedido = Pedido.objects.filter(estado=True, disponibilidad=1)
-        pedidoEspecifico = PedidoEspecifico.objects.all()
-        metodoEnvio = MetodoEnvio.objects.all()
-        datos_cuenta = DatosCuenta.objects.all()
-        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
-        context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
-                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
-        return render(request, 'pedido/completados.html', context)
-    else:
-        messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html')
-
-
-def cancelados(request):
-    is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
-    if is_admin:
-        pedido = Pedido.objects.raw(
-            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text'
-        )
-        # pedido = Pedido.objects.filter(estado=True, disponibilidad=2)
-        pedidoEspecifico = PedidoEspecifico.objects.all()
-        metodoEnvio = MetodoEnvio.objects.all()
-        datos_cuenta = DatosCuenta.objects.all()
-        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
-        context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
-                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
-        return render(request, 'pedido/cancelados.html', context)
-    else:
-        messages.error(request, "Acceso denegado")
-        return render(request, 'base/base.html')
-
 # admin local
 
 
@@ -97,7 +97,7 @@ def local_pedidos_pendientes(request):
         id=request.user.id).filter(username='alexander')
     if is_admin_local:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + 5 as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + 5 as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text ORDER BY p.id DESC'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=0)
         pedidoEspecifico = PedidoEspecifico.objects.all()
@@ -117,7 +117,7 @@ def local_pedidos_completados(request):
         id=request.user.id).filter(username='alexander')
     if is_admin_local:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text ORDER BY p.id DESC'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=1)
         pedidoEspecifico = PedidoEspecifico.objects.all()
@@ -137,7 +137,7 @@ def local_pedidos_cancelados(request):
         id=request.user.id).filter(username='alexander')
     if is_admin_local:
         pedido = Pedido.objects.raw(
-            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text'
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text ORDER BY p.id DESC'
         )
         # pedido = Pedido.objects.filter(estado=True, disponibilidad=2)
         pedidoEspecifico = PedidoEspecifico.objects.all()
