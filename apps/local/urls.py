@@ -9,7 +9,7 @@ urlpatterns = [
     path('local/update/', login_required(update_cuenta_local),
          name="Cuenta_update_local"),
     path('users', login_required(localadmuser), name="LocalUsers"),
-    path('users/registeradm', login_required(local_usuario_register_adm),
+    path('users/registeradml', login_required(local_usuario_register_adm),
          name="LocalUserRegisterAdm"),
     path('users/actualizaradm',
          login_required(local_usuario_actualizar_adm), name="LocalUserUpdateAdm"),

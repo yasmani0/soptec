@@ -157,7 +157,9 @@ def local_usuario_register_adm(request):
             email = request.POST.get('email_reg_adm')
             clave = request.POST.get('clave_reg_adm')
 
-            if tipousuario != '1' or tipousuario != '3':
+            if tipousuario == '1' or tipousuario == '3':
+                tipousuario = request.POST.get('id_tiposuario')
+            else:
                 messages.error(request, "Acceso denegado")
                 return redirect("usuario_salir")
 
