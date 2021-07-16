@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.db import connection
@@ -58,12 +58,14 @@ def index(request):
 
         if request.method == 'POST':
             form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
-            nombre = request.POST.get('nombre_banco')
+            nombre_persona = request.POST.get('nombre_persona')
+            nombre_banco = request.POST.get('nombre_banco')
             numero = request.POST.get('numero_cuenta')
 
             try:
                 DatosCuenta.objects.create(
-                    nombre_banco=nombre,
+                    nombre_persona=nombre_persona,
+                    nombre_banco=nombre_banco,
                     numero_cuenta=numero
                 )
                 messages.success(request, "Cuenta agregada correctamente")
@@ -87,15 +89,16 @@ def update(request):
     if is_admin:
         if request.method == 'POST':
             id_cuenta = request.POST.get('id_cuenta')
-            nombre = request.POST.get('nombre_banco')
+            nombre_banco = request.POST.get('nombre_banco')
+            nombre_persona = request.POST.get('nombre_persona')
             numero = request.POST.get('numero_cuenta')
             estado = request.POST.get('estado')
-            print("id: ", id_cuenta, "nombre: ", nombre,
-                  "numero: ", numero, "estado: ", estado)
+            # print("id: ", id_cuenta, "nombre: ", nombre,
+            #       "numero: ", numero, "estado: ", estado)
             try:
                 if id_cuenta:
                     cursor = connection.cursor()
-                    cursor.execute("Update datoscuenta_datoscuenta set nombre_banco='"+str(nombre)+"', numero_cuenta='"+str(
+                    cursor.execute("Update datoscuenta_datoscuenta set nombre_banco='"+str(nombre_banco)+"', nombre_persona='"+str(nombre_persona)+"', numero_cuenta='"+str(
                         numero)+"', estado='"+str(estado)+"' where id="+str(id_cuenta))
                     messages.success(
                         request, "Cuenta actualizada correctamente")
@@ -117,8 +120,11 @@ def admuser(request):
             datos_cuenta = DatosCuenta.objects.all()
             form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
             cursor = connection.cursor()
-            usuarios = User.objects.raw(
-                "select id, username, first_name, last_name, email, is_active from auth_user where is_superuser='0' ORDER BY id asc")
+            usuarios = Cliente.objects.raw(
+                "select u.id, u.username, u.first_name, u.last_name, email, u.is_active, c.tipo_usuario, c.id_cliente_id from cliente_cliente as c inner join auth_user as u on u.id=c.id_cliente_id where u.is_superuser='0' ORDER BY u.id desc"
+            )
+            # usuarios = User.objects.raw(
+            #     "select id, username, first_name, last_name, email, is_active from auth_user where is_superuser='0' ORDER BY id asc")
             user = {'usuarios': usuarios, 'datos_cuenta': datos_cuenta,
                     'form_cuenta': form_cuenta}
 
@@ -133,10 +139,15 @@ def usuario_register_adm(request):
     if is_admin:
         if request.method == 'POST':
             username = request.POST.get('usuario_reg_adm').lower()
+            tipousuario = request.POST.get('id_tiposuario')
             nombre = request.POST.get('nombre_reg_adm')
             apellido = request.POST.get('apellido_reg_adm')
             email = request.POST.get('email_reg_adm')
             clave = request.POST.get('clave_reg_adm')
+
+            if tipousuario != '1' or tipousuario != '2' or tipousuario != '3':
+                messages.error(request, "Acceso denegado")
+                return redirect("usuario_salir")
 
             try:
                 user = User.objects.create_user(
@@ -147,7 +158,8 @@ def usuario_register_adm(request):
                     password=clave
                 )
 
-                Cliente.objects.create(id_cliente_id=user.id)
+                Cliente.objects.create(
+                    id_cliente_id=user.id, tipo_usuario=tipousuario)
 
                 messages.success(request, "Usuario agregado correctamente")
 
@@ -169,6 +181,7 @@ def usuario_actualizar_adm(request):
     if is_admin:
         if request.method == 'POST':
             id_user = request.POST.get('id_upd_adm')
+            tipousuario = request.POST.get('tipousuario_upd_adm')
             username = request.POST.get('usuario_upd_adm').lower()
             nombre = request.POST.get('nombre_upd_adm')
             apellido = request.POST.get('apellido_upd_adm')
@@ -177,6 +190,10 @@ def usuario_actualizar_adm(request):
             clave_pasada = request.POST.get('clave_pasada_upd_adm')
             clave_nueva = request.POST.get('clave_nueva_upd_adm')
             verif_user = User.objects.filter(username=username).count()
+
+            if tipousuario != '1' or tipousuario != '2' or tipousuario != '3':
+                messages.error(request, "Acceso denegado")
+                return redirect("usuario_salir")
 
             if estado == "0":
                 estado = False
@@ -189,8 +206,15 @@ def usuario_actualizar_adm(request):
                 try:
                     if username:
                         cursor = connection.cursor()
-                        cursor.execute("Update auth_user set username='"+str(username)+"', first_name='"+str(nombre)+"', last_name='"+str(
-                            apellido)+"', email='"+str(email)+"' , is_active='"+str(estado)+"' where id="+str(id_user))
+
+                        try:
+                            cursor.execute("Update auth_user set username='"+str(username)+"', first_name='"+str(nombre)+"', last_name='"+str(
+                                apellido)+"', email='"+str(email)+"' , is_active='"+str(estado)+"' where id="+str(id_user))
+                            cursor.execute("Update cliente_cliente set tipo_usuario='"+str(
+                                tipousuario)+"' where id_cliente_id="+str(id_user))
+                        except:
+                            pass
+
                         user = User.objects.get(id=id_user)
                         if user.check_password(clave_pasada):
                             user.set_password(clave_nueva)
@@ -214,7 +238,13 @@ def usuario_actualizar_adm(request):
 def perfil_actualizar_adm(request):
     is_admin = User.objects.filter(id=request.user.id).filter(is_superuser=1)
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
+        id=request.user.id)
+
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+
+    is_tipo_usuario_asistente = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=3)
     if is_admin:
         if request.method == 'POST':
             id_adm = request.POST.get('id_adm')
@@ -242,7 +272,7 @@ def perfil_actualizar_adm(request):
 
             return HttpResponse(json.dumps(""), content_type="application/json")
     else:
-        if is_admin_local:
+        if is_admin_local and is_tipo_usuario:
             if request.method == 'POST':
                 id_adm = request.POST.get('id_adm')
                 nombre = request.POST.get('nombre')
@@ -271,5 +301,34 @@ def perfil_actualizar_adm(request):
 
                 return HttpResponse(json.dumps(""), content_type="application/json")
         else:
-            messages.error(request, "Acceso denegado")
-            return render(request, 'base/base.html')
+            if is_admin_local and is_tipo_usuario_asistente:
+                if request.method == 'POST':
+                    id_adm = request.POST.get('id_adm')
+                    nombre = request.POST.get('nombre')
+                    apellido = request.POST.get('apellido')
+                    email = request.POST.get('email')
+                    cedula = request.POST.get('cedula')
+                    telefono = request.POST.get('telefono')
+
+                    try:
+                        if id_adm:
+                            cursor = connection.cursor()
+                            cursor.execute("Update auth_user set first_name='"+str(nombre)+"', last_name='"+str(
+                                apellido)+"', email='"+str(email)+"' where id="+str(id_adm))
+
+                            cursor.execute("Update cliente_cliente set cedula='"+str(cedula)+"', telefono='"+str(
+                                telefono)+"' where id_cliente_id="+str(id_adm))
+
+                            messages.success(
+                                request, "Perfil actualizado correctamente")
+
+                            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                    except:
+                        messages.error(
+                            request, "Cedula ya registrada, ingrese otra cedula")
+                        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+                    return HttpResponse(json.dumps(""), content_type="application/json")
+            else:
+                messages.error(request, "Acceso denegado")
+                return render(request, 'base/base.html')

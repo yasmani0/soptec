@@ -16,16 +16,45 @@ import json
 
 
 def usuario_login(request):
+
     if request.method == 'POST':
         usuario = request.POST.get('users_login')
         password = request.POST.get('pass_login')
 
         is_admin = User.objects.filter(username=usuario).filter(is_superuser=1)
+
+        is_admin_local = User.objects.filter(
+            username=usuario)
+
+        admin_locales = Cliente.objects.raw(
+            "select u.id, u.username, u.is_active, c.tipo_usuario from cliente_cliente as c inner join auth_user as u on u.id=c.id_cliente_id"
+        )
+
         if is_admin:
             user = authenticate(request, username=usuario, password=password)
             if user is not None:
                 login(request, user)
                 return redirect("Admin")
+
+        if admin_locales:
+
+            for adml in admin_locales:
+
+                if adml.username == usuario and adml.tipo_usuario == '2' and adml.is_active == True:
+                    user = authenticate(
+                        request, username=usuario, password=password)
+                    login(request, user)
+                    messages.success(
+                        request, "Inicio de sesión correctamente")
+                    return redirect("LocalAdmin")
+
+                if adml.username == usuario and adml.tipo_usuario == '3' and adml.is_active == True:
+                    user = authenticate(
+                        request, username=usuario, password=password)
+                    login(request, user)
+                    messages.success(
+                        request, "Inicio de sesión correctamente")
+                    return redirect("AsistenteLocal")
 
         verif_usuario_aux = User.objects.filter(username=usuario)
         if verif_usuario_aux:
@@ -44,27 +73,27 @@ def usuario_login(request):
                         login(request, user)
                         messages.success(
                             request, "Inicio de sesión correctamente")
-                        return render(request, 'base/base.html')
+                        return redirect("Inicio")
                     else:
                         messages.error(
                             request, "Usuario o contraseña incorrecta")
-                        return render(request, 'base/base.html')
+                        return redirect("Inicio")
                 else:
                     messages.error(
                         request, "Lo sentimos tu cuenta ha sido deshabilitada")
-                    return render(request, 'base/base.html')
+                    return redirect("Inicio")
             else:
                 messages.error(
                     request, "No exite esta cuenta, por favor registrese")
-                return render(request, 'base/base.html')
+                return redirect("Inicio")
         else:
             messages.error(
                 request, "No exite esta cuenta, por favor registrese")
-            return render(request, 'base/base.html')
+            return redirect("Inicio")
 
         messages.error(
             request, "No exite esta cuenta, por favor registrese")
-        return render(request, 'base/base.html')
+        return redirect("Inicio")
 
 
 def salir(request):

@@ -18,7 +18,7 @@ class Pedido(models.Model):
         max_length=2, blank=True, null=True, default="0")
     transaccion_id = models.CharField(max_length=100, null=True)
     totalPagar = models.FloatField(max_length=10, blank=True, null=True)
-    imagen = models.ImageField(upload_to='img/comprobante', null=True)
+    # imagen = models.ImageField(upload_to='img/comprobante', null=True)
 
     def __str__(self):
         return str(self.id)

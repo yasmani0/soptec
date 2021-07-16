@@ -9,7 +9,7 @@ class Marca(models.Model):
         max_length=100, blank=False, null=False)
     estado = models.CharField(max_length=2, blank=True, null=True, default="1")
     id_categoria = models.ForeignKey(
-        Categoria, on_delete=models.CASCADE, blank=False, null=False)
+        Categoria, on_delete=models.CASCADE, blank=False, null=False, default="1")
 
     def __str__(self):
         return '{}'.format(self.nombre)

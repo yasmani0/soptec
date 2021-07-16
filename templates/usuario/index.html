@@ -88,6 +88,17 @@ Administración de usuarios
 
                     </div>
                     <div class="form-group">
+                        Tipo usuario
+                        <select name="id_tiposuario" class="form-control js-example-basic-single w-100"
+                            style="width: 100%;" required>
+                            <option value=""> ---------------- </option>
+                            <option value="1">Cliente</option>
+                            <option value="2">Admin local</option>
+                            <option value="3">Asistente Local</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         Usuario
                         <input type="text" id="usuario" class="form-control" placeholder="Ingrese se usuario ..."
                             name="usuario_reg_adm" required autocomplete="off">
@@ -96,13 +107,15 @@ Administración de usuarios
                     <div class="form-group">
                         Nombre
                         <input type="text" id="nombre" class="form-control" placeholder="Ingrese su nombre ..."
-                            name="nombre_reg_adm" required required onkeypress="return sololetras(event)" onpaste="return false" autocomplete="off">
+                            name="nombre_reg_adm" required required onkeypress="return sololetras(event)"
+                            onpaste="return false" autocomplete="off">
                     </div>
 
                     <div class="form-group">
                         Apellido
                         <input type="text" id="nombre" class="form-control" placeholder="Ingrese su apellido ..."
-                            name="apellido_reg_adm" required required onkeypress="return sololetras(event)" onpaste="return false" autocomplete="off">
+                            name="apellido_reg_adm" required required onkeypress="return sololetras(event)"
+                            onpaste="return false" autocomplete="off">
                     </div>
 
                     <div class="form-group">
@@ -140,6 +153,7 @@ Administración de usuarios
                     <thead>
                         <tr>
                             <th> # </th>
+                            <th>Tipo usuario</th>
                             <th>Usuario</th>
                             <th>Nombre </th>
                             <th>Apellido</th>
@@ -155,6 +169,21 @@ Administración de usuarios
                         <!---->
                         <tr>
                             <th scope="row">{{forloop.counter}}</th>
+                            {% if u.tipo_usuario == "3" %}
+                            <td>
+                                Asistente local
+                            </td>
+                            {% else %}
+                            {% if u.tipo_usuario == "2" %}
+                            <td>
+                                Admin local
+                            </td>
+                            {% else %}
+                            <td>
+                                Cliente
+                            </td>
+                            {% endif %}
+                            {% endif %}
                             <td>{{u.username}}</td>
                             <td>{{u.first_name}}</td>
                             <td>{{u.last_name}}</td>

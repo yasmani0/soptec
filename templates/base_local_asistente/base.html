@@ -1,0 +1,705 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <title>Soptec Pc - Local Asistente Admin</title>
+
+  <!-- Favicons -->
+  <!-- <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+  <link rel="icon" href="../../static/soptec1.ico" type="image/x-icon">
+
+  <!-- Bootstrap core CSS -->
+  <!-- <link href="{% static 'style_local/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet"> -->
+  <link href="{% static 'style_users/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+  <!--external css-->
+  <link href="{% static 'style_local/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href="{% static 'style_local/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'style_local/css/style-responsive.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+    integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+
+  <link href="{% static 'style_local/css/app.css' %}" rel="stylesheet">
+
+
+  <!-- =======================================================
+    Template Name: Dashio
+    Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
+    Author: TemplateMag.com
+    License: https://templatemag.com/license/
+  ======================================================= -->
+
+  {%block addcss%}
+  {%endblock%}
+</head>
+
+<body>
+  <section id="container">
+    <!-- **********************************************************************************************************************************************************
+        TOP BAR CONTENT & NOTIFICATIONS
+        *********************************************************************************************************************************************************** -->
+    <!--header start-->
+    <header class="header black-bg">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+      </div>
+      <!--logo start-->
+      <a href="{% url 'AsistenteLocal' %}" class="logo"><b>SOPTEC <span>PC</span></b></a>
+      <!--logo end-->
+      <div class="nav notify-row d-none" id="top_menu">
+        <!--  notification start -->
+        <ul class="nav top-menu">
+
+          <!-- inbox dropdown end -->
+          <!-- notification dropdown start-->
+          <li id="header_notification_bar" class="dropdown" style="position: absolute; left: 225px;">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+              <i class="fa fa-bell"></i>
+              <span class="badge bg-warning"
+                style="position: absolute; left: 35px; top:-12px; width: 25px; height: 17px;">7</span>
+            </a>
+            <ul class="dropdown-menu extended notification">
+              <div class="notify-arrow notify-arrow-yellow"></div>
+              <li>
+                <p class="yellow">Tienes 5 notificaciones</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <span class="label label-danger"><i class="fa fa-bolt"></i></span>
+                  Server Overloaded.
+                  <span class="small italic">4 mins.</span>
+                </a>
+              </li>
+              <li>
+                <a href="index.html#">See all notifications</a>
+              </li>
+            </ul>
+          </li>
+          <!-- notification dropdown end -->
+        </ul>
+        <!--  notification end -->
+      </div>
+
+      <div class="top-menu pull-right">
+        <ul class="nav pull-right top-menu">
+          <li><a class="logout" href="{% url 'usuario_salir' %}"
+              style="position: absolute; right: 0px; width: 100px; font-size: 14px; text-align: center;">Salir</a></li>
+        </ul>
+      </div>
+    </header>
+    <!--header end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN SIDEBAR MENU
+        *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+    <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+          <p class="centered"><a href="#" data-toggle="modal" data-target="#ModalPerfil"><img
+                src="../../static/style_local/img/ui-sam.jpg" class="img-circle" width="80"
+                style="border-radius:50%"></a></p>
+          <h5 class="centered" style="font-size: 14px;">{{user.first_name}} - Administrador</h5>
+          <h5 class="centered"><a href="#" data-toggle="modal" data-target="#ModalPerfil"
+              style="font-size: 12px; color: rgb(39, 118, 182); padding: 0;">Perfil</a></h5>
+          {% block slider %}
+          <li class="mt sub-menu">
+            <a class="active" href="javascript:;">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Acceso</span>
+            </a>
+            <ul class="sub">
+              <li class="active"><a href="{% url 'AsistenteLocal' %}">Inicio</a></li>
+              <li><a href="{% url 'Local_Asistente_Users' %}">Usuarios</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-desktop"></i>
+              <span>Almacén</span>
+            </a>
+            <ul class="sub">
+              <li><a href="{% url 'Local_Asistentes_Categoria' %}">Categorias</a></li>
+              <li><a href="{% url 'local_asistentes_index' %}">Marcas</a></li>
+              <li><a href="{% url 'Local_Asistentes_Productos_Index' %}">Productos</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="javascript:;">
+              <i class="fa fa-shopping-cart"></i>
+              <span>Pedidos</span>
+            </a>
+            <ul class="sub">
+              <li><a href="{% url 'Local_Asistentes_Pedido_Completado' %}">Completados</a></li>
+              <li><a href="{% url 'Local_Asistentes_Pedidos' %}">Pendientes</a></li>
+              <li><a href="{% url 'Local_Asistentes_Pedido_Cancelado' %}">Cancelados</a></li>
+            </ul>
+          </li>
+          {%endblock%}
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+
+    {% include 'base_local_asistente/cuenta.html' %}
+    {% include 'LocalAsistentesFuncionalidades/datoscuentalocal/index.html' %}
+    <!--sidebar end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper site-min-height">
+        {%block titlepage%} <h3 class="pt-4"> Resumen general </h3>{%endblock%}
+        <div class="row mt">
+          <div class="col-lg-12">
+            {% block contenido %}
+            <div class="card">
+              <h5 class="pt-4" style="padding-left: 20px;">Estado de los pedidos</h5>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                      <div class="inner">
+                        <h3>{{pedidoC}}</h3>
+
+                        <p>Pedidos compretados</p>
+                      </div>
+                      <div class="icon">
+                        <i class="fas fa-check"></i>
+                      </div>
+                      <a href="{% url 'Local_Asistentes_Pedido_Completado' %}" class="small-box-footer">Más información <i
+                          class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                      <div class="inner">
+                        <h3>{{pedidoP}}</h3>
+
+                        <p>Pedidos pendientes</p>
+                      </div>
+                      <div class="icon">
+                        <i class="fas fa-info-circle"></i>
+                      </div>
+                      <a href="{% url 'Local_Asistentes_Pedidos' %}" class="small-box-footer">Más información <i
+                          class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-red">
+                      <div class="inner">
+                        <h3>{{pedidoCan}}</h3>
+
+                        <p>Pedidos cancelados</p>
+                      </div>
+                      <div class="icon">
+                        <i class="fas fa-times"></i>
+                      </div>
+                      <a href="{% url 'Local_Asistentes_Pedido_Cancelado' %}" class="small-box-footer">Más información <i
+                          class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                      <div class="inner">
+                        <h3>{{usuariosReg}}</h3>
+
+                        <p>Usuarios registrados</p>
+                      </div>
+                      <div class="icon">
+                        <i class="fas fa-user"></i>
+                      </div>
+                      <a href="{% url 'Local_Asistente_Users' %}" class="small-box-footer">Más información <i
+                          class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                  </div>
+                  <!-- ./col -->
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-12"> -->
+            <!-- operaciones recientes -->
+            <div class="card">
+              <h5 class="pl-3 pt-4">Operaciones recientes</h5>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="tablaoperacion">
+                    <thead>
+                      <tr>
+                        <th style="text-align: center;"> # </th>
+                        <th style="text-align: center;">Fecha</th>
+                        <th style="text-align: center;">Cliente</th>
+                        <th style="text-align: center;">Tipo Envio</th>
+                        <th style="text-align: center;">Total</th>
+                        <th style="text-align: center;">Estado</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if operacionesRec %}
+                      <!---->
+                      {% for p in operacionesRec %}
+                      <!---->
+                      <tr>
+                        <th scope="row" style="text-align: center;">{{forloop.counter}}</th>
+                        <td style="text-align: center;">
+                          {{p.fecha_pedido|date:"d-m-Y"}}
+                        </td>
+                        <td style="text-align: center;">
+                          <b style="color: rgb(43, 182, 50); text-transform: capitalize;">{{p.cliente.id_cliente}}</b>
+                        </td>
+                        {% if p.tipo_envio == '1' %}
+                        <td scope="row" style="text-align: center;">
+                          <i class="fas fa-laptop-house fa-2x"></i>
+                          <br>
+                          <span>Recibir</span>
+                        </td>
+
+                        {% else %}
+                        {% if p.tipo_envio == '2' %}
+                        <td scope="row" style="text-align: center;">
+                          <i class="fas fa-dolly fa-2x"></i>
+                          <br>
+                          <span>Entregar</span>
+                        </td>
+                        {% else %}
+                        {% endif %}
+                        {% endif %}
+
+                        {% if p.tipo_envio == '1' %}
+                        <td style="text-align: center;">
+                          ${{p.totalPagar|floatformat:2}}
+                        </td>
+
+                        {% else %}
+                        {% if p.tipo_envio == '2' %}
+                        <td style="text-align: center;">
+                          ${{p.totalf|floatformat:2}}
+                        </td>
+                        {% else %}
+                        {% endif %}
+                        {% endif %}
+
+                        <td style="text-align: center;">
+                          {% if p.disponibilidad == '1' %}
+                          <b style="color: rgb(43, 182, 50);">Aceptado</b>
+                          {% else %}
+                          {% if p.disponibilidad == '0' %}
+                          <b style="color: rgb(236, 120, 43);">Pendiente</b>
+                          {% else %}
+                          <b style="color: rgb(236, 43, 43);">Cancelado</b>
+                          {% endif %}
+                          {% endif %}
+                        </td>
+
+
+                      </tr>
+                      {% endfor %}
+                      <!---->
+                      {% else %}
+                      <!---->
+                      <tr>
+                        <div class="alert alert-success" role="alert">
+                          Aún no tiene ninguna oparación reciente
+                        </div>
+                      </tr>
+
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div id="alertcategoria">
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- fin listar -->
+            <!--  -->
+            <!-- grafica -->
+            <div class="card">
+              <div class="form-group">
+                <br class="d-block d-md-none">
+                <br class="d-block d-md-none">
+                <br class="d-block d-md-none">
+                <h5 class="pl-3 pt-4" id="textopedido">Pedidos completados</h5>
+
+                <select class="form-control filtros" id="selecciongraficaasistente" name="selecciongraficaasistente"
+                  style="width: 210px; position: absolute; top: 20px; right: 25px;">
+                  <option value="1">Pedidos completados </option>
+                  <option value="2">Pedidos pendientes</option>
+                  <option value="3">Pedidos cancelados</option>
+                </select>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <!-- pedidos completados -->
+                  <div class="col-12 my-3 text-center" id="grafica_completados_asistentes">
+                    <div class="alert alert-secondary" role="alert" id="mensajecompletanoasistente" style="display: none;">
+                      No tiene ningun pedido completado!
+                    </div>
+                    <p id="textomensajecompletadoasistente" style="display: none;"">Pedidos por mes</p>
+                          <canvas id="AsistentemyChart"></canvas>
+                  </div>
+                  <!-- pedidos pendiente -->
+                  <div class="col-12 my-3 text-center" id="grafica_pendientes_asistentes" style="display: none;">
+                    <div class="alert alert-secondary" role="alert" id="mensajependienteasis" style="display: none;">
+                      No tiene ningun pedido pendiente!
+                    </div>
+                    <p id="textomensajependienteasistente" style="display: none;">Pedidos por mes</p>
+                    <canvas id="AsistentemyChart1"></canvas>
+                  </div>
+                  <!-- pedidos cancelados -->
+                  <div class="col-12 my-3 text-center" id="grafica_cancelados_asistentes" style="display: none;">
+                    <div class="alert alert-secondary" role="alert" id="mensajecanceladoasistente" style="display: none;">
+                      No tiene ningun pedido cancelado!
+                    </div>
+                    <p id="textomensajecanceladoasistente" style="display: none;">Pedidos por mes</p>
+                    <canvas id="AsistentemyChart2"></canvas>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+            {%endblock%}
+          </div>
+        </div>
+      </section>
+      <!-- /wrapper -->
+    </section>
+    <!-- /MAIN CONTENT -->
+    <!--main content end-->
+    <!--footer start-->
+    <footer class="site-footer">
+      <div class="text-center">
+        <p>
+          &copy; Copyrights <strong>Soptec PC</strong>. Todos los derechos reservados
+        </p>
+        <div class="credits">
+          <!--
+            You are NOT allowed to delete the credit link to TemplateMag with free version.
+            You can delete the credit link only if you bought the pro version.
+            Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
+            Licensing information: https://templatemag.com/license/
+          -->
+          <!-- Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a> -->
+        </div>
+        <a href="#" class="go-top">
+          <i class="fa fa-angle-up"></i>
+        </a>
+      </div>
+    </footer>
+    <!--footer end-->
+  </section>
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="{% static 'style_local/jquery/jquery.min.js' %}"></script>
+  <!-- <script src="{% static 'style_local/bootstrap/js/bootstrap.min.js' %}"></script> -->
+  <script src="{% static 'style_users/bootstrap/bootstrap.bundle.min.js' %}"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="{% static 'style_local/jquery/jquery-ui-1.9.2.custom.min.js' %}"></script>
+  <script src="{% static 'style_local/jquery/jquery.ui.touch-punch.min.js' %}"></script>
+  <script class="include" type="text/javascript"
+    src="{% static 'style_local/jquery/jquery.dcjqaccordion.2.7.js' %}"></script>
+  <script src="{% static 'style_local/jquery/jquery.scrollTo.min.js' %}"></script>
+  <script src="{% static 'style_local/jquery/jquery.nicescroll.js" type="text/javascript' %}"></script>
+  <!--common script for all pages-->
+  <script src="{% static 'style_local/jquery/common-scripts.js' %}"></script>
+  <!--script for this page-->
+  <!-- Datatable -->
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+
+  <!-- funcionalidades -->
+  <script>
+    
+    $(document).ready(function () {
+      $("#btnMostrarModalCuenta").click(function () {
+        $("#ModalPerfil").modal('hide')
+        $("#ModalCuenta").modal('show')
+      })
+      $("#btnMostrarAgregarCuenta").click(function () {
+        $("#ModalCuenta").modal('hide')
+        $("#ModalCuentaCreate").modal('show')
+      })
+      $("#btnMostrarDNCuenta").click(function () {
+        $("#ModalCuentaCreate").modal('hide')
+        $("#ModalCuenta").modal('show')
+      })
+      // $("#cerrarUpdateC").click(function () {
+      //   $("#ModalCuentaID").modal('hide')
+      // })
+    })
+  </script>
+
+  {%block addjs%}
+  {% if messages %}
+  {% for m in messages %}
+  <script>
+    if ('{{m}}' == 'Cedula ya registrada, ingrese otra cedula') {
+      Swal.fire({
+        title: 'Error',
+        text: '{{m}}',
+        icon: 'error',
+        confirmButtonText: 'Aceptar'
+      })
+
+    } else {
+      Swal.fire({
+        title: 'Felicitaciones',
+        text: '{{m}}',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      })
+
+    }
+
+  </script>
+  {% endfor %}
+  {% endif %}
+  <script src="{% static 'style_admin/funcionalidades/producto.js' %}"></script>
+  <script src="{% static 'style_admin/funcionalidades/operaciones.js' %}"></script>
+  {%endblock%}
+
+  {% block tablap %}
+  {%endblock%}
+
+  {% block scriptadd %}
+  {%endblock%}
+
+  
+
+ 
+  <script src="{% static 'graficas/chartjs/charts.js' %}"></script>
+
+  <script>
+    let meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+    const pedidosMes = [50, 60, 50, 65, 75, 100, 25, 36, 35, 78, 15, 36];
+    let textomensajecompletadoasistente = document.getElementById('textomensajecompletadoasistente')
+    let textomensajepediente = document.getElementById('textomensajepediente')
+    let textomensajecanceladoasistente = document.getElementById('textomensajecanceladoasistente')
+
+    let mensajecompletado = document.getElementById('mensajecompletado')
+    let mensajepediente = document.getElementById('mensajepediente')
+    let mensajecanceladoasistente = document.getElementById('mensajecanceladoasistente')
+
+    let arrayhaypedidos = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    var ctxasis = document.getElementById('AsistentemyChart').getContext('2d');
+    var AsistentemyChart = new Chart(ctxasis, {
+      type: 'bar',
+      data: {
+        labels: meses,
+        datasets: [{
+          label: ' Número de pedidos por meses',
+          data: {{ pedido_completado_grafica_data| safe}},
+      backgroundColor: [
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)',
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)'
+    ],
+      borderColor: [
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)'
+    ],
+      borderWidth: 1
+            }]
+        },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+
+  var ctxasis1 = document.getElementById('AsistentemyChart1').getContext('2d');
+    var AsistentemyChart1 = new Chart(ctxasis1, {
+      type: 'bar',
+      data: {
+        labels: meses,
+        datasets: [{
+          label: ' Número de pedidos por meses',
+          data: {{ pedido_pendiente_grafica_data| safe}},
+      backgroundColor: [
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)',
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)'
+    ],
+      borderColor: [
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)'
+    ],
+      borderWidth: 1
+            }]
+        },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+        });
+  
+    textomensajecanceladoasistente.style.display = 'block';
+    mensajecanceladoasistente.style.display = 'none';
+    var ctxasis2 = document.getElementById('AsistentemyChart2').getContext('2d');
+    var AsistentemyChart2 = new Chart(ctxasis2, {
+      type: 'bar',
+      data: {
+        labels: meses,
+        datasets: [{
+          label: ' Número de pedidos por meses',
+          data: {{ pedido_cancelado_grafica_data| safe}},
+      backgroundColor: [
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)',
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)'
+    ],
+      borderColor: [
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)'
+    ],
+      borderWidth: 1
+              }]
+          },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+
+
+
+   </script>
+
+
+  <script>
+
+    let seleccion = document.getElementById('selecciongraficaasistente')
+    let completados = document.getElementById('grafica_completados_asistentes')
+    let pendientes = document.getElementById('grafica_pendientes_asistentes')
+    let cancelados = document.getElementById('grafica_cancelados_asistentes')
+    let texto = document.getElementById('textopedido')
+
+    seleccion.addEventListener('change', (event) => {
+      if (event.target.value == 1) {
+        completados.style.display = 'block';
+        pendientes.style.display = 'none';
+        cancelados.style.display = 'none';
+        texto.textContent = 'Pedidos completados';
+
+      } else if (event.target.value == 2) {
+
+        completados.style.display = 'none';
+        pendientes.style.display = 'block';
+        cancelados.style.display = 'none';
+        texto.textContent = 'Pedidos pendientes';
+
+      } else if (event.target.value == 3) {
+
+        completados.style.display = 'none';
+        pendientes.style.display = 'none';
+        cancelados.style.display = 'block';
+        texto.textContent = 'Pedidos cancelados';
+
+      }
+    })
+
+  </script>
+ 
+
+</body>
+
+</html>

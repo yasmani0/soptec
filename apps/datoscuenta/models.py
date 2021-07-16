@@ -2,6 +2,8 @@ from django.db import models
 
 
 class DatosCuenta(models.Model):
+    nombre_persona = models.CharField(
+        max_length=100, blank=True, null=False)
     nombre_banco = models.CharField(
         max_length=100, blank=False, unique=True, null=False)
     numero_cuenta = models.CharField(

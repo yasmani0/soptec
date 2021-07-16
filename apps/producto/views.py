@@ -112,8 +112,10 @@ def update2(request, id):
 
 def local_index(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         producto = Producto.objects.all()
         categoria = Categoria.objects.all()
         marca = Marca.objects.all().order_by('nombre')
@@ -143,8 +145,10 @@ def local_index(request):
 
 def localupdate(request, id):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         producto = Producto.objects.get(id=id)
         if request.method == "POST":
             form = ProductoForm(request.POST, instance=producto,
@@ -158,6 +162,65 @@ def localupdate(request, id):
         else:
             form = ProductoForm(instance=producto)
         return render(request, 'LocalFuncionalidades/producto/update.html', {'form': form})
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+# asistente
+
+
+def local_asistentes_index(request):
+    is_asistente_local = User.objects.filter(
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=3)
+    if is_asistente_local and is_tipo_usuario:
+        producto = Producto.objects.all()
+        categoria = Categoria.objects.all()
+        marca = Marca.objects.all().order_by('nombre')
+        datos_cuenta = DatosCuenta.objects.all()
+        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
+
+        if request.method == 'POST':
+            # id = request.POST.get('id_cat')
+            form = ProductoForm(request.POST, files=request.FILES)
+            if form.is_valid():
+                # form.instance.id_categoria = id
+                form.id_marca = request.POST.get('id_marca')
+                form.save()
+                messages.success(request, "Producto agregado correctamente")
+            else:
+                messages.error(request, "El nombre del producto ya existe")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            form = ProductoForm()
+            contexto = {'producto': producto, 'form': form,
+                        'categoria': categoria, 'marca': marca, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
+        return render(request, 'LocalAsistentesFuncionalidades/producto/index.html', contexto)
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+
+def local_asistentes_update(request, id):
+    is_asistente_local = User.objects.filter(
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=3)
+    if is_asistente_local and is_tipo_usuario:
+        producto = Producto.objects.get(id=id)
+        if request.method == "POST":
+            form = ProductoForm(request.POST, instance=producto,
+                                files=request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Producto actualizado correctamente")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            else:
+                return HttpResponse(json.dumps("El servicio ya existe"), content_type="application/json")
+        else:
+            form = ProductoForm(instance=producto)
+        return render(request, 'LocalAsistentesFuncionalidades/producto/update.html', {'form': form})
     else:
         messages.error(request, "Acceso denegado")
         return render(request, 'base/base.html')
@@ -189,6 +252,10 @@ def detalle_producto(request, id):
     producto = Producto.objects.filter(estado=1, id_categoria_id=id)
     categoria = Categoria.objects.filter(id=id)
     marca = Marca.objects.filter(estado=1, id_categoria=id)
+    clientes = Cliente.objects.raw(
+        "select u.id, u.username, u.first_name, u.last_name, email, u.is_active, c.tipo_usuario, c.id_cliente_id from cliente_cliente as c inner join auth_user as u on u.id=c.id_cliente_id where u.id=" +
+        str(request.user.id)
+    )
 
     if request.user.is_authenticated:
         filtroPedido = Pedido.objects.filter(
@@ -205,10 +272,14 @@ def detalle_producto(request, id):
         pedido = {'get_cart_total': 0, 'get_cart_items': 0}
         cartItems = pedido['pedido.get_cart_items']
 
-    return render(request, 'categoriaProducto/detalleProducto.html', {'producto': producto, 'categoria': categoria, 'marca': marca, 'cartItems': cartItems, 'filtroPedido': filtroPedido})
+    return render(request, 'categoriaProducto/detalleProducto.html', {'producto': producto, 'categoria': categoria, 'marca': marca, 'cartItems': cartItems, 'filtroPedido': filtroPedido, 'clientes': clientes})
 
 
 def cart(request):
+    clientes = Cliente.objects.raw(
+        "select u.id, u.username, u.first_name, u.last_name, email, u.is_active, c.tipo_usuario, c.id_cliente_id from cliente_cliente as c inner join auth_user as u on u.id=c.id_cliente_id where u.id=" +
+        str(request.user.id)
+    )
     if request.user.is_authenticated:
         cliente = request.user.cliente
         pedido, created = Pedido.objects.get_or_create(
@@ -220,11 +291,16 @@ def cart(request):
         pedido = {'get_cart_total': 0, 'get_cart_items': 0}
         cartItems = pedido['pedido.get_cart_items']
 
-    context = {'items': items, 'pedido': pedido, 'cartItems': cartItems}
+    context = {'items': items, 'pedido': pedido,
+               'cartItems': cartItems, 'clientes': clientes}
     return render(request, 'pedido/carrito.html', context)
 
 
 def checkout(request):
+    clientes = Cliente.objects.raw(
+        "select u.id, u.username, u.first_name, u.last_name, email, u.is_active, c.tipo_usuario, c.id_cliente_id from cliente_cliente as c inner join auth_user as u on u.id=c.id_cliente_id where u.id=" +
+        str(request.user.id)
+    )
     if request.user.is_authenticated:
         cliente = request.user.cliente
         datos_cuenta = DatosCuenta.objects.all()
@@ -239,7 +315,7 @@ def checkout(request):
         cartItems = pedido['pedido.get_cart_items']
 
     context = {'items': items, 'pedido': pedido,
-               'cartItems': cartItems, 'datos_cuenta': datos_cuenta, 'pedidoComprobante': pedidoComprobante}
+               'cartItems': cartItems, 'datos_cuenta': datos_cuenta, 'pedidoComprobante': pedidoComprobante, 'clientes': clientes}
     return render(request, 'pedido/verificar.html', context)
 
 
@@ -266,23 +342,24 @@ def updatePedidoEspecifico(request):
 
                 if producto.cantidad == 0:
                     messages.error(request, "No hay suficientes productos")
-                    # mensajes
-                    context = {'mail': 'zeroyaz0@gmail.com', 'nombre': '! Admin !',
-                               'asunto': '!IMPORTANTE!', 'mensaje': 'No hay suficientes productos de '+str(producto.nombre)}
-                    template = get_template('contactanos/email.html')
-                    content = template.render(context)
-
-                    email = EmailMultiAlternatives(
-                        'Soptec PC - Sin Productos',
-                        'Mensaje enviando ',
-                        settings.EMAIL_HOST_USER,
-                        ['zeroyaz0@gmail.com']
-                    )
-
-                    email.attach_alternative(content, 'text/html')
-                    email.send()
 
                 else:
+                    if producto.cantidad == 2:
+                        context = {'mail': 'karlaeve1720@outlook.com', 'nombre': '! Admin !',
+                                   'asunto': '!IMPORTANTE!', 'mensaje': 'No hay suficientes productos de '+str(producto.nombre)}
+
+                        template = get_template('contactanos/email.html')
+
+                        content = template.render(context)
+                        email = EmailMultiAlternatives(
+                            'Soptec PC - Sin Productos',
+                            'Mensaje enviando ',
+                            settings.EMAIL_HOST_USER,
+                            ['karlaeve1720@outlook.com']
+                        )
+                        email.attach_alternative(content, 'text/html')
+                        email.send()
+
                     pedidoespecifico.cantidad = (pedidoespecifico.cantidad + 1)
                     producto.cantidad = (producto.cantidad - 1)
                     cursor = connection.cursor()
@@ -348,7 +425,7 @@ def pedidoProcesados(request):
                     direccion="Local",
                 )
 
-                context = {'mail': 'zeroyaz0@gmail.com', 'nombre': '! Admin !',
+                context = {'mail': 'karlaeve1720@outlook.com', 'nombre': '! Admin !',
                            'asunto': '!IMPORTANTE!', 'mensaje': 'Nuevo pedido de '+str(request.user.first_name)}
                 template = get_template('contactanos/email.html')
                 content = template.render(context)
@@ -357,7 +434,7 @@ def pedidoProcesados(request):
                     'Soptec PC - Nuevo Pedido',
                     'Mensaje enviando ',
                     settings.EMAIL_HOST_USER,
-                    ['zeroyaz0@gmail.com']
+                    ['karlaeve1720@outlook.com']
                 )
 
                 email.attach_alternative(content, 'text/html')
@@ -382,7 +459,7 @@ def pedidoProcesados(request):
                 cursor.execute("Update cliente_cliente set cedula='"+str(cedula) +
                                "', telefono='"+str(telefono)+"' where id_cliente_id="+str(idA))
 
-                context = {'mail': 'zeroyaz0@gmail.com', 'nombre': '! Admin !',
+                context = {'mail': 'karlaeve1720@outlook.com', 'nombre': '! Admin !',
                            'asunto': '!IMPORTANTE!', 'mensaje': 'Nuevo pedido de '+str(request.user.first_name)}
                 template = get_template('contactanos/email.html')
                 content = template.render(context)
@@ -391,7 +468,7 @@ def pedidoProcesados(request):
                     'Soptec PC - Nuevo Pedido',
                     'Mensaje enviando ',
                     settings.EMAIL_HOST_USER,
-                    ['zeroyaz0@gmail.com']
+                    ['karlaeve1720@outlook.com']
                 )
 
                 email.attach_alternative(content, 'text/html')

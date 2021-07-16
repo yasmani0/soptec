@@ -1,7 +1,13 @@
 from django.shortcuts import render
+from apps.cliente.models import Cliente
 
 # Create your views here.
 
 
 def index(request):
-    return render(request, 'servicios/index.html')
+    clientes = Cliente.objects.raw(
+        "select u.id, u.username, u.first_name, u.last_name, email, u.is_active, c.tipo_usuario, c.id_cliente_id from cliente_cliente as c inner join auth_user as u on u.id=c.id_cliente_id where u.id=" +
+        str(request.user.id)
+    )
+    contexto = {'clientes': clientes}
+    return render(request, 'servicios/index.html', contexto)

@@ -7,7 +7,8 @@ from cloudinary.models import CloudinaryField
 class Categoria(models.Model):
     nombre = models.CharField(
         max_length=100, blank=False, unique=True, null=False)
-    descripcion = models.CharField(max_length=200, null=False)
+    descripcion = models.CharField(
+        max_length=200, null=False, default="")
     imagen = CloudinaryField('imagen', null=True)
     estado = models.CharField(max_length=2, blank=True, null=True, default="1")
 

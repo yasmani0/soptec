@@ -1,0 +1,107 @@
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document" style="overflow-y: auto;z-index: 10000;">
+    <div class="modal-content" style="border-radius: 20px 20px 0 0">
+        <div class="modal-header" style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+            <h3 class="modal-title">Detalle del pedido</h3>
+            <button style="color: white;" class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="tablacategoria">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <!-- <th>Imagen</th> -->
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if productos %}
+                        {% for p in productos %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}} </th>
+                            <!-- <td>
+                                <img src="{{p.imagen}}" alt="image" class="img-thumbnail"
+                                    style="width: 90px; height: 75px;">
+                            </td> -->
+                            <td>{{p.nombre}}</td>
+                            <td>{{p.precio}}</td>
+                            <td style="padding-left: 35px;">
+                                {{p.cantidad}}
+                            </td>
+                            <td>${{p.subtotal|floatformat:2}}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        {% endif %}
+                        {% for t in totales %}
+
+                        {% if t.tipo_envio == '1' %}
+                        <tr>
+                            <td colspan="3">
+                               
+                            </td>
+                            <td colspan="1">
+                                <h5 style="text-align: center; font-size: 16px; font-weight: 600;"><strong>Total:</strong></h5>
+                            </td>
+                            <td colspan="1">
+                                <h5 style="font-size: 16px; font-weight: 600; "><strong class="total">${{t.totalPagar|floatformat:2}}</strong></h5>
+                            </td>
+                        </tr>
+                        {% else %}
+                        {% if t.tipo_envio == '2' %}
+                        <tr>
+                            <td colspan="3">
+                               
+                            </td>
+                            <td colspan="1">
+                                <h5 style="text-align: center; font-size: 16px;"><strong>Subtotal:</strong></h5>
+                            </td>
+                            <td colspan="1">
+                                <h5 style="font-size: 16px;"><strong class="total">${{t.totalPagar|floatformat:2}}</strong></h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                               
+                            </td>
+                            <td colspan="1">
+                                <h5 style="text-align: center; font-size: 16px;"><strong>Costo envio:</strong></h5>
+                            </td>
+                            <td colspan="1">
+                                <h5 style="font-size: 16px;"><strong class="total">${{t.iva|floatformat:2}}</strong></h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                               
+                            </td>
+                            <td colspan="1">
+                                <h5 style="text-align: center; font-size: 16px; font-weight: 600;"><strong>Total:</strong></h5>
+                            </td>
+                            <td colspan="1">
+                                <h5 style="font-size: 16px; font-weight: 600; "><strong class="total">${{t.totalf|floatformat:2}}</strong></h5>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success btn-lg" data-dismiss="modal"
+                style="width: 200px;">Confirmar</button>
+
+        </div>
+
+    </div>
+</div>

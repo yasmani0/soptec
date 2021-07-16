@@ -1,0 +1,243 @@
+{% extends 'base_local_asistente/base.html' %}
+{% load staticfiles%}
+
+{% block titlepage %}
+
+<h3 class="pt-4 pl-3">Administración de productos</h3>
+
+{% endblock %}
+
+{% block slider %}
+<li class="mt sub-menu">
+    <a href="javascript:;">
+      <i class="fas fa-tachometer-alt"></i>
+      <span>Acceso</span>
+    </a>
+    <ul class="sub">
+      <li><a href="{% url 'AsistenteLocal' %}">Inicio</a></li>
+      <li><a href="{% url 'Local_Asistente_Users' %}">Usuarios</a></li>
+    </ul>
+  </li>
+  <li class="sub-menu">
+    <a class="active" href="javascript:;">
+      <i class="fa fa-desktop"></i>
+      <span>Almacén</span>
+    </a>
+    <ul class="sub">
+      <li><a href="{% url 'Local_Asistentes_Categoria' %}">Categorias</a></li>
+      <li><a href="{% url 'local_asistentes_index' %}">Marcas</a></li>
+      <li class="active"><a href="{% url 'Local_Asistentes_Productos_Index' %}">Productos</a></li>
+    </ul>
+  </li>
+  <li class="sub-menu">
+    <a href="javascript:;">
+      <i class="fa fa-shopping-cart"></i>
+      <span>Pedidos</span>
+    </a>
+    <ul class="sub">
+      <li><a href="{% url 'Local_Asistentes_Pedido_Completado' %}">Completados</a></li>
+      <li><a href="{% url 'Local_Asistentes_Pedidos' %}">Pendientes</a></li>
+      <li><a href="{% url 'Local_Asistentes_Pedido_Cancelado' %}">Cancelados</a></li>
+    </ul>
+  </li>
+{%endblock%}
+
+{% block contenido %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 20px 20px 0 0">
+            <div class="modal-header"
+                style="background-color: rgb(60, 141, 188); color: white; border: none !important;">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Producto</h5>
+                <button style="color: white;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" enctype="multipart/form-data" method="POST" role="form">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        {{form.id_categoria.label}}
+                        {{form.id_categoria}}
+                    </div>
+                    <div class="form-group">
+                        {{form.id_marca.label}}
+                        <select name="id_marca" class="form-control js-example-basic-single w-100" style="width: 100%;"
+                            required>
+                            <option value=""> ---------------- </option>
+                            {% for m in marca %}
+                            {% if m.id == p.id_marca_id %}
+                            <option value="{{m.id}}" selected>{{m.nombre}} - {{m.id_categoria}}</option>
+                            {% else %}
+                            <option value="{{m.id}}">{{m.nombre}} - {{m.id_categoria}} </option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+
+                    </div>
+                    <div class="form-group">
+                        {{form.nombre.label}}
+                        {{form.nombre}}
+                    </div>
+                    <div class="form-group">
+                        {{form.precio.label}}
+                        {{form.precio}}
+                    </div>
+                    <div class="form-group">
+                        {{form.cantidad.label}}
+                        {{form.cantidad}}
+                    </div>
+                    <div class="form-group">
+                        {{form.imagen.label}}
+                        {{form.imagen}}
+                    </div>
+                    <div class="form-group">
+                        {{form.descripcion.label}}
+                        {{form.descripcion}}
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#exampleModal">
+        <b>+ Agregar</b>
+    </button>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="tablausuario">
+                    <thead>
+                        <tr>
+                            <th> # </th>
+                            <th>Imagen</th>
+                            <th>Categoria</th>
+                            <th>Marca</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if producto %}
+                        <!---->
+                        {% for p in producto %}
+                        <!---->
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>
+                                {% if p.imagen %}
+                                <img src="{{p.imagen.url}}" alt="image" class="img-thumbnail"
+                                    style="width: 90px; height: 75px;" />
+                                {% else %}
+                                {% endif %}
+                            </td>
+                            <td>{{p.id_categoria}}</td>
+                            <td>{{p.id_marca}}</td>
+                            <td>{{p.nombre}}</td>
+                            <td>{{p.precio}}</td>
+                            <td>{{p.cantidad}}</td>
+                            <td>{{p.descripcion}}</td>
+                            <td>{% if p.estado == '1'%} <b style="color: rgb(43, 182, 50);">Activo</b> {% else %} <b
+                                    style="color: rgb(252,56,29);">Inactivo</b> {% endif %}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#ModalProducto-{{p.id}}"><i class="fa fa-edit"> <b></b></i></b>
+                                </button>
+
+                            </td>
+
+                            {% include "LocalAsistentesFuncionalidades/producto/update.html" %}
+                        </tr>
+
+                        {% endfor %}
+                        <!---->
+                        {% else %}
+                        <!---->
+                        <tr>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-heart-broken"></i> Aún no tenemos categorias <i
+                                    class="fas fa-heart-broken"></i>
+                            </div>
+                        </tr>
+
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="alertcategoria">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- fin listar -->
+{% endblock %}
+
+
+{% block addjs %}
+
+{% if messages %}
+{% for m in messages %}
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    if ('{{m}}' == 'El nombre del producto ya existe') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+
+
+    } else if ('{{m}}' == 'Cuenta o numero de ya existente, ingrese otra cuenta') {
+        Toast.fire({
+            icon: 'error',
+            title: '{{m}}'
+        })
+
+    } else {
+        Toast.fire({
+            icon: 'success',
+            title: '{{m}}'
+        })
+
+    }
+
+
+</script>
+{% endfor %}
+{% endif %}
+
+<script src="{% static 'style_admin/funcionalidades/usuarios.js' %}"></script>
+
+{% endblock %}

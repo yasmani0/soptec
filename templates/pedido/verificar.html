@@ -74,6 +74,37 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="ciudad" style="font-weight: 605;">Seleccione su provincia:</label>
+                                <select class="form-control" name="city" id="ciudad" required aria-required="true" title="Selecciona una provincia">
+                                    <option value=""> ---------------- </option>
+                                    <option value="1">Pichincha (Quito)</option>
+                                    <option value="2">Guayas (Guayaquil)</option>
+                                    <option value="3">Cotopaxi (Latacunga)</option>
+                                    <option value="4">Azuay (Cuenca)</option>
+                                    <option value="5">Bolívar (Guaranda)</option>
+                                    <option value="6">Cañar (Azogues)</option>
+                                    <option value="7">Carchi (Tulcán)</option>
+                                    <option value="8">Chimborazo (Riobamba)</option>
+                                    <option value="9">El Oro (Machala)</option>
+                                    <option value="10">Esmeraldas (Esmeraldas)</option>
+                                    <option value="11">Galápagos (Puerto Baquerizo Moreno)</option>
+                                    <option value="12">Imbabura (Ibarra)</option>
+                                    <option value="13">Loja (Loja)</option>
+                                    <option value="14">Los Ríos (Babahoyo)</option>
+                                    <option value="15">Manabí (Portoviejo)</option>
+                                    <option value="16">Morona-Santiago (Macas)</option>
+                                    <option value="17">Napo (Tena)</option>
+                                    <option value="18">Orellana (Puerto Francisco de Orellana)</option>
+                                    <option value="19">Pastaza (Puyo)</option>
+                                    <option value="20">Santa Elena (Santa Elena)</option>
+                                    <option value="21">Santo Domingo (Santo Domingo)</option>
+                                    <option value="22">Sucumbíos (Nueva Loja)</option>
+                                    <option value="23">Tungurahua (Ambato)</option>
+                                    <option value="24">Zamora-Chinchipe (Zamora)</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <div class="form-field">
                                     <input id="cedula" required class="form-control" type="text" name="cedula"
                                         placeholder="Cedula ...">
@@ -111,13 +142,13 @@
 
                         <div id="metodo-pago" style="display: none;">
 
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <div class="form-field">
                                     <input class="form-control" type="text" name="city" id="ciudad"
                                         placeholder="Ciudad ...">
                                     <div class="mostrarMensajeC" id="mostrarMensajeC" style="color: red;"></div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <div class="form-field">
                                     <input class="form-control" type="text" name="address" placeholder="Dirección ..."
@@ -308,9 +339,9 @@
         mostrarMensaje.style.display = 'none'
     })
 
-    mciudad.addEventListener('focus', () => {
-        mostrarMensajeC.style.display = 'none'
-    })
+    // mciudad.addEventListener('focus', () => {
+    //     mostrarMensajeC.style.display = 'none'
+    // })
 
     mdireccion.addEventListener('focus', () => {
         mostrarMensajeD.style.display = 'none'
@@ -457,27 +488,29 @@
             tablasinenvio.style.display = 'none'
             tablamasenvio.style.display = 'block'
 
+            
             form.addEventListener('submit', function (e) {
                 const cedula = document.getElementById('cedula').value
                 const ciudad = document.getElementById('ciudad').value
                 const direccion = document.getElementById('direccion').value
                 mostrarMensaje.style.display = 'block'
-                mostrarMensajeC.style.display = 'block'
+                // mostrarMensajeC.style.display = 'block'
                 mostrarMensajeD.style.display = 'block'
 
-                if ((validateDni(cedula)) == true) {
-                    if (ciudad == '') {
-                        e.preventDefault()
-                        mostrarMensajeC.textContent = 'Este campo es obligatorio'
+                alert('hola bb 1')
 
-                    } else {
+
+                if ((validateDni(cedula)) == true) {
+                    // e.preventDefault()
+                    alert(ciudad)
                         if (direccion == '') {
+                            alert('hola bb 3')
                             e.preventDefault()
-                            mostrarMensajeC.textContent = ''
+                            // mostrarMensajeC.textContent = ''
                             mostrarMensajeD.textContent = 'Este campo es obligatorio'
                         } else {
                             mostrarMensaje.textContent = ''
-                            mostrarMensajeC.textContent = ''
+                            // mostrarMensajeC.textContent = ''
                             mostrarMensajeD.textContent = ''
                             e.preventDefault()
 
@@ -581,16 +614,14 @@
                                     // })
 
                                     window.location.href = "{% url 'Comprobante' %}"
-                                })
-                        }
+                                })            
+
+                        } 
+                }else {
+                        e.preventDefault()
+                        mostrarMensaje.textContent = 'Cedula incorrecta'
 
                     }
-
-                } else {
-                    e.preventDefault()
-                    mostrarMensaje.textContent = 'Cedula incorrecta'
-
-                }
 
             })
 

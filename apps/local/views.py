@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.db import connection
@@ -15,8 +15,10 @@ import json
 
 def index(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         datos_cuenta = DatosCuenta.objects.all()
         pedidoP = Pedido.objects.filter(estado=True, disponibilidad=0).count()
         pedidoC = Pedido.objects.filter(estado=True, disponibilidad=1).count()
@@ -27,8 +29,9 @@ def index(request):
         operacionesRec = Pedido.objects.raw(
             'SELECT id, tipo_envio, "totalPagar", fecha_pedido, disponibilidad, ("totalPagar" * 0) + 5 as iva, "totalPagar" + (5) as totalf FROM public.pedido_pedido where estado=true AND NOT disponibilidad>2::text ORDER BY id DESC LIMIT 10'
         )
-        usuariosReg = User.objects.filter(
-            is_active=True, is_superuser=False).exclude(username='alexander').count()
+
+        usuariosReg = Cliente.objects.all().exclude(
+            tipo_usuario=2).exclude(tipo_usuario=0).count()
 
         # grafica
         try:
@@ -60,12 +63,14 @@ def index(request):
 
         if request.method == 'POST':
             form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
-            nombre = request.POST.get('nombre_banco')
+            nombre_banco = request.POST.get('nombre_banco')
+            nombre_persona = request.POST.get('nombre_persona')
             numero = request.POST.get('numero_cuenta')
 
             try:
                 DatosCuenta.objects.create(
-                    nombre_banco=nombre,
+                    nombre_banco=nombre_banco,
+                    nombre_persona=nombre_persona,
                     numero_cuenta=numero
                 )
                 messages.success(request, "Cuenta agregada correctamente")
@@ -86,19 +91,22 @@ def index(request):
 
 def update_cuenta_local(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         if request.method == 'POST':
             id_cuenta = request.POST.get('id_cuenta')
-            nombre = request.POST.get('nombre_banco')
+            nombre_banco = request.POST.get('nombre_banco')
+            nombre_persona = request.POST.get('nombre_persona')
             numero = request.POST.get('numero_cuenta')
             estado = request.POST.get('estado')
-            print("id: ", id_cuenta, "nombre: ", nombre,
-                  "numero: ", numero, "estado: ", estado)
+            # print("id: ", id_cuenta, "nombre: ", nombre,
+            #       "numero: ", numero, "estado: ", estado)
             try:
                 if id_cuenta:
                     cursor = connection.cursor()
-                    cursor.execute("Update datoscuenta_datoscuenta set nombre_banco='"+str(nombre)+"', numero_cuenta='"+str(
+                    cursor.execute("Update datoscuenta_datoscuenta set nombre_banco='"+str(nombre_banco)+"', nombre_persona='"+str(nombre_persona)+"', numero_cuenta='"+str(
                         numero)+"', estado='"+str(estado)+"' where id="+str(id_cuenta))
                     messages.success(
                         request, "Cuenta actualizada correctamente")
@@ -117,13 +125,15 @@ def update_cuenta_local(request):
 def localadmuser(request):
     if request.user.is_authenticated:
         is_admin = User.objects.filter(
-            id=request.user.id).filter(username='alexander')
-        if is_admin:
+            id=request.user.id)
+        is_tipo_usuario = Cliente.objects.filter(
+            id_cliente=request.user.id, tipo_usuario=2)
+        if is_admin and is_tipo_usuario:
             datos_cuenta = DatosCuenta.objects.all()
             form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
             cursor = connection.cursor()
             usuarios = User.objects.raw(
-                "select id, username, first_name, last_name, email, is_active from auth_user where is_superuser='0' AND NOT username='alexander' ORDER BY id asc")
+                "select c.tipo_usuario, u.id, u.username, u.first_name, u.last_name, u.email, u.is_active from cliente_cliente as c inner join  auth_user as u on c.id_cliente_id=u.id where c.tipo_usuario='1' OR c.tipo_usuario='3' ORDER BY id desc")
             user = {'usuarios': usuarios, 'datos_cuenta': datos_cuenta,
                     'form_cuenta': form_cuenta}
 
@@ -135,14 +145,21 @@ def localadmuser(request):
 
 def local_usuario_register_adm(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         if request.method == 'POST':
             username = request.POST.get('usuario_reg_adm').lower()
+            tipousuario = request.POST.get('id_tiposuario')
             nombre = request.POST.get('nombre_reg_adm')
             apellido = request.POST.get('apellido_reg_adm')
             email = request.POST.get('email_reg_adm')
             clave = request.POST.get('clave_reg_adm')
+
+            if tipousuario != '1' or tipousuario != '3':
+                messages.error(request, "Acceso denegado")
+                return redirect("usuario_salir")
 
             try:
                 user = User.objects.create_user(
@@ -153,7 +170,8 @@ def local_usuario_register_adm(request):
                     password=clave
                 )
 
-                Cliente.objects.create(id_cliente_id=user.id)
+                Cliente.objects.create(
+                    id_cliente_id=user.id, tipo_usuario=tipousuario)
 
                 messages.success(request, "Usuario agregado correctamente")
 
@@ -172,10 +190,13 @@ def local_usuario_register_adm(request):
 
 def local_usuario_actualizar_adm(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         if request.method == 'POST':
             id_user = request.POST.get('id_upd_adm')
+            tipousuario = request.POST.get('tipousuario_upd_adm')
             username = request.POST.get('usuario_upd_adm').lower()
             nombre = request.POST.get('nombre_upd_adm')
             apellido = request.POST.get('apellido_upd_adm')
@@ -184,6 +205,10 @@ def local_usuario_actualizar_adm(request):
             clave_pasada = request.POST.get('clave_pasada_upd_adm')
             clave_nueva = request.POST.get('clave_nueva_upd_adm')
             verif_user = User.objects.filter(username=username).count()
+
+            if tipousuario != '1' or tipousuario != '3':
+                messages.error(request, "Acceso denegado")
+                return redirect("usuario_salir")
 
             if estado == "0":
                 estado = False
@@ -199,6 +224,10 @@ def local_usuario_actualizar_adm(request):
                         cursor.execute("Update auth_user set username='"+str(username)+"', first_name='"+str(nombre)+"', last_name='"+str(
                             apellido)+"', email='"+str(email)+"' , is_active='"+str(estado)+"' where id="+str(id_user))
                         user = User.objects.get(id=id_user)
+
+                        cursor.execute("Update cliente_cliente set tipo_usuario='"+str(
+                            tipousuario)+"' where id_cliente_id="+str(id_user))
+
                         if user.check_password(clave_pasada):
                             user.set_password(clave_nueva)
                             user.save()

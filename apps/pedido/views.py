@@ -4,6 +4,7 @@ from apps.pedido.models import Pedido, PedidoEspecifico, MetodoEnvio
 from apps.datoscuenta.forms import DatosCuentaForm
 from apps.datoscuenta.models import DatosCuenta
 from django.contrib.auth.models import User
+from apps.cliente.models import Cliente
 from django.contrib import messages
 from django.db import connection
 import json
@@ -94,8 +95,10 @@ def update(request):
 
 def local_pedidos_pendientes(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         pedido = Pedido.objects.raw(
             'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + 5 as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text ORDER BY p.id DESC'
         )
@@ -114,8 +117,10 @@ def local_pedidos_pendientes(request):
 
 def local_pedidos_completados(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         pedido = Pedido.objects.raw(
             'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text ORDER BY p.id DESC'
         )
@@ -134,8 +139,11 @@ def local_pedidos_completados(request):
 
 def local_pedidos_cancelados(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+
+    if is_admin_local and is_tipo_usuario:
         pedido = Pedido.objects.raw(
             'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text ORDER BY p.id DESC'
         )
@@ -154,8 +162,10 @@ def local_pedidos_cancelados(request):
 
 def local_pedido_update(request):
     is_admin_local = User.objects.filter(
-        id=request.user.id).filter(username='alexander')
-    if is_admin_local:
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=2)
+    if is_admin_local and is_tipo_usuario:
         if request.method == 'POST':
             id_pedido = request.POST.get('idConf')
             estado = request.POST.get('estadoPedido')
@@ -191,3 +201,97 @@ def local_pedido_update(request):
 #             return render(request, 'LocalFuncionaliddes/pedido/cancelados.html', {'pedidocancelado': pedidocancelado})
 #         else:
 #             return HttpResponse("Acceso Denegado Admin")
+
+# asistentes
+def local_asistentes_pedidos_pendientes(request):
+    is_asistente_local = User.objects.filter(
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=3)
+    if is_asistente_local and is_tipo_usuario:
+        pedido = Pedido.objects.raw(
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + 5 as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=0::text ORDER BY p.id DESC'
+        )
+        # pedido = Pedido.objects.filter(estado=True, disponibilidad=0)
+        pedidoEspecifico = PedidoEspecifico.objects.all()
+        metodoEnvio = MetodoEnvio.objects.all()
+        datos_cuenta = DatosCuenta.objects.all()
+        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
+        context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
+                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
+        return render(request, 'LocalAsistentesFuncionalidades/pedido/index.html', context)
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+
+def local_asistentes_pedidos_completados(request):
+    is_asistente_local = User.objects.filter(
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=3)
+    if is_asistente_local and is_tipo_usuario:
+        pedido = Pedido.objects.raw(
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=1::text ORDER BY p.id DESC'
+        )
+        # pedido = Pedido.objects.filter(estado=True, disponibilidad=1)
+        pedidoEspecifico = PedidoEspecifico.objects.all()
+        metodoEnvio = MetodoEnvio.objects.all()
+        datos_cuenta = DatosCuenta.objects.all()
+        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
+        context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
+                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
+        return render(request, 'LocalAsistentesFuncionalidades/pedido/completados.html', context)
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+
+def local_asistentes_pedidos_cancelados(request):
+    is_asistente_local = User.objects.filter(
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=3)
+
+    if is_asistente_local and is_tipo_usuario:
+        pedido = Pedido.objects.raw(
+            'SELECT p.id, p.tipo_envio, p."totalPagar", p.fecha_pedido, p.disponibilidad, (p."totalPagar" * 0) + 5 as iva, p."totalPagar" + (5) as totalf FROM public.pedido_pedido as p where estado=true AND disponibilidad=2::text ORDER BY p.id DESC'
+        )
+        # pedido = Pedido.objects.filter(estado=True, disponibilidad=2)
+        pedidoEspecifico = PedidoEspecifico.objects.all()
+        metodoEnvio = MetodoEnvio.objects.all()
+        datos_cuenta = DatosCuenta.objects.all()
+        form_cuenta = DatosCuentaForm(request.POST, files=request.FILES)
+        context = {'pedido': pedido, 'pedidoEspecifico': pedidoEspecifico,
+                   'metodoEnvio': metodoEnvio, 'datos_cuenta': datos_cuenta, 'form_cuenta': form_cuenta}
+        return render(request, 'LocalAsistentesFuncionalidades/pedido/cancelados.html', context)
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')
+
+
+def local_asistentes_pedido_update(request):
+    is_asistente_local = User.objects.filter(
+        id=request.user.id)
+    is_tipo_usuario = Cliente.objects.filter(
+        id_cliente=request.user.id, tipo_usuario=3)
+    if is_asistente_local and is_tipo_usuario:
+        if request.method == 'POST':
+            id_pedido = request.POST.get('idConf')
+            estado = request.POST.get('estadoPedido')
+            estadoc = 1
+            try:
+                if id_pedido:
+                    cursor = connection.cursor()
+                    cursor.execute("Update pedido_pedido set disponibilidad='" +
+                                   str(estado)+"', estadoc='" +
+                                   str(estadoc)+"' where id="+str(id_pedido))
+                    messages.success(request, "Estado del pedido actualizado")
+                    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            except:
+                return HttpResponse(json.dumps("Error  1"), content_type="application/json")
+
+            return HttpResponse(json.dumps(""), content_type="application/json")
+    else:
+        messages.error(request, "Acceso denegado")
+        return render(request, 'base/base.html')

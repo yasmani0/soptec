@@ -22,6 +22,7 @@
                                         <tr>
                                             <th> # </th>
                                             <th>Nombre del banco</th>
+                                            <th>Nombre de la persona</th>
                                             <th>Numero de cuenta</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
@@ -35,6 +36,7 @@
                                         <tr>
                                             <th scope="row">{{dc.id}}</th>
                                             <td>{{dc.nombre_banco}}</td>
+                                            <td>{{dc.nombre_persona}}</td>
                                             <td>{{dc.numero_cuenta}}</td>
                                             <td>{% if dc.estado == '1'%} <b style="color: rgb(43, 182, 50);">Activo</b>
                                                 {% else %} <b style="color: rgb(252,56,29);">Inactivo</b> {% endif %}

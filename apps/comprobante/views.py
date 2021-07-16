@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from apps.datoscuenta.models import DatosCuenta
 from apps.comprobante.models import Comprobante
@@ -23,8 +23,13 @@ from django.contrib.staticfiles import finders
 
 def index(request):
 
+    clientes = Cliente.objects.raw(
+        "select u.id, u.username, u.first_name, u.last_name, email, u.is_active, c.tipo_usuario, c.id_cliente_id from cliente_cliente as c inner join auth_user as u on u.id=c.id_cliente_id where u.id=" +
+        str(request.user.id)
+    )
+
     if request.user.is_authenticated:
-        datos_cuenta = DatosCuenta.objects.all()
+        datos_cuenta = DatosCuenta.objects.filter(estado=1)
         tipo = 1
 
         # pedidoRetiro = Pedido.objects.filter(
@@ -72,16 +77,16 @@ def index(request):
             messages.success(
                 request, "Pedido realizado correctamente mira tus pedidos, Gracias por su compra ...")
 
-            return render(request, 'base/base.html')
+            return redirect("Inicio")
         else:
 
             contexto = {'datos_cuenta': datos_cuenta,
-                        'pedidoRetiro': pedidoRetiro, 'filtroPedidoRetiro': filtroPedidoRetiro, 'pedidoEnvio': pedidoEnvio, 'filtroPedidoEnvio': filtroPedidoEnvio}
+                        'pedidoRetiro': pedidoRetiro, 'filtroPedidoRetiro': filtroPedidoRetiro, 'pedidoEnvio': pedidoEnvio, 'filtroPedidoEnvio': filtroPedidoEnvio, 'clientes': clientes}
             return render(request, 'comprobante/index.html', contexto)
     else:
         print("Usuario no esta logeado")
         contexto = {'datos_cuenta': datos_cuenta, 'pedidoRetiro': pedidoRetiro,
-                    'filtroPedidoRetiro': filtroPedidoRetiro, 'pedidoEnvio': pedidoEnvio, 'filtroPedidoEnvio': filtroPedidoEnvio}
+                    'filtroPedidoRetiro': filtroPedidoRetiro, 'pedidoEnvio': pedidoEnvio, 'filtroPedidoEnvio': filtroPedidoEnvio, 'clientes': clientes}
         return render(request, 'comprobante/index.html', contexto)
 
 

@@ -57,8 +57,8 @@
       height: 120px;
       object-fit: contain;" class="d-none d-md-block">
     </a> -->
-    
-  
+
+
       <div class="logo mr-auto ">
         <h1 class="text-light"><a href="{% url 'Inicio' %}"><span>Soptec PC</span></a></h1>
       </div>
@@ -79,7 +79,7 @@
                     style="padding-left:5px ;">Cerrar sesión</span></a></li>
               {% else %}
               <li><a data-toggle="modal" data-target="#modalLoginForm">Iniciar sesión</a></li>
-             
+
               {% endif %}
             </ul>
           </li>
@@ -90,7 +90,7 @@
           <li><a href="{% url 'Servicios' %}">Servicios</a></li>
           <li><a href="{% url 'CategoriaProducto' %}">Productos</a></li>
           <li><a href="{% url 'Contactanos' %}">Contactanos</a></li>
-          <li><a href="{% url 'QuienesSomos' %}">Quienes Somos</a></li>
+          <li><a href="{% url 'QuienesSomos' %}">Quienes Somos </a></li>
 
           {% endblock %}
 
@@ -101,15 +101,26 @@
           </script>
           {% else %}
           {% include "base/perfil.html" %}
-
           {% endif %}
 
-          {% if user.is_authenticated and user.username == 'alexander' %}
+          {% if user.is_authenticated %}
+          {% for c in clientes %}
 
+          {% if c.tipo_usuario == '2' %}
           <script>
             window.location.href = "{% url 'LocalAdmin' %}"
           </script>
-      
+          {% else %}
+          {% if c.tipo_usuario == '3' %}
+          <script>
+            window.location.href = "{% url 'AsistenteLocal' %}"
+          </script>
+          {% else %}
+          {% endif %}
+          {% endif %}
+
+          {% endfor %}
+
 
           {% endif %}
 
@@ -170,15 +181,25 @@
     {% block quienesSomos %}
     {% include 'base/quienesSomos.html' %}
     {% endblock %}
-
     <!-- End Quienes Somos -->
 
-    <!-- ======= Quienes Somos ======= -->
+    <!-- ======= Terminos y servicios ======= -->
+    {% block terminosServicios %}
+  
+    {% endblock %}
+    <!-- End Terminos y servicios -->
+
+    <!-- ======= Politica de privacidad ======= -->
+    {% block politicaPrivacidad %}
+  
+    {% endblock %}
+    <!-- End Politica de privacidad -->
+
+    <!-- ======= Start ======= -->
     {% block categoriaProducto %}
 
     {% endblock %}
-
-    <!-- End Quienes Somos -->
+    <!-- End  -->
 
 
 
@@ -193,13 +214,13 @@
         <div class="row">
 
           <div class="col-lg-3 col-md-6 footer-links">
-            <h4>Terminos y condiciones</h4>
+            <h4>Términos y condiciones</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terminos de servicios</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Politica de privacidad</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'Terminos_Servicios' %}">Términos y condiciones</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'Politica_Privacidad' %}">Politica de privacidad</a></li>
             </ul>
           </div>
-          
+
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Servicios</h4>
             <ul>
@@ -224,10 +245,11 @@
 
           <div class="col-lg-3 col-md-6 footer-info">
             <h3>Acerca de Soptec PC</h3>
-            <p>SOPTEC PC empresa dedicada a la venta de productos y servicios informáticos con los más altos estándares de calidad a precios cómodos nuestra empresa inicia en el año 2013.</p>
+            <p>SOPTEC PC empresa dedicada a la venta de productos y servicios informáticos con los más altos estándares
+              de calidad a precios cómodos nuestra empresa inicia en el año 2013.</p>
             <div class="social-links mt-3">
               <!-- <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a> -->
-              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+              <a href="https://www.facebook.com/profile.php?id=100011051139328" target="_blank" class="facebook"><i class="bx bxl-facebook"></i></a>
               <!-- <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a> -->
               <!-- <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a> -->
             </div>
@@ -352,28 +374,28 @@
     }
     const csrftoken = getCookie('csrftoken');
 
-     // solo letras
-     function sololetras(e){
-        
-        key=e.keycode || e.which;  
-        teclado=String.fromCharCode(key).toLowerCase();   
-        letras = " abcdefghijklmnñopqrstuvwxyz";
-        especiales = "8-37-38-46-164"; 
+    // solo letras
+    function sololetras(e) {
 
-        teclado_especial= false;
+      key = e.keycode || e.which;
+      teclado = String.fromCharCode(key).toLowerCase();
+      letras = " abcdefghijklmnñopqrstuvwxyz";
+      especiales = "8-37-38-46-164";
 
-        for(let i in especiales){
-          if(key==especiales[i]){
-            teclado_especial=true;
-            break;
-          }
+      teclado_especial = false;
+
+      for (let i in especiales) {
+        if (key == especiales[i]) {
+          teclado_especial = true;
+          break;
         }
-
-        if(letras.indexOf(teclado)==-1 && !teclado_especial){
-          return false;
-        }
-      
       }
+
+      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+        return false;
+      }
+
+    }
 
   </script>
 
